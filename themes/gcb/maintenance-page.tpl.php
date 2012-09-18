@@ -25,7 +25,7 @@
   </div>
 
   <header id="header" role="banner" class="clearfix">
-	<?php if ($logo): ?>
+	<?php /*if ($logo): ?>
       <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" id="logo">
         <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
       </a>
@@ -41,7 +41,7 @@
           <h2 id="site-slogan"><?php print $site_slogan; ?></h2>
         <?php endif; ?>
       </hgroup>
-    <?php endif; ?>
+    <?php endif; */ ?>
 
     <?php print render($page['header']); ?>
   </header> <!-- /#header -->
