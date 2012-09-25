@@ -1,0 +1,623 @@
+<?php
+
+/**
+ * @file
+ * Module for building and managing site's blocks.
+ */
+
+
+module_load_include('inc', 'gcb_blocks', 'inc/constants');
+
+
+/**
+ * Implements hook_block_info().
+ */
+function gcb_blocks_block_info() {
+  
+  $blocks['main_menu_om_bus_gcb'] = array(
+    'info' => t('OM Business GoCloudBackup'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  
+  $blocks['main_menu_om_aboutus'] = array(
+    'info' => t('OM About Us'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  
+//  $blocks['b_provider_p_bottom'] = array(
+//    'info' => t('Bottom section of Business providers page preface'),
+//    'cache' => DRUPAL_CACHE_GLOBAL,
+//  );
+    
+  
+  $blocks['footer_menu'] = array(
+    'info' => t('Footer menu'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  $blocks['header_links'] = array(
+    'info' => t('Header links'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  
+    
+  $blocks['request_quote'] = array(
+    'info' => t('Request a quote block'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  
+    
+  $blocks['news_tags'] = array(
+    'info' => t('Shows a tag cloud for news tags'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  $blocks['blog_tags'] = array(
+    'info' => t('Shows a tag cloud for blog tags'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  $blocks['articles_tags'] = array(
+    'info' => t('Shows a tag cloud for Library tags'),
+    'cache' => DRUPAL_CACHE_GLOBAL,
+  );
+  
+//  $blocks['t_pick_providers_ar'] = array(
+//    'info' => t('Top pick providers for the all providers reviews page'),
+//    'cache' => DRUPAL_CACHE_GLOBAL,
+//  );
+    
+  
+  
+  // Topics block for different content types.
+  /*
+  $content_types = array('blog_post' => 'blog', 'news_post' => 'news', 'article' => 'articles');
+  foreach ($content_types as $content_type => $label) {
+    
+    $blocks[$content_type . '_topics'] = array(
+      'info' => t(drupal_ucfirst($label) . ' topics'),
+      'cache' => DRUPAL_CACHE_GLOBAL,
+    );
+  }
+  */
+  
+  return $blocks;
+}
+
+
+/**
+ * Implements hook_block_view().
+ */
+function gcb_blocks_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {      
+    case 'main_menu_om_bus_gcb':
+      $block['subject'] = t('OM Business GoCloudBackup');
+      $block['content'] = gcb_blocks_get_omMenuBlock_byTitle('Business GoCloudBackup', 'gcb_blocks_get_omMenuBlock_Providers');
+      break;
+    case 'main_menu_om_aboutus':
+      $block['subject'] = t('OM About Us');
+      $block['content'] = gcb_blocks_get_omMenuBlock_byTitle('About Us', 'gcb_blocks_get_omMenuBlock_AboutUs');
+      break;
+    
+    case 'footer_menu':
+      $block['subject'] = t('Footer menu');
+      $block['content'] = gcb_blocks_get_footerMenu();
+      break; 
+    case 'header_links':
+      $block['subject'] = t('Header links');
+      $block['content'] = gcb_blocks_get_headerLinks();
+      break; 
+    
+    case 'request_quote':
+      $block['subject'] = t('Request a quote block');
+      $block['content'] = gcb_blocks_get_requestQuote_block();
+      break; 
+     
+//    case 'b_provider_p_bottom':
+//      $block['subject'] = t('Bottom section of Business providers page preface');
+//      $block['content'] = gcb_misc_getPrefaceBottomSection('page-compare-business-gcb-providers');
+//      break;
+    
+    
+    
+    case 'news_tags':
+      $block['subject'] = t('Shows a tag cloud for news tags');
+      $block['content'] = gcb_pages_buildTagsPage('news');
+      break;
+    case 'blog_tags':
+      $block['subject'] = t('Shows a tag cloud for blog tags');
+      $block['content'] = gcb_pages_buildTagsPage('blog');
+      break;
+    case 'articles_tags':
+      $block['subject'] = t('Shows a tag cloud for Library tags');
+      $block['content'] = gcb_pages_buildTagsPage('articles');
+      break;
+    
+//    case 't_pick_providers_ar':
+//      $block['subject'] = t('Top pick providers for the all providers reviews page');
+//      $block['content'] = gcb_blocks_getTopPickProvidersBlocksForAllReviewsPage();
+//      break;
+    
+    /*
+    default:
+      // Get blocks for topics for a specific content type.
+      if (strpos($delta, '_topics')) {
+        $content_types = array('blog_post' => 'blog', 'news_post' => 'news', 'article' => 'articles');
+        $content_type = str_replace('_topics', '', $delta);
+        if(!isset($content_types[$content_type])) {
+          continue;
+        }
+        $block['subject'] = t(drupal_ucfirst($content_types[$content_type]) . ' topics');
+        $block['content'] = gcb_blocks_get_tagsBlock($content_type);
+      }
+      break;
+    */
+  }
+
+  return $block;
+}
+
+
+/**
+ * Returns a two themed blocks with Top pick providers for the All Reviews page
+ */
+function gcb_blocks_getTopPickProvidersBlocksForAllReviewsPage() {
+  $out = '';
+  
+  /*
+  $block_data = array('module' => 'views', 'delta' => 'providers-block_pick_bu_areviews', 'shadow' => TRUE);
+  $out .= gcb_blocks_getBlockThemed($block_data);
+  $block_data = array('module' => 'views', 'delta' => 'providers-block_pick_re_areviews', 'shadow' => TRUE);
+  $out .= gcb_blocks_getBlockThemed($block_data);
+  */
+  
+  // Get block for Top pick business providers.
+  $block_data = array('module' => 'views', 'delta' => 'providers-block', 'shadow' => FALSE, 'subject' => 'Top 5 Business GoCloudBackup Providers Reviews');
+  $out .= gcb_blocks_getBlockThemed($block_data);
+ 
+  // Get block for Top pick residential providers.
+  $block_data = array('module' => 'views', 'delta' => 'providers-block_1', 'shadow' => FALSE, 'subject' => 'Top 5 Residential GoCloudBackup Providers Reviews'); 
+  $out .= gcb_blocks_getBlockThemed($block_data);
+  
+  return $out;
+}
+
+
+/**
+ * Returns a two themed blocks with Top pick providers for the Articles (news, blog, etc) directory page 
+ */
+function gcb_blocks_getTopProvidersBlocksForArticlesDirectory() {
+  /*
+  $out = '<div class="providers dir">';
+  $block_data = array('module' => 'views', 'delta' => 'providers-block_pick_bu', 'shadow' => TRUE);
+  $out .= gcb_blocks_getBlockThemed($block_data);
+  $block_data = array('module' => 'views', 'delta' => 'providers-block_pick_re', 'shadow' => TRUE);
+  $out .= gcb_blocks_getBlockThemed($block_data);
+  $out .= '<div class="bottom-clear"></div>';
+  $out .= '</div>';
+  return $out;
+  */
+}
+
+
+/**
+ * Returns a themed tags block for a specific content type.
+ * 
+ * Allows to use same tags for News, Articles, Blog posts, etc.
+ */
+/*
+function gcb_blocks_get_tagsBlock($content_type) {
+  
+  global $language;
+  $tags = NULL;
+  $tags = cache_get($content_type . '_tags_block' . $language->language);
+  if (!$tags || empty($tags->data) || $tags->expire < time()) {
+    // Key = url_argument, used in building the url, 
+    // for example,
+    // tags/news for topics list for news 
+    // OR blog/provider for show all blog posts tagged with 'provider' topic.
+    $content_types = array('blog_post' => 'blog', 'news_post' => 'news', 'article' => 'articles');
+    $url_argument = $content_types[$content_type];
+    $tags = gcb_misc_getTags($content_type, $url_argument, 2);
+    if(!$$tags) {
+      return NULL;
+    }
+    $tags = theme('gcb_misc_submenuSimple', array('submenu' => array('below' => $tags), 'class' => 'topics'));
+    $tags .= '<div class="more-link">' . l(t('More'), $url_argument . '/tags') . '</div>';
+    // Expire = current time + 4 hours.
+    cache_set($content_type . '_topics_block' . $language->language, $tags, 'cache', time() + 14400);
+  }
+  else {
+    $tags = $tags->data;
+  }
+  return $tags; 
+}
+*/
+
+
+/**
+ * Returns a themed Header links block.
+ */
+function gcb_blocks_get_headerLinks() {
+  $menu = menu_build_tree('menu-header-links');
+  return theme('gcb_misc_headerLinks', array('submenu' => array('below' => $menu)));
+}
+
+
+/**
+ * Returns a themed Footer menu.
+ */
+function gcb_blocks_get_footerMenu() {
+  $menu = menu_build_tree('menu-footer-menu');
+  return theme('gcb_misc_submenuSimple', array('submenu' => array('below' => $menu), 'class' => 'menu', 'delimiter' => '<li> | </li>'));
+}
+
+
+/**
+ * Dispatcher for getting themed block for MegaMenu by a block title.
+ */
+function gcb_blocks_get_omMenuBlock_byTitle($title, $function) {
+
+  /*
+  global $language;
+  $types = cache_get('types_' . $language->language);
+  Expire = current time + 2 hours.
+  cache_set('types_' . $language->language, $types, 'cache', time() + 7200);
+  */
+  
+  // Get main menu wireframe menu.
+  $submenu = gcb_blocks_getSubmenuByTitle('main-menu', $title);
+  return $function($submenu);
+}
+
+
+/**
+ * Returns a themed GoCloudBackup Providers block content for MegaMenu.
+ */
+function gcb_blocks_get_omMenuBlock_Providers($submenu) {
+  return theme('gcb_misc_submenuSimple', array('submenu' => $submenu, 'class' => 'block'));
+}
+
+
+/**
+ * Returns a themed GoCloudBackup Blog block content for MegaMenu.
+ */
+function gcb_blocks_get_omMenuBlock_AboutUs($submenu) {
+  return theme('gcb_misc_submenuSimple', array('submenu' => $submenu, 'class' => 'block'));
+}
+
+
+/**
+ * Returns a submenu from a menu.
+ */
+function gcb_blocks_getSubmenuByTitle($menu_name, $submenu_title) {
+  $menu = menu_build_tree($menu_name);
+  if(!$menu) {
+    return NULL;
+  }
+  foreach ($menu as $submenu) {
+    if ($submenu['link']['link_title'] == $submenu_title) {
+      return $submenu;
+    }
+  }
+  return NULL;
+}
+
+
+/**
+ * Wrap a block content in proper block's divs.
+ */
+function gcb_blocks_wrapInBlockThemed($block_data, $block)
+{
+  if(!isset($block['content']) || !$block['content']) {
+      return null;
+  }
+  if (is_array($block['content'])) {
+    $block['content'] = render($block);
+  }
+  
+  if (isset($block_data['shadow']) && $block_data['shadow']) {
+    return 
+      '<section id="block-' . $block_data['module'] . '-' . $block_data['delta'] . '" class="block gcb block-' . $block_data['module'] . '">' 
+        . '<div class="inside">'
+            . ( ($block['subject'] && (!isset($block_data['subject_visible']) || $block_data['subject_visible']) )
+                ? 
+                '<div class="block-icon pngfix"></div><h2 class="block-title">' . $block['subject'] . '</h2>'
+                :
+                '') 
+            . '<div class="content">' . $block['content'] . '</div>
+          </div> <!-- /.inside -->
+          <div class="shadow"></div>
+      </section>';
+  }
+  else {
+    return 
+      '<section id="block-' . $block_data['module'] . '-' . $block_data['delta'] . '" class="block gcb block-' . $block_data['module'] . '">' 
+         . ( ($block['subject'] && (!isset($block_data['subject_visible']) || $block_data['subject_visible']) )
+            ? 
+            '<div class="block-icon pngfix"></div><h2 class="block-title">' . $block['subject'] . '</h2>'
+            :
+            '') 
+         . '<div class="content">' . $block['content'] . '</div>
+      </section>';
+  }
+}
+
+
+/**
+ * Returns a content of a block wrapped in proper divs.
+ */
+function gcb_blocks_getBlockThemed($block_data)
+{
+  $block = module_invoke($block_data['module'], 'block_view', $block_data['delta']);
+  if ($block) {
+    if (isset($block_data['subject'])) {
+      $block['subject'] = $block_data['subject'];
+    }
+    return gcb_blocks_wrapInBlockThemed($block_data, $block);
+  }
+  return NULL;
+}
+
+
+/**
+ * Block Request a quote with a multistep form.
+ */
+function gcb_blocks_get_requestQuote_block() {
+  
+  drupal_add_library('system', 'ui.core');
+  drupal_add_library('system', 'ui.widget');
+  drupal_add_library('system', 'ui.position');  
+
+  drupal_add_js('sites/all/libraries/jquery.plugins/jquery.hint-with-password.js');
+  
+  $path_to_custom_js = drupal_get_path('module', 'gcb_blocks') . '/js/';
+  drupal_add_js($path_to_custom_js . 'gcb_requestquote.js');
+  
+  $path_to_custom_js = 'sites/all/libraries/jquery.plugins/multipart_form/';
+  drupal_add_js($path_to_custom_js . 'jquery.form.js');
+  drupal_add_js($path_to_custom_js . 'jquery.validate.js');
+  drupal_add_js($path_to_custom_js . 'jquery.form.wizard-min.js');
+  
+  
+  
+  $token = md5(time()); //drupal_get_token('test');
+  $_SESSION['requestQuoteToken'] = $token;
+
+  $out = '
+  <h3>No-Risk Free GoCloudBackup Quote</h3>
+  <h4>Don\'t trust your phone system with just anyone!</h4>
+  <div id="requestQuoteFormWrapper">
+        <div class="sending results" style="display: none;"></div>
+        <div class="success results" style="display: none;"></div>
+        <div class="fail results" style="display: none;">The Request has failed! <br>Something went wrong. <br>Please, contact the site administrator.</div>
+        
+        <form class="multipartForm bbq" method="post" action="/request" style="overflow: hidden;">
+
+                
+                <div id="fieldWrapper">
+                    
+                    <div class="step" id="questions_section">
+
+                            <div class="wrapper top first">
+                              <div class="question">' . t('Lines needed') . ':</div>
+                              <select name="phones_amt" id="phones_amt" class="input required">
+                                <option value="1 - 2">1 - 2</option>
+                                <option value="3 - 5">3 - 5</option>
+                                <option selected="selected" value="6 - 10">6 - 10</option>
+                                <option value="11 - 20">11 - 20</option>
+                                <option value="21 - 50">21 - 50</option>
+                                <option value="50+">50+</option>
+                              </select>
+                            </div>
+           
+                            <div class="wrapper top">
+                              <div class="question">' . t('Service Type') . ':</div>
+                              <select name="q_type" id="q_type" class="input required">
+                                <option selected="selected" value="Business">' . t('Business') .'</option>
+                                <option value="Home">' . t('Home') .'</option>
+                                <option value="Home-Based Business">' . t('Home-Based Business') .'</option>
+                              </select>
+                            </div>
+                            
+                            <div class="bottom-clear"></div>
+
+                            <div class="middle-wrapper">
+                            
+                              <div class="wrapper middle first">
+                                  <input class="after required firstname" name="firstname" id="firstname" title="First Name *" />
+                              </div>
+
+                              <div class="wrapper middle">
+                                  <input class="after required lastname" name="lastname" id="lastname" title="Last Name *" />
+                              </div>
+
+                              <div class="wrapper middle last">
+                                  <input class="after email required" name="email" id="email" title="Email Address *" />
+                              </div>
+
+                              <div class="wrapper middle phone">
+                                  <input class="after required phone" name="phone" id="phone" value="" title="Phone Number *" />
+                              </div>
+
+                              <div class="wrapper middle company">
+                                  <input class="after" name="company" id="company" title="Company" />
+                              </div>
+                            
+                              <div class="bottom-clear"></div>
+                              
+                            </div>
+                            
+                            <div id="on_error"></div>
+
+                            <div class="protected"></div>
+                    </div>
+
+                    
+                
+                </div>
+                
+                
+            
+                <div id="Navigation"> 							
+                        <input class="navigation_button" id="next" value="Submit" type="submit" />
+                </div>
+                
+                
+                <input type="hidden" name="token" value="' . $token . '" />
+                <input type="hidden" name="source" value="block" />
+                <input type="hidden" name="version" value="1" />
+                <input type="hidden" name="referrer" value="" />
+                <input type="hidden" name="url" value="" />
+                
+                
+        </form>
+
+        <p id="data"></p>
+</div>
+<div class="block_footer"></div>
+  ';
+  
+  return $out;
+}
+
+
+/**
+ * Block Request a quote with a multistep form FOR PAGE - /gcb-provider-quotes.
+ */
+function gcb_blocks_get_requestQuoteForPage() {
+
+  $path_to_custom_js = 'sites/all/libraries/jquery.plugins/multipart_form/';
+  drupal_add_js($path_to_custom_js . 'jquery.form.js');
+  drupal_add_js($path_to_custom_js . 'jquery.validate.js');
+  //drupal_add_js($path_to_custom_js . 'bbq.js');
+  drupal_add_js($path_to_custom_js . 'jquery.form.wizard-min.js');
+  
+  drupal_add_js('sites/all/libraries/jquery.plugins/jquery.hint-with-password.js');
+
+  drupal_add_library('system', 'ui.core');
+  drupal_add_library('system', 'ui.widget');
+  drupal_add_library('system', 'ui.position');  
+  
+  $path_to_custom_js = drupal_get_path('module', 'gcb_blocks') . '/js/';
+  drupal_add_js($path_to_custom_js . 'gcb_requestquote_page.js');
+  
+  drupal_add_js($path_to_custom_js . 'gcb_brandsCarousel.js');
+  drupal_add_js('sites/all/libraries/jquery.plugins/jcarousel/jquery.jcarousel.min.js');
+  drupal_add_css('sites/all/libraries/jquery.plugins/jcarousel/skins/tango/skin.css');
+  
+  
+  $token = md5(time()); //drupal_get_token('test');
+  $_SESSION['requestQuoteToken'] = $token;
+  
+  $out = '
+   <div id="requestQuoteFormWrapper">
+        <div class="sending results" style="display: none;"></div>
+        <div class="success results" style="display: none;"></div>
+        <div class="fail results" style="display: none;">The Request has failed! <br>Something went wrong. <br>Please, contact the site administrator.</div>
+        
+        <form class="multipartForm bbq" method="post" action="/request">
+
+                
+                <div id="fieldWrapper">
+                    
+                    <div class="step" id="questions_section">
+
+                            <div class="question">' . t('Amount of phones needed') . ':</div>
+                              <select name="phones_amt" id="phones_amt" class="input required">
+                                <option value="1 - 4">1 - 4</option>
+                                <option selected="selected" value="5 - 10">5 - 10</option>
+                                <option value="11 - 20">11 - 20</option>
+                                <option value="21 - 50">21 - 50</option>
+                                <option value="More than 50">More than 50</option>
+                              </select>
+           
+                            <div class="question">' . t('GoCloudBackup Service desired') . ':</div>
+                              <select name="q_type" id="q_type" class="input required">
+                                <option value="Both phones and service">' . t('Both phones and service') .'</option>
+                                <option value="Phone system only">' . t('Phone system only') .'</option>
+                                <option value="Service provider only">' . t('Service provider only') .'</option>
+                              </select>
+                            
+                            <div class="question">' . t('Buying time frame') . ':</div>
+                              <select name="buying_time" id="buying_time" class="input required">
+                                <!--<option value="">- Select a value -</option>-->
+                                <option value="ASAP">' . t('ASAP') .'</option>
+                                <option value="1-3 Months">' . t('1-3 Months') .'</option>
+                                <option value="3-6 Months">' . t('3-6 Months') .'</option>
+                              </select>
+                              
+                            
+                            <div class="bottom-clear"></div>
+                            
+                            <div class="guide">Free GoCloudBackup Guide With Request</div>
+
+                            <div class="wrapper input-border">
+                              <input class="after required firstname" name="firstname" id="firstname" title="First Name *" />
+                            </div>
+                            
+                            <div class="wrapper input-border">
+                              <input class="after required lastname" name="lastname" id="lastname" title="Last Name *" />
+                            </div>
+                            
+                            <div class="wrapper input-border">
+                              <input class="after email required" name="email" id="email" title="Email Address *" />
+                            </div>
+                            
+                            <!--
+                            <div class="wrapper phone">
+                              <div class="label_before required">' . t('Phone') . '<span class="form-required">*</span></div>
+                              <div class="input-border"><div id="phone">
+                                <input class="after required phone" name="phone_1" id="phone_1" value="" />
+                                <input class="after required phone" name="phone_2" id="phone_2" value="" />
+                                <input class="after required phone" name="phone_3" id="phone_3" value="" />
+                               </div></div>
+                            </div>
+                            -->
+                            
+                            <div class="wrapper phone input-border">
+                                <input class="after required phone" name="phone" id="phone" value="" title="Phone Number *" />
+                            </div>
+                            
+                            
+                            <div class="wrapper company input-border">
+                                <input class="after" name="company" id="company" title="Company" />
+                            </div>
+
+                            <div class="wrapper website input-border">
+                                <input class="after" name="website" id="website" title="Website" />
+                            </div>
+                            
+                            <div id="on_error"></div>
+
+                            <!--<div class="step-notice">' . t('Step <span class="f">!first</span>of<span class="s">!second</span>', array('!first' => 1, '!second' => 2)) . '</div> -->
+                            
+                            <div class="ps"><span>4,000+ Form Submissions -</span> Helping businesses save an average of $180 per month on their phone bill</div>
+                            
+                            <div class="verisign"></div><div class="protected"></div>
+                    </div>
+
+                    
+                
+                </div>
+                
+                
+            
+                <div id="Navigation"> 							
+                        <input class="navigation_button" id="next" value="Submit & Get Quotes" type="submit" />
+                </div>
+                
+                
+                <input type="hidden" name="token" value="' . $token . '" />
+                <input type="hidden" name="source" value="page" />
+                <input type="hidden" name="version" value="1" />
+                <input type="hidden" name="referrer" value="" />
+                <input type="hidden" name="url" value="" />
+                
+        </form>
+
+        <p id="data"></p>
+</div>
+<div class="block_footer"></div>
+  ';
+  
+  return $out;
+}

@@ -1,5 +1,6 @@
-<div id="container" class="clearfix">
-  
+<div id="bshadow">
+    
+    
   <div id="skip-link">
     <a href="#main-content" class="element-invisible element-focusable"><?php print t('Skip to main content'); ?></a>
     <?php if ($main_menu): ?>
@@ -14,20 +15,20 @@
       <div id="header-menu-back"></div>
       
       <div id="logo-block">
-        <a href="<?php print $front_page; ?>" title="<?php print t('Park Home'); ?>" id="logo">
-          <img src="<?php //print 'http://park.all4senses.com/sites/all/themes/park/css/images/park-logo.png'; ?>" alt="<?php print t('Park logo'); ?>" title="<?php print t('Park Home'); ?>" />
+        <a href="<?php print $front_page; ?>" title="<?php print t('GoCloudBackup Home'); ?>" id="logo">
+          <img src="<?php print 'http://getvoip.com/sites/all/themes/gv_orange/css/images/getvoip-logo.png'; ?>" alt="<?php print t('GoCloudBackup logo'); ?>" title="<?php print t('GoCloudBackup Home'); ?>" />
         </a>
         <div class="descr">
-          <div class="title">Dream Park</div>
-          <div class="subtitle">Follow Your Dreams</div>
+          <div class="title">2012 GoCloudBAckup GUIDE</div>
+          <div class="subtitle">SERVICE PROVIDER REVIEWS</div><div class="stars"><img src="http://getvoip.com/sites/all/themes/gv_orange/css/images/sprite-0.png" alt="GoCloudBAckup Reviews" title="GoCloudBAckup Reviews"/></div>
         </div>
       </div>
       
-      <?php echo '<div id="block-gv-blocks-header-links"><div class="follow-us">Follow Us</div>', /*gv_blocks_get_headerLinks(),*/ '</div>', render($page['header']); ?>
-    </nav>
+      <?php echo '<div id="block-gv-blocks-header-links"><div class="follow-us">Follow Us</div>', gcb_blocks_get_headerLinks(), '</div>', render($page['header']); ?>
+    </nav> <!-- /#navigation -->
 
     <?php ////if ($breadcrumb): print $breadcrumb; endif;?>
-  </header> 
+  </header> <!-- /#header -->
 
   
   <?php if ($page['highlighted']): ?>
@@ -40,6 +41,7 @@
   <div id="all-content" class="clearfix">
       
       
+    
       <section id="main" role="main" class="clearfix">
 
           <?php print $messages; ?>
@@ -51,6 +53,25 @@
           
           <?php print render($page['above_content']); ?>
           <?php print render($page['content']); ?>
+          
+          <?php 
+          $pages_with_timestamp = array(
+            '/blog', 
+            '/news', 
+            '/about-us',
+            '/contact-us',
+            '/advertise',
+            '/press',
+            '/privacy-policy',
+            '/terms-of-use',
+            '/our-team',
+          );
+          //global $user;          
+          //if ($user->uid == 1) {
+          if($is_front || in_array($_SERVER['REDIRECT_URL'], $pages_with_timestamp))
+            echo gcb_misc_lastUpdatedStamp();
+          //}
+          ?>
           
       </section> <!-- /#main -->
 
@@ -69,10 +90,14 @@
 
   </div> <!-- /#all-content -->
 
+  </div> <!-- <div id="bshadow"> -->
+
+
   
   <footer id="footer" role="contentinfo" class="clearfix">
     <?php echo render($page['footer']); ?>
-    <div class="c">© 2012 Park.all4senses.com | All Rights Reserved</div>
-  </footer>
-  
-</div> <!-- /#container -->  
+    <div class="c">© 2012 GoCloudBackup.com | All Rights Reserved</div>
+    <div id="sitelock"><a id="sitelock" href="#" onclick="window.open('https://www.sitelock.com/verify.php?site=getvoip.com','SiteLock','width=600,height=600,left=160,top=170');" ><img alt="website security" title="SiteLock"  src="//shield.sitelock.com/shield/getvoip.com"/></a></div>
+    <a id="valid-rss" href="http://appc.w3.org/check.cgi?url=http%3A//getvoip.com/rss.xml"><img src="http://getvoip.com/sites/all/themes/gv_orange/css/images/valid-rss-rogers.png" alt="[Valid RSS]" title="Validate my RSS feed" /></a>
+  </footer> <!-- /#footer -->
+

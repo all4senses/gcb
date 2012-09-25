@@ -1,0 +1,2796 @@
+<?php
+
+/**
+ * @file
+ * Module contained miscelanious helper functions and hooks.
+ */
+
+
+/**
+ * Constants for ratins titles, etc.
+ */
+module_load_include('inc', 'gcb_misc', 'inc/constants');
+
+
+/**
+ * Implements hook_menu().
+ */
+function gcb_misc_menu() {
+ 
+  $items['request'] = array(
+    'title' => 'Make a request',
+    'page callback' => 'gcb_misc_makeRequest_ajax',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  ); 
+
+  $items['request/capture'] = array(
+    'title' => 'Capture users data on the fly before submitting a request',
+    'page callback' => 'gcb_misc_makeRequestCapture_ajax',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+    
+  $items['test'] = array(
+    'title' => 'Test page',
+    'page callback' => 'gcb_misc_testPage',
+    'access arguments' => array('administer content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['admin/content/reviews-to-approve'] = array(
+    'title' => 'Reviews to Approve',
+    'page callback' => 'gcb_misc_gotoReviewsToApprove',
+    //'access arguments' => array('administer content'),
+    'access callback' => 'gcb_misc_userIsAdmin',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  
+  $items['approve/%/%'] = array(
+    'title' => 'Approve content',
+    'page callback' => 'gcb_misc_approveContent',
+    'page arguments' => array(1,2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+
+/**
+ * Returns default file public path.
+ */
+function gcb_misc_file_public_path() {
+  return variable_get('file_public_path', 'f');
+}
+
+/**
+ * Hook menu alter.
+ */
+function gcb_misc_menu_alter(&$items) {
+  // Example - disable the page at node/add
+  //$items['node/add']['access callback'] = FALSE;
+  
+  // Remove all Tagadelic urls.
+  unset($items['tagadelic'], $items['tagadelic/list/%tagadelic_vocs'], $items['tagadelic/chunk/%tagadelic_vocs']);
+}
+
+
+/**
+ * Set (if bigger then 12 hours period) and returns a last updated time stamp
+ *
+ */
+function gcb_misc_lastUpdatedStamp($min_hours = 24, $relative_path = NULL) {
+
+  if (!$relative_path) {
+    $relative_path = $_SERVER['REQUEST_URI'];
+    if ($relative_path == '/home') {
+      $relative_path = '/';
+    }
+  }
+  
+  $query = db_select('gcb_last_updated', 'lu')
+      ->fields('lu', array('timestamp'));
+  $query->condition('lu.path', $relative_path);
+  $last_updated = $query->execute()->fetchfield();
+  
+  $current_time = time();
+  
+  if (!$last_updated || ($current_time - $last_updated) > $min_hours * 3600 ) {
+    // Update or insert new timestamp
+    if ($last_updated) {
+      $result = db_update('gcb_last_updated')
+        ->fields(array(
+          'timestamp' => $current_time,
+        ))
+        ->condition('path', $relative_path)
+        ->execute();
+    }
+    else {
+      $result = db_insert('gcb_last_updated')
+        ->fields(array(
+          'path' => $relative_path,
+          'timestamp' => $current_time,
+        ))
+        ->execute();
+    }
+    return '<div class="ts">' . t('Last Updated: ') . date('F d, Y \a\t g:ia', $current_time) . '</div>';
+  }
+  else {
+    return '<div class="ts">' . t('Last Updated: ') . date('F d, Y \a\t g:ia', $last_updated) . '</div>';
+  }
+}
+
+
+/**
+ * Get prefaces main section rendered.
+ *
+ */
+function gcb_misc_getPrefaceMainSection($key) {
+  $node = gcb_misc_getPrefaceByKey($key);
+  $node->title_no_link = TRUE;
+  $node_view = node_view($node, 'full');
+  
+  return render($node_view/*['body']*/);
+}
+
+
+/**
+ * Get prefaces bottom section rendered.
+ *
+ */
+function gcb_misc_getPrefaceBottomSection($key) {
+  $node = gcb_misc_getPrefaceByKey($key);
+  $node_view = node_view($node, 'full');
+
+  return render($node_view['field_preface_bottom']);
+}
+
+
+/**
+ * Renders metatags array with a new order of tags: description, keywords, the rest...
+ *
+ */
+function gcb_misc_getUserRealName($uid) {
+  
+  $query = db_select('realname', 'rn')
+      ->fields('rn', array('realname'));
+  $query->condition('rn.uid', $uid);
+  $realname = $query->execute()->fetchfield();
+  
+  return $realname;
+}
+
+
+/**
+ * Returns initial (landing) node for a given final request a quote page.
+ */
+function gcb_misc_getInitialQuotePageNode($finalQuotePage_title) {
+  
+  $title = trim(str_replace(' Final', '', $finalQuotePage_title));
+  $query = db_select('node', 'n')
+      ->fields('n', array('nid'));
+  $query->condition('n.title', $title);
+  $query->condition('n.type', 'quote');
+  $nid = $query->execute()->fetchfield();
+  
+  return node_load($nid);
+}
+
+
+/**
+ * Renders metatags array with a new order of tags: description, keywords, the rest...
+ *
+ */
+function gcb_misc_renderMetatags_newOrder(&$metatags) {
+  
+  echo render($metatags['description']);
+  echo render($metatags['keywords']);
+  // The rest...
+  echo render($metatags);
+}
+
+
+/**
+ * Process variables for search-result.tpl.php.
+ *
+ * The $variables array contains the following arguments:
+ * - $result
+ * - $module
+ *
+ * @see search-result.tpl.php
+ */
+function gcb_misc_preprocess_search_result(&$variables) {
+  
+  // Original code.
+  /*
+  global $language;
+  
+  $result = $variables['result'];
+  $variables['url'] = check_url($result['link']);
+  $variables['title'] = check_plain($result['title']);
+  if (isset($result['language']) && $result['language'] != $language->language && $result['language'] != LANGUAGE_NONE) {
+    $variables['title_attributes_array']['xml:lang'] = $result['language'];
+    $variables['content_attributes_array']['xml:lang'] = $result['language'];
+  }
+
+  $info = array();
+  if (!empty($result['module'])) {
+    $info['module'] = check_plain($result['module']);
+  }
+  if (!empty($result['user'])) {
+    $info['user'] = $result['user'];
+  }
+  if (!empty($result['date'])) {
+    //$info['date'] = format_date($result['date'], 'short');
+    // a4s changes
+    //$info['date'] = date('F d, Y \a\t g:ia', $result['date']);
+    //$info['date'] = date('F d, Y \a\t g:ia', $result['node']->created);
+  }
+  if (isset($result['extra']) && is_array($result['extra'])) {
+    $info = array_merge($info, $result['extra']);
+  }
+  // Check for existence. User search does not include snippets.
+  $variables['snippet'] = isset($result['snippet']) ? $result['snippet'] : '';
+  // Provide separated and grouped meta information..
+  $variables['info_split'] = $info;
+  $variables['info'] = implode(' - ', $info);
+  $variables['theme_hook_suggestions'][] = 'search_result__' . $variables['module'];
+  */
+  
+  
+  // a4s changes
+  $result = $variables['result'];
+  if (!empty($result['date'])) {
+    $info = array();
+    //$info['date'] = format_date($result['date'], 'short');
+    //$info['date'] = date('F d, Y \a\t g:ia', $result['date']);
+    $info['date'] = date('F d, Y \a\t g:ia', $result['node']->created);
+    
+    if (isset($result['extra']) && is_array($result['extra'])) {
+      $info = array_merge($info, $result['extra']);
+    }
+    $variables['info_split'] = $info;
+    $variables['info'] = implode(' - ', $info);
+  }
+}
+
+
+/**
+ * Implements hook_ranking() for Search ranking.
+ */
+function gcb_misc_ranking() {
+ // Add relevance based on creation or changed date.
+  if ($node_cron_last = variable_get('node_cron_last', 0)) {
+    $ranking['recent_created'] = array(
+      'title' => t('Recently posted (created)'),
+      // Exponential decay with half-life of 6 months, starting at last indexed node
+      'score' => 'POW(2.0, (n.created - :node_cron_last) * 6.43e-8)',
+      'arguments' => array(':node_cron_last' => $node_cron_last),
+    );
+  }
+  return $ranking;
+}
+
+
+/**
+ * Push field tags to metatags in the Head.
+ */
+function gcb_misc_pushTagsToMetatags($name, $value) {
+  switch ($name) {
+    case 'keywords':
+      $t = '';
+      $tags = element_children($value);
+      foreach ($tags as $tag) {
+        $t .= $t ? ', ' . $value[$tag]['#title'] : $value[$tag]['#title'];
+      }
+      if ($t) {
+        gcb_misc_addMetatag($name, $t);
+      }
+      break;
+  }
+}
+
+
+/**
+ * Allow modules to define namespaces for RDF mappings.
+ *
+ * Many common namespace prefixes are defined in rdf_rdf_namespaces(). However,
+ * if a module implements hook_rdf_mapping() and uses a prefix that is not
+ * defined in rdf_rdf_namespaces(), this hook should be used to define the new
+ * namespace prefix.
+ *
+ * @return
+ *   An associative array of namespaces where the key is the namespace prefix
+ *   and the value is the namespace URI.
+ *
+ * @ingroup rdf
+ */
+// a4s Seems it didn't work out...
+function gcb_misc_rdf_namespaces() {
+  return array(
+    'xmlns:addthis'  => 'http://www.addthis.com/help/api-spec',
+    'xmlns:g'  => 'http://base.google.com/ns/1.0',
+  );
+}
+
+
+/**
+ * Implements hook_TYPE_alter().
+ * 
+ * Specifically hook_html_head_alter().
+ */
+function gcb_misc_html_head_alter(&$object) {
+  if (isset($object['rdf_node_comment_count'])) {
+    unset($object['rdf_node_comment_count']['#attributes']['datatype']);
+  }
+}
+
+
+/**
+ * Implements hook_views_api().
+ *
+ * @return array
+ *   Views api definition.
+ */
+function gcb_misc_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'gcb_misc') . '/inc',
+  );
+} 
+
+
+/**
+ * Form with a fieldset of Add content section for Admin Content GoCloudBackup page (by Views).
+ */
+function gcb_misc_AddContentSection_form() {
+  
+  global $user;
+  
+  $types = node_type_get_types();
+  
+  // Hide some content tupes if not a root.
+  if ($user->uid != 1) {
+    unset($types['admin_page'], $types['preface'], $types['quote'], $types['webform']);
+  }
+  
+  $options = array('' => '- Select a content type -');
+  foreach ($types as $type => $value) {
+    $options[str_replace('_', '-', $type)] = $value->name;
+  }
+  
+  $form['add_content'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Add a new content'),
+    '#collapsible' => TRUE,
+  );
+  $form['add_content']['select_type'] = array(
+    '#type' => 'select',
+    //'#title' => 'Select content type',
+    '#options' => $options,
+    '#attributes' => array('id' => 'select_type',  'onChange' => "top.location.href='http://gocloudbackup.com/node/add/" . "' + document.getElementById('select_type').options[document.getElementById('select_type').selectedIndex].value"),
+  );
+  
+  return $form;
+}
+
+
+/**
+ * Return trimmed teaser with right size (cleared from images) and with separated a styled image, cutted off from the body.
+ */
+function gcb_misc_getArticleTeaserData($target, $body_full_markup, $nid, $characters_num = NULL, $only_teaser = FALSE) {
+ 
+  $main_image_html = NULL;
+  $main_image = NULL;
+  $matches = NULL;
+
+  if (preg_match('/<img[^>]+>/i', $body_full_markup, $matches)) {
+    preg_match_all('/(alt|title|src)="([^"]*)"/i',$matches[0], $matches);
+    foreach ($matches[1] as $index => $key) {
+      $main_image[$key] = $matches[2][$index];
+    }
+    $main_image['src'] = str_replace('%20', ' ', $main_image['src']);
+    $stream_path = gcb_misc_getStreamUriFromRelativePath($main_image['src']);
+    $main_image['uri'] = $stream_path;
+    
+    $image_size = getimagesize(ltrim($main_image['src'], '/'));
+
+    // Scale and cut.
+    /*
+    if ($image_size[0] / $image_size[1] > 1.5) {
+      $main_image_html = theme('image_style', array( 'path' => $stream_path, 'style_name' => 'article_thumbnail_h'));
+    }
+    else {
+      $main_image_html = theme('image_style', array( 'path' => $stream_path, 'style_name' => 'article_thumbnail_v'));
+    }
+    */
+    // Scale only.
+    if ($image_size[0] / $image_size[1] > 1) {
+      $style_name = 'article_thumbnail_h';
+      $main_image_html = theme('image_style', array( 'path' => $stream_path, 'style_name' => $style_name));
+      //$main_image['src_themed'] = image_style_url($style_name, $stream_path);
+    }
+    else {
+      $style_name = 'article_thumbnail_v';
+      $main_image_html = theme('image_style', array( 'path' => $stream_path, 'style_name' => $style_name));
+      //$main_image['src_themed'] = image_style_url($style_name, $stream_path);
+    }
+    
+    // Image for sharing.
+    if ($image_size[0] / $image_size[1] > 1) {
+      // Too wide. will not be cutted.
+      $main_image['src_themed'] = image_style_url('share_wide', $stream_path);
+    }
+    elseif ($image_size[1] / $image_size[0] < 1) {
+      // Too tall. will not be cutted.
+      $main_image['src_themed'] = image_style_url('share_tall', $stream_path);
+    }
+    else {
+      //Normal image, will not be cutted.
+      $main_image['src_themed'] = image_style_url('share', $stream_path);
+    }
+    
+    
+    $main_image_html = '<div class="thumb">' . $main_image_html . '</div>';
+    
+    //$main_image_html = theme('image_style', array( 'path' => $stream_path, 'style_name' => 'article_thumbnail'));
+    
+    $body_full_markup = preg_replace('/<img[^>]+>/i', '', $body_full_markup);
+  }
+
+  $teaser = strip_tags($body_full_markup);
+  
+  
+  if (!$characters_num) {
+    if ($main_image_html) {
+      $characters_num = 130;
+    }
+    else {
+      $characters_num = 250;
+    }
+  }
+  
+  // $teaser = text_summary($body_full_markup, 'full_html', $characters_num);
+  $teaser = trim(drupal_substr($teaser, 0, $characters_num));
+  
+  // Replace the last word with ...
+  // preg_match('/^.*\s(.*)$/i', trim(strip_tags($teaser)), $matches);
+  // $last_pos = strrpos($teaser, $matches[1]);
+  $last_pos = strrpos($teaser, ' ');
+  
+  // $teaser = substr_replace ($teaser, '...' . l(t('Read More'), 'node/' . $nid, array('attributes' => array('class' => array('more')))) , $last_pos, strlen($matches[1]));
+  $teaser = substr_replace ($teaser, '...' . l(t('Read More'), 'node/' . $nid, array('attributes' => array('class' => array('more')))), $last_pos);
+
+  if ($only_teaser) {
+    return $main_image_html . $teaser;
+  }
+  else {
+    return array('teaser' => $main_image_html . $teaser, 'main_image' => $main_image);
+  }
+  
+}
+
+
+/**
+ * Rewrite links like <public files dir>/pdfs/ to alias /pdfs/ (forward) and vise versa and others.
+ */
+function gcb_misc_rewriteLinks($type, $data, $direction = 'forward') {
+  switch ($type) {
+    
+    case 'pdfs':
+      
+      $file_public_path = gcb_misc_file_public_path();
+      
+      if ($direction == 'forward') {
+        
+        // Converts from <public files dir>/pdfs/ to /pdfs/
+        // the real path will be accessible with .htaccess mod_rewrite settings in the root of the site.
+
+        // $body = $form_state['values']['body'];
+        $body = $data['values']['body'];
+        $count1 = $count2 = 0;
+        if ($body['und'][0]['value']) {
+          //$body['und'][0]['value'] = preg_replace('|"/sites/default/files/pdfs|', '"/pdfs', $body['und'][0]['value'], -1, $count1);
+          $body['und'][0]['value'] = preg_replace('|"/' . $file_public_path . '/pdfs|', '"/pdfs', $body['und'][0]['value'], -1, $count1);
+        }
+        if ($body['und'][0]['summary']) {
+          //$body['und'][0]['summary'] = preg_replace('|/sites/default/files/pdfs|', '"/pdfs', $body['und'][0]['summary'], -1, $count2);
+          $body['und'][0]['summary'] = preg_replace('|/' . $file_public_path . '/pdfs|', '"/pdfs', $body['und'][0]['summary'], -1, $count2);
+        }
+        if ($count1 + $count2 > 0) {
+          return $body;
+        }
+      }
+      else {
+        // Converts from /pdfs/ to <public files dir>/pdfs/
+
+        // $body = $form['body']
+        $body = $data['body'];
+        if ($body['und'][0]['#default_value']) {
+          //$body['und'][0]['#default_value'] = preg_replace('|"/pdfs|', '"/sites/default/files/pdfs', $body['und'][0]['#default_value'], -1);
+          $body['und'][0]['#default_value'] = preg_replace('|"/pdfs|', '"/' . $file_public_path . '/pdfs', $body['und'][0]['#default_value'], -1);
+        }
+        if ($body['und'][0]['summary']['#default_value']) {
+          //$body['und'][0]['summary']['#default_value'] = preg_replace('|"/pdfs|', '"/sites/default/files/pdfs', $body['und'][0]['summary']['#default_value'], -1);
+          $body['und'][0]['summary']['#default_value'] = preg_replace('|"/pdfs|', '"/' . $file_public_path . '/pdfs', $body['und'][0]['summary']['#default_value'], -1);
+        }
+        return $body;
+      }
+      break;
+  }
+  return NULL;
+}
+
+
+/**
+ * Convert path from Drupal stream uri.
+ */
+function gcb_misc_getPathFromStreamUri($uri) {
+  $file_default_scheme = file_default_scheme();
+  $default_file_path = variable_get('file_' . $file_default_scheme . '_path', ($file_default_scheme == 'public' ? 'f' : 'pf'));
+  
+  return $default_file_path . str_replace($file_default_scheme . ':/', '', $uri);
+}
+
+
+/**
+ * Convert a relative or absolute path to Drupal stream uri.
+ */
+function gcb_misc_getStreamUriFromRelativePath($path) {
+  $file_default_scheme = file_default_scheme();
+  $default_file_path = variable_get('file_' . $file_default_scheme . '_path', ($file_default_scheme == 'public' ? 'f' : 'pf'));
+
+  $stream_path = str_replace('http://gocloudbackup.com', '', $path);
+  $stream_path = ltrim($stream_path, '/');
+  return $file_default_scheme . ':/' . str_replace($default_file_path, '', $stream_path);
+}
+
+
+/**
+ * Helper function to add metatag to a current page.
+ */
+function gcb_misc_addMetatag($name, $content, $href = NULL) {
+  if ($content) {
+    if ($name == 'title') {
+      drupal_set_title($content);
+    }
+    else {
+      $meta = array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+            'name' => $name,
+            'content' => $content,
+        )
+      );
+      drupal_add_html_head($meta, $name);
+    }
+  } // End of if ($content) {
+  elseif($href) {
+    $meta = array(
+      '#tag' => 'link',
+      '#attributes' => array(
+          'rel' => $name,
+          'href' => $href,
+      )
+    );
+    drupal_add_html_head($meta, $name);
+  } // End of elseif($href) {
+}
+
+
+/**
+ * Get the title metatag for the front page from the Metatag module's settings.
+ */
+function gcb_misc_metatag_getFrontTitle() {
+  $metatags = metatag_metatags_view('global:frontpage', array());
+  return $metatags['title']['#attached']['metatag_set_preprocess_variable'][0][2];
+}
+
+
+/**
+ * Helper function to add sharing data (metatags and links) to a current page.
+ */
+function gcb_misc_addSocialShareData_toPage($node) {
+  
+  global $gplus_type;
+  $image = NULL;
+  $og_type = NULL;
+  $title = NULL;
+  
+  if (@$node->field_preface_key['und'][0]['value'] == 'front') {
+    $title = gcb_misc_metatag_getFrontTitle();
+  }
+  if (!$title) {
+    if (isset($node->metatags['title']['value']) && $node->metatags['title']['value']) {
+      $title = $node->metatags['title']['value'];
+    }
+    else {
+      $title = $node->title;
+    }
+  }
+  
+  
+  switch ($node->type) {
+    case 'blog_post':
+    case 'news_post':
+    case 'article':
+      if (isset($node->field_main_image['und'][0]['value']) && $node->field_main_image['und'][0]['value']) {
+        $image = unserialize($node->field_main_image['und'][0]['value']);
+        if (isset($image['src_themed']) && $image['src_themed']) {
+          $image = $image['src_themed'];
+        }
+        elseif (isset($image['src']) && $image['src']) {
+          $image = $image['src'];
+        }
+        else {
+          $image = NULL;
+        }
+      }
+      
+      $og_type = 'article';
+      $gplus_type = 'Article';
+      break;
+    
+      
+      
+    case 'provider':
+      
+      $p_data = unserialize($node->field_p_data['und'][0]['value']);
+      if (isset($p_data['logo_share_src_themed']) && $p_data['logo_share_src_themed']) {
+        $image = $p_data['logo_share_src_themed'];
+      }
+      elseif(isset($node->field_p_logo['und'][0]['uri']) && $node->field_p_logo['und'][0]['uri']) {
+        $image = gcb_misc_getPathFromStreamUri($node->field_p_logo['und'][0]['uri']);
+      }
+      
+      $og_type = 'company';
+      $gplus_type = 'LocalBusiness';
+      break;
+      
+      
+      
+    case 'review':
+      global $review_provider_logo_path;
+      if ($review_provider_logo_path) {
+        $image = $review_provider_logo_path;
+      }
+      $og_type = 'company';
+      $gplus_type = 'Review';
+      // Refresh a title a bit.
+      $title = $node->field_r_provider_name['und'][0]['value'] . ' Review - ' . $node->title;
+      break;
+    
+  }
+  
+  if (!$image){
+    // Show default image - the logo.
+    //$image = '/sites/all/themes/gcb_orange/css/images/gocloudbackup-logo.png';
+    $image = '/sites/all/themes/gcb_orange/css/images/gocloudbackup-logo-t.png';
+  }
+
+  if (!strpos($image, '//gocloudbackup.com')) {
+    $image = 'http://gocloudbackup.com/' . ltrim($image, '/');
+  }
+
+  $tags = array(
+       /*
+      'title' => array(
+          '#tag' => 'meta',
+          '#attributes' => array(
+              'name' => 'title',
+              'content' => "Video '" . $node->title . "' by " . $publisher_title,
+          ),
+      ),
+      'DC.title' => array(
+          '#tag' => 'meta',
+          '#attributes' => array(
+              'name' => 'DC.title',
+              'content' => $node->title,
+          ),
+      ),
+      'description' => array(
+          '#tag' => 'meta',
+          '#attributes' => array(
+              'name' => 'description',
+              'content' => (isset($node->body['und'][0]['summary']) AND $node->body['und'][0]['summary'])?$node->body['und'][0]['summary']:drupal_substr(strip_tags($node->body['und'][0]['value']), 0, 200) . '...',
+          ),
+      ),
+      'author' => array(
+          '#tag' => 'meta',
+          '#attributes' => array(
+              'name' => 'author',
+              'content' => $publisher_title,
+          ),
+      ),
+
+
+
+      'medium' => array(
+          '#tag' => 'meta',
+          '#attributes' => array(
+              'name' => 'medium',
+              'content' => 'video',
+          ),
+      ),
+
+      'video_type' => array(
+          '#tag' => 'meta',
+          '#attributes' => array(
+              'name' => 'video_type',
+              'content' => 'application/x-shockwave-flash',
+          ),
+      ),
+
+      'video_height' => array(
+          '#tag' => 'meta',
+          '#attributes' => array(
+              'name' => 'video_height',
+              'content' => '300',
+          ),
+      ),
+
+      'video_width' => array(
+          '#tag' => 'meta',
+          '#attributes' => array(
+              'name' => 'video_height',
+              'content' => '500',
+          ),
+      ),
+
+
+      'video_src' => array(
+          '#tag' => 'link', // The #tag is the html tag - <link />
+          '#attributes' => array( 
+              'href' => 'http://ripplin.com/sites/all/libraries/flowplayer/flowplayer-3.2.8.swf?config=' . urlencode('http://ripplin.com/video-src?v=' . $node->nid),
+              'rel' => 'video_src',
+          ),
+      ),
+      */
+  
+    'fb:admins' => array(
+      '#type' => 'html_tag',
+      '#tag' => 'meta',
+      '#attributes' => array(
+          'property' => 'fb:admins',
+          'content' => 'http://www.facebook.com/getvoipservice',
+      ),
+    ),
+
+    // Title for Facebook.
+    'og:title' => array(
+      '#type' => 'html_tag',
+      '#tag' => 'meta',
+      '#attributes' => array(
+          'property' => 'og:title',
+          'content' => $title,
+      ),
+    ),
+      
+    // Title for G+.
+    'name' => array(
+      '#type' => 'html_tag',
+      '#tag' => 'meta',
+      '#attributes' => array(
+          'itemprop' => 'name',
+          'content' => $title,
+      ),
+    ),
+      
+    'image_src' => array(
+      '#tag' => 'link', // The #tag is the html tag - <link />
+      '#attributes' => array( 
+          'href' => $image,
+          'rel' => 'image_src',
+          //'type' => 'text/css',
+      ),
+    ),
+  
+    // For Facebook.
+    'og:image' => array(
+      '#type' => 'html_tag',
+      '#tag' => 'meta',
+      '#attributes' => array(
+          'property' => 'og:image',
+          'content' => $image,
+      ),
+    ),
+      
+    // For G+.  
+    'image' => array(
+      '#type' => 'html_tag',
+      '#tag' => 'meta',
+      '#attributes' => array(
+          'itemprop' => 'image',
+          'content' => $image,
+      ),
+    ),
+      
+      
+      
+    // Add main rss feed to every page.
+    'main_rss' => array(
+      '#tag' => 'link', 
+      '#attributes' => array( 
+          'rel' => 'alternate',
+          'type' => 'application/rss+xml',
+          'title' => 'Latest Articles from GoCloudBackup',
+          'href' => 'http://gocloudbackup.com/rss.xml',
+      ),
+    ),
+      
+  );
+
+    
+  
+  if ($og_type) {
+   
+    $tags['og:type'] = array(
+        '#type' => 'html_tag',
+        '#tag' => 'meta',
+        '#attributes' => array(
+            'property' => 'og:type',
+            'content' => $og_type,
+        ),
+    );
+  }
+  
+  
+        
+  foreach ($tags as $key => $val)
+      drupal_add_html_head($val, $key);
+        
+}
+
+
+/**
+ * Returns votes ids for a specific criteria.
+ */
+function gcb_misc_getVotesIDs($criteria) {
+    $query = db_select('votingapi_vote', 'v')
+      ->fields('v', array('vote_id', 'tag', 'value'));
+    foreach ($criteria as $field => $value) {
+      $query->condition($field, $value);
+    }
+    $results = $query->execute()->fetchAllAssoc('vote_id');
+    $votes = array();
+    foreach ($results as $result) {
+      //$votes[] = array('vote_id' => $result->vote_id);
+      $votes[] = (array) $result;
+    }
+    return $votes;
+}
+
+
+/**
+ * Helper function to for administer menu.
+ */
+function gcb_misc_gotoReviewsToApprove() {
+  drupal_goto('admin/content/approve-reviews');
+}
+
+
+/**
+ * Approve content by type and nid.
+ */
+function gcb_misc_approveContent($type, $id) {
+
+  switch ($type) {
+    
+    case 'review':
+      
+      global $user;
+      if (!in_array('administrator', $user->roles)) {
+        drupal_access_denied();
+        return;
+      }
+      // Disallow for now to approve a review right from the list... let's do it via the edit form.
+      /*
+      if (!$id || !$node = node_load($id)) {
+        return t('Wrong Review Id');
+      }
+      $node->field_r_notapproved['und'][0]['value'] = 0;
+      $node->status = 1;
+      node_save($node);
+      drupal_set_message('The review ' . l($node->title, 'node/' . $node->nid) . ' is now approved and published.');
+      drupal_goto();
+      */
+      break;
+    
+    case 'email':
+      
+      $approve = explode('=', $id);
+      if(count($approve) != 2 ) {
+        drupal_access_denied();
+        return;
+      }
+      $code = $approve[0];
+      $email = $approve[1];
+      
+      $query = db_select('field_data_field_r_email', 're')
+        ->fields('re', array('entity_id'));
+      $query->condition('field_r_email_value', $email);
+      $review_nid = $query->execute()->fetchField();
+      
+      if (!$review_nid) {
+        //drupal_access_denied();
+        return t('Sorry, no review with such an email found.');
+      }
+      
+      $query = db_select('node', 'n')
+        ->fields('n', array('uid'))
+        ->fields('ac', array('field_r_approvecode_value'));
+      $query->condition('nid', $review_nid);
+      $query->leftJoin('field_data_field_r_approvecode', 'ac', 'ac.entity_id = n.nid');
+      $review = $query->execute()->fetchObject();
+      
+      if ($review->uid) {
+        // Wrong request because it's a registered user's email.
+        //drupal_access_denied();
+        return t('Wrong request.');
+      }
+      if (!$review->field_r_approvecode_value) {
+        return t('This email is already approved.');
+      }
+      if ($review->field_r_approvecode_value != $code) {
+        return t('Wrong verification code!');
+      }
+      
+      // We are ready to approve the email now.
+      $review = node_load($review_nid);
+      $review->field_r_approvecode['und'][0]['value'] = '';
+      node_save($review);
+      return t('Thank you! Your email has been successfully verified! After approving by our administrators, your review will be published on our site.');
+  }
+  
+  drupal_access_denied();
+}
+
+
+/**
+ * Implements hook_url_inbound_alter().
+ */
+function gcb_misc_url_inbound_alter(&$path, $original_path, $path_language) {
+//Create the path /contact-us from /contact
+//if (preg_match('|^contact-us$|', $path, $matches)) {
+//  $path = 'contact';
+//}
+//else
+  if ($path == 'cloudbackup-provider-submit-user-review') {
+    $path = 'node/add/review';
+  }
+//  elseif (preg_match('|^pdfs\/(.*)|', $path, $matches)) {
+//    //$path = 'pdfs/voipe911-advisory.pdf';
+//    
+//    $file_public_path = gcb_misc_file_public_path();
+//    //$path = 'sites/default/files/pdfs/' . $matches[1];
+//    $path = $file_public_path . '/pdfs/' . $matches[1];
+//  }
+}
+
+
+/**
+ * Implements hook_url_outbound_alter().
+ */
+function gcb_misc_url_outbound_alter(&$path, &$options, $original_path) {
+  // Create the path /contact-us from /contact
+//  if (preg_match('|^contact$|', $path, $matches)) {
+//    $path = 'contact-us';
+//  }
+//  else
+  if ($path == 'node/add/review') {
+    $path = 'cloudbackup-provider-submit-user-review';
+  }
+  //elseif (preg_match('|^sites\/default\/files\/pdfs\/(.*)|', $path, $matches)) {
+  elseif (preg_match('|^' . addslashes(gcb_misc_file_public_path()) . '\/pdfs\/(.*)|', $path, $matches)) {
+    //$path = 'sites/default/files/pdfs/voipe911-advisory.pdf';
+    //$path = 'f/pdfs/voipe911-advisory.pdf';
+    
+    $path = 'pdfs/' . $matches[1];
+  }
+}
+
+
+/**
+ * Loads jquery plugin Colorbox to open videos in popup windows
+ */
+function gcb_misc_loadColorboxForVideoLinks($type = 'YouTube Direct Link') {
+  switch ($type) {
+    case 'YouTube Direct Link':
+        // for links with a class "yt-direct" like <a class="yt-direct" href="http://www.youtube.com/embed/9fWAFw4iSrg?rel=0&amp;wmode=transparent" title="Fonality HUD - Full Demo">Fonality HUD - Full Demo</a>
+        drupal_add_js('sites/all/libraries/jquery.plugins/colorbox/colorbox/jquery.colorbox-min.js');
+        drupal_add_css('sites/all/libraries/jquery.plugins/colorbox/example1/colorbox.css');
+        $path_to_custom_js = drupal_get_path('module', 'gcb_misc') . '/js/';
+        drupal_add_js($path_to_custom_js . 'gcb_colorbox_p_video.js');
+        break;
+  }
+}
+
+
+/**
+ * Test page function for url /test.
+ */
+function gcb_misc_testPage() {
+  $out = '';
+
+  $file_public_path = gcb_misc_file_public_path();
+  $dir = $file_public_path . '/jsmin-gcb';
+  $objects = scandir($dir);
+  foreach ($objects as $object) {
+    if ($object != "." && $object != "..") {
+      unlink($dir . "/" . $object);
+    }
+  }
+ 
+  variable_del('gcb_minified_js');
+  
+  return $out . '<br>End of Test';
+}
+
+
+/**
+ * Implements on the fly capturing of a users' data before they have submit requests.
+ * 
+ * Returns nothing.
+ */
+function gcb_misc_makeRequestCapture_ajax() {
+  $status = TRUE;
+  $output = '';
+  
+  $post = array();
+  foreach ($_POST as $key => $value) {
+    $post[$key] = check_plain(strip_tags($value));
+  }
+  
+  
+  if (@$post['op'] == 'exit') {
+    
+    if (isset($_SESSION['ucaptured_timestamp'])) {
+      
+      // If a row in the DB has been created already
+      $query = db_select('gcb_quote_requests', 'qr')
+        ->fields('qr', array('data'));
+      $query->condition('qr.timestamp', $_SESSION['ucaptured_timestamp']);
+      $ucaptured = $query->execute()->fetchField();
+      $ucaptured = unserialize($ucaptured);  
+      
+      $ucaptured = gcb_misc_setUcapturedVariable($post, $ucaptured);
+
+      if ($ucaptured['Email']) {
+      
+            // Send alert email.
+            $ucaptured_data = gcb_misc_setUcapturedVariable(NULL, $ucaptured, TRUE);
+            $ucaptured_data += array(
+              'User IP' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
+              'Start Submission Time' => date('Y-m-d, H:i:s', $_SESSION['ucaptured_timestamp']),
+            );
+            
+            if (isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] && !strpos($_SERVER['HTTP_REFERER'], '://gocloudbackup.com')) {
+              $ucaptured_data['Referrer'] = $_SERVER['HTTP_REFERER'];
+            }
+            
+            $params['ucaptured_data'] = $ucaptured_data;
+            global $language;
+            
+            // Normal send if not a test from a4s
+            drupal_mail('gcb_misc', 'request_quote', 'leads@gocloudbackup.com', $language->language, $params);
+            // Test letter to the root
+            drupal_mail('gcb_misc', 'request_quote_ucaptured_data', 'all4senses@gmail.com', $language->language, $params);
+            
+            // Update DB.
+            $result = db_update('gcb_quote_requests')
+              ->fields(array(
+                'data' => serialize($ucaptured),
+                'status' => 1, // Unsubmitted, sent.
+                'checked' => 1, // Reviewed, because is sent.
+                'email_presented' => $ucaptured['Email'] ? 1 : 0,
+              ))
+              ->condition('timestamp', $_SESSION['ucaptured_timestamp'])
+              ->execute();
+
+          } // End of if ($ucaptured['email']) {
+          else {
+
+            // Remove the row from DB (if it is there) because it's useless without an email.
+            /*
+            if (isset($_SESSION['ucaptured_timestamp'])) {
+              $result = db_delete('gcb_quote_requests')
+                ->condition('timestamp', $_SESSION['ucaptured_timestamp'])
+                ->execute();
+            }
+            */
+          } // End of Else of if ($ucaptured['email']) {
+
+          unset($_SESSION['ucaptured_timestamp']);
+    
+    } // End of if (isset($_SESSION['ucaptured_timestamp'])) {
+
+    
+    
+    
+  } // End of if (@$post['op'] == 'exit') {
+  else {
+    
+    // Op = set
+    
+    if (isset($_SESSION['ucaptured_timestamp'])) {
+      
+      // A row has been already created.
+      
+      $query = db_select('gcb_quote_requests', 'qr')
+        ->fields('qr', array('data'));
+      $query->condition('qr.timestamp', $_SESSION['ucaptured_timestamp']);
+      $ucaptured = $query->execute()->fetchField();
+      
+      if ($ucaptured) {
+        $ucaptured = unserialize($ucaptured);
+        
+        $ucaptured = gcb_misc_setUcapturedVariable($post, $ucaptured);
+        
+        $result = db_update('gcb_quote_requests')
+          ->fields(array(
+            'data' => serialize($ucaptured),
+            'email_presented' => $ucaptured['Email'] ? 1 : 0,
+          ))
+          ->condition('timestamp', $_SESSION['ucaptured_timestamp'])
+          ->execute();
+
+      } // End of if ($ucaptured) {
+      else {
+        
+        $ucaptured = gcb_misc_setUcapturedVariable($post);
+        
+        $result = db_insert('gcb_quote_requests')
+          ->fields(array(
+            'timestamp' => $_SESSION['ucaptured_timestamp'],
+            'status' => 0, // Unsubmitted, not yet sent.
+            'ip' =>  isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
+            'data' => serialize($ucaptured),
+            'checked' => 0, // Not reviewed by a user or not sent
+            'email_presented' => $ucaptured['Email'] ? 1 : 0,
+          ))
+          ->execute();
+      } // End of Else of if ($ucaptured) {
+      
+    } // End of if (isset($_SESSION['ucaptured_timestamp'])) {
+    else {
+      
+      // A row is not yet created in the DB.
+      
+      $_SESSION['ucaptured_timestamp'] = time();
+      
+      // Check if such timestamp alreade exists.
+      $query = db_select('gcb_quote_requests', 'qr')
+        ->fields('qr', array('data'));
+      $query->condition('qr.timestamp', $_SESSION['ucaptured_timestamp']);
+      $tmp = $query->execute()->fetchField();
+    
+      if ($tmp) {
+        // It exists, so we'll just increment timestamp, hopely a new one doesn't exist.
+        $_SESSION['ucaptured_timestamp'] += 1;
+      }
+      
+      $ucaptured = gcb_misc_setUcapturedVariable($post);
+      
+      $result = db_insert('gcb_quote_requests')
+        ->fields(array(
+          'timestamp' => $_SESSION['ucaptured_timestamp'],
+          'status' => 0, // Unsubmitted, not yet sent.
+          'ip' =>  isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
+          'data' => serialize($ucaptured),
+          'checked' => 0, // Not reviewed by a user or not sent
+          'email_presented' => $ucaptured['Email'] ? 1 : 0,
+        ))
+        ->execute();
+      
+    } // End of Else of if (isset($_SESSION['ucaptured_timestamp'])) {
+    
+  } // End of Else of if (@$post['op'] == 'exit' && $ucaptured && @$ucaptured['email']) {
+  
+  drupal_json_output(array('status' => $status/*, 'op' => @$post['op'], 'post' => $_POST, 'ucaptured' => $ucaptured/*, 'token' => $post['token'], 'test_token' => $test_token, 'valid_token' => $valid_token, 'letter' => $letter*/));
+}
+
+
+/**
+ * Helper function for loading a data in the ucaptured variable while handling the capturing user data on the request a quote page.
+ */
+function gcb_misc_setUcapturedVariable($post, $ucaptured = NULL, $combine_phone = FALSE) {
+  
+  if ($combine_phone) {
+    if (isset($ucaptured['Phone 1']) && isset($ucaptured['Phone 2']) && isset($ucaptured['Phone 3'])) {
+      $ucaptured['Phone #'] = $ucaptured['Phone 1'] . '-' . $ucaptured['Phone 2'] . '-' . $ucaptured['Phone 3'];
+      unset($ucaptured['Phone 1'], $ucaptured['Phone 2'], $ucaptured['Phone 3']);
+    }
+    return $ucaptured;
+  }
+  
+  $fields = array(
+      'Email' => 'email', 
+      'First Name' => 'firstname', 
+      'Last Name' => 'lastname',
+      //'Name' => 'name',
+      'Phone #' => 'phone',
+      //'Phone 1' => 'phone_1',
+      //'Phone 2' => 'phone_2',
+      //'Phone 3' => 'phone_3',
+      'Website' => 'website', 
+      'Company' => 'company',
+      //'Monthly budget' => 'budget',
+      
+      'Phones needed' => 'phones_amt',
+      'Quote type' => 'q_type',
+      'Buying Time Frame' => 'buying_time',
+
+      //'Quote for' => 'q_for',
+      
+      'Source' => 'source',
+      'Version' => 'version',
+      'Sumbission page' => 'url',
+  );
+  
+  if ($ucaptured) {
+    foreach ($fields as $key1 => $key2) {
+      //$ucaptured['Email'] = (isset($post['email']) && $post['email']) ? $post['email'] : $ucaptured['Email'];
+      $ucaptured[$key1] = (isset($post[$key2]) && $post[$key2]) ? $post[$key2] : $ucaptured[$key1];
+    }
+  }
+  else {
+    foreach ($fields as $key1 => $key2) {
+      //$ucaptured['Email'] = isset($post['email']) ? $post['email'] : '';
+      $ucaptured[$key1] = isset($post[$key2]) ? $post[$key2] : '';
+    }
+    
+    if(isset($_SERVER['HTTP_USER_AGENT'])) {
+      $ucaptured['Browser'] = $_SERVER['HTTP_USER_AGENT'];
+    }
+    if (isset($post['referrer']) && $post['referrer']) {
+      $ucaptured['Referrer'] = $post['referrer'];
+    }
+    /*
+    if (isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] && !strpos($_SERVER['HTTP_REFERER'], '://gocloudbackup.com')) {
+      $ucaptured['Referrer'] = $_SERVER['HTTP_REFERER'];
+    }
+    */
+  }
+  
+  return $ucaptured;
+}
+
+
+/**
+ * Implements requests from users.
+ * 
+ * Returns json result data with OK or error.
+ */
+function gcb_misc_makeRequest_ajax() {
+  $status = TRUE;
+  $output = '';
+  
+  $post = array();
+  foreach ($_POST as $key => $value) {
+    $post[$key] = check_plain(strip_tags($value));
+  }
+  
+  if (empty($post) 
+      || !isset($post['source']) || !$post['source']
+      || !isset($post['phones_amt']) || !$post['phones_amt']
+      //|| !isset($post['q_for']) || !$post['q_for']
+      //|| !isset($post['buying_time']) || !$post['buying_time']
+      || ( (!isset($post['firstname']) || !$post['firstname'] || !isset($post['lastname']) || !$post['lastname']) && (!isset($post['name']) || !$post['name']) )
+      || !isset($post['email']) || !$post['email']
+      || ( (!isset($post['phone_1']) || !$post['phone_1'] || !isset($post['phone_2']) || !$post['phone_2'] || !isset($post['phone_3']) || !$post['phone_3']) && (!isset($post['phone']) || !$post['phone']) )
+     ) {
+    $output = t('<div class="not-verified"><p class="error">The form is not filled!</p><p>Please, reload the page and try again.</p></div>'); 
+  }
+  elseif (!isset($post['token']) /*|| !isset($_SESSION['requestQuoteToken']) || $post['token'] != $_SESSION['requestQuoteToken']*/){
+    $output = t('<div class="not-verified"><p class="error">The form is outdated or broken.</p><p> Please, reload the page and try again.</p><div class="not-verified">'); 
+  }
+  else {
+
+    $current_time = time();
+    
+    // Mapping form data to right named fields.
+    
+    $phone = isset($post['phone']) ? $post['phone'] : $post['phone_1'] . '-' . $post['phone_2'] . '-' . $post['phone_3'];
+    
+    if ($post['source'] == 'page') {
+      
+      
+      
+      $submission = array(
+        'Phones needed' => $post['phones_amt'],
+        'Quote for' => isset($post['q_for']) ? $post['q_for'] : '',
+        'Quote type' => isset($post['q_type']) ? $post['q_type'] : '',
+        'Buying Time Frame' => $post['buying_time'],
+        'First Name' => isset($post['firstname']) ? $post['firstname'] : '',
+        'Last Name' => isset($post['lastname']) ? $post['lastname'] : '',
+        'Name' => isset($post['name']) ? $post['name'] : '',
+        
+        'Company' => isset($post['company']) ? $post['company'] : '',
+
+        'Email' => $post['email'],
+        'Website' => isset($post['website']) ? $post['website'] : '',
+        'Phone #' => $phone,
+        'Monthly budget' => isset($post['budget']) ? $post['budget'] : '',
+
+        'Source' => $post['source'],
+        'Version' => $post['version'],
+        //'Sumbission page' => $post['url'],
+      );
+      
+      foreach ($submission as $key => $value) {
+        if (!$value || $value == 'Optional' || $key == $value) {
+          unset($submission[$key]);
+        }
+      }
+      
+      
+      
+      
+      
+      // Clear user's captured on the fly data and/or save request to the db.
+      
+      $save_submission = $submission;
+      $save_submission['Submit Time'] = $current_time;
+      if (isset($_SERVER['HTTP_USER_AGENT'])) {
+        $save_submission['Browser'] = $_SERVER['HTTP_USER_AGENT'];
+      }
+      if (isset($post['referrer']) && $post['referrer']) {
+        $save_submission['Referrer'] = $post['referrer'];
+      }
+      $save_submission['Sumbission page'] = $post['url'];
+      /*
+      if (isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] && !strpos($_SERVER['HTTP_REFERER'], '://gocloudbackup.com')) {
+        $save_submission['Referrer'] = $_SERVER['HTTP_REFERER'];
+      }
+      */
+      if (isset($_SESSION['ucaptured_timestamp'])) {
+        $start_submission_time = $_SESSION['ucaptured_timestamp'];
+        $save_submission['Submission Duration'] = $current_time - $start_submission_time;
+        $result = db_update('gcb_quote_requests')
+          ->fields(array(
+            'data' => serialize($save_submission),
+            'status' => 2, // Submitted and sent.
+            'checked' => 1, // Reviewed, because is sent.
+            'email_presented' => 1,
+          ))
+          ->condition('timestamp', $_SESSION['ucaptured_timestamp'])
+          ->execute();
+        unset($_SESSION['ucaptured_timestamp']);
+      }
+      else {
+        // For some reason it wasn't still captured.
+        $start_submission_time = $current_time;
+        $result = db_insert('gcb_quote_requests')
+          ->fields(array(
+            'timestamp' => $start_submission_time,
+            'status' => 2, // Submitted and sent.
+            'ip' =>  isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
+            'data' => serialize($save_submission),
+            'checked' => 1, // Reviewed, because is sent.
+            'email_presented' => 1,
+          ))
+          ->execute();
+      }  
+      
+      
+      
+        
+      
+    }
+    else {
+      
+      // Quote Blocks...
+      
+      $submission = array(
+        'Phones needed' => $post['phones_amt'],
+        'Quote for' => isset($post['q_for']) ? $post['q_for'] : '',
+        'Quote type' => isset($post['q_type']) ? $post['q_type'] : '',
+        'Buying Time Frame' => $post['buying_time'],
+        'Connection type' => isset($post['connection']) ? $post['connection'] : '',
+        'First Name' => $post['firstname'],
+        'Last Name' => $post['lastname'],
+          
+        'Company' => isset($post['company']) ? $post['company'] : '',
+        'Website' => isset($post['website']) ? $post['website'] : '',
+        'Email' => $post['email'],
+        'Phone #' => $phone,
+        'Notes' => isset($post['notes']) ? $post['notes'] : '',
+          
+        'Source' => $post['source'],
+        'Version' => $post['version'],
+        //'Sumbission page' => $post['url'],
+      );      
+      
+      foreach ($submission as $key => $value) {
+        if (!$value || $value == 'Optional' || $key == $value) {
+          unset($submission[$key]);
+        }
+      }
+    }
+    
+    $submission['User IP'] = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+    $submission['Time'] = date('Y-m-d, H:i:s', time());
+    
+    $params['request_data'] = $submission;
+    
+    
+
+    // Add an extra data.
+    
+    $submission_with_extra = $submission;
+    
+    $submission_with_extra['Sumbission page'] = $post['url'];
+    if (isset($post['referrer']) && $post['referrer']) {
+      $submission_with_extra['Referrer'] = $post['referrer'];
+    }
+    if(isset($_SERVER['HTTP_USER_AGENT'])) {
+      $submission_with_extra['Browser'] = $_SERVER['HTTP_USER_AGENT'];
+    }
+    
+    $params_with_extra['request_data'] = $submission_with_extra;
+    
+    /*
+    $admins = db_query("SELECT u.uid FROM {users_roles} u INNER JOIN {role} r ON r.name = :role AND r.rid = u.rid WHERE 1", array(':role' => 'administrator')); 
+    foreach ($admins as $admin) {
+      // Comment to go live!
+      //if($admin->uid != 1) continue;
+      
+      $recipient = user_load($admin->uid);
+      $params['recipient'] = $recipient;
+      drupal_mail('gcb_misc', 'request_quote', $recipient->mail, user_preferred_language($recipient), $params);
+    }
+    */
+    global $language;
+    //$params['recipient'] = $recipient;
+    //$letter = theme('gcb_misc_requestQuote_mail', $post);//$params['request_data']);
+    
+    
+            
+    if ($submission['First Name'] != 'a4s') {
+      // Normal send if not a test from a4s
+      drupal_mail('gcb_misc', 'request_quote', 'leads@gocloudbackup.com', $language->language, $params);
+    }
+    // Test letter to the root
+    drupal_mail('gcb_misc', 'request_quote', 'all4senses@gmail.com', $language->language, $params_with_extra);
+
+
+    
+    
+    
+    // Check for new captured but not sent data with emails in db, more than 1 hour old
+
+    $query = db_select('gcb_quote_requests', 'qr')
+      ->fields('qr', array('data', 'ip', 'timestamp'));
+    $query->condition('qr.status', 0);
+    $query->condition('qr.checked', 0);
+    $query->condition('qr.email_presented', 1);
+    $query->condition('qr.timestamp', $current_time - 3600, '<'); // 1 hour old
+    $not_sents = $query->execute();
+
+    foreach ($not_sents as $not_sent) {
+      $ucaptured = unserialize($not_sent->data);
+
+      // Send email.
+      $ucaptured_data = gcb_misc_setUcapturedVariable(NULL, $ucaptured, TRUE);
+      $ucaptured_data += array(
+        'User IP' => $not_sent->ip,
+        'Start Submission Time' => date('Y-m-d, H:i:s', $not_sent->timestamp),
+      );
+
+      $params['ucaptured_data'] = $ucaptured_data;
+
+      // Normal send
+      if ($submission['First Name'] != 'a4s') {
+        drupal_mail('gcb_misc', 'request_quote_ucaptured_data', 'leads@gocloudbackup.com', $language->language, $params);
+      }
+      // Test letter to the root
+      drupal_mail('gcb_misc', 'request_quote_ucaptured_data', 'all4senses@gmail.com', $language->language, $params);
+      
+      // Update a status in DB.
+      $result = db_update('gcb_quote_requests')
+        ->fields(array(
+          'status' => 1, // Unsubmitted, sent.
+          'checked' => 1, // Reviewed, because is sent.
+        ))
+        ->condition('timestamp', $not_sent->timestamp)
+        ->execute();
+
+    } // foreach ($not_sents as $not_sent) {
+
+    
+    
+    
+    
+    $status = TRUE;
+         
+    $output = t('<p><strong>Thank you</strong> for taking your time to complete our form. A CloudBackup Expert will be contacting you shortly to provide you with a personalized CloudBackup Service quote.</p><p>In the meantime, you can gain a great deal of CloudBackup information right here at <a href="http://gocloudbackup.com">gocloudbackup.com</a></p>'); 
+    
+    if ($post['source'] == 'page') {
+      switch ($post['version']) {
+        case '1':
+          $output .= '<script>top.location.href="http://gocloudbackup.com/request-cloudbackup-quote-final";</script>';
+          break;
+        
+        case '2':
+          $output .= '<script>top.location.href="http://gocloudbackup.com/cloudbackup-provider-quotes-final";</script>';
+          break;
+        
+        case '3':
+          $output .= '<script>top.location.href="http://gocloudbackup.com/compare-cloudbackup-solutions-final";</script>';
+          break;
+      }
+      
+    }
+    
+  }
+
+  drupal_json_output(array('status' => $status, 'data' => $output/*, 'post' => $_POST, 'token' => $post['token'], 'test_token' => $test_token, 'valid_token' => $valid_token, 'letter' => $letter*/));
+}
+
+
+/*
+ * double triggerring of a submit form because of double launching almost the same code from the Request quote block which actually hasn't appeared on the page anyway (before recent time it was absolutely the same so the problem was autosolved quietly :) 
+ */
+
+
+/**
+ * Implements hook_mail().
+ */
+function gcb_misc_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'request_quote':
+      $message['subject'] = t('New request for a quote');
+      $message['body'][] = theme('gcb_misc_requestQuote_mail', $params['request_data']);
+      break;
+    
+    
+    case 'request_quote_ucaptured_data':
+      $message['subject'] = t('New captured BUT not submitted user data');
+      $message['body'][] = theme('gcb_misc_requestQuote_mail', $params['ucaptured_data']);
+      break;
+    
+    
+    case 'email_verification':
+      $message['subject'] = t('Submitted Review Requires One-Click Email Verification');
+      $message['body'][] = t('Dear User,
+
+Thank you for taking your time to share your CloudBackup experience by submitting a review.
+
+To faster verify and publish your review, please click on the email verification link below:
+
+!url
+
+Best Wishes,
+GoCloudBackup Team
+', array('!url' => 'http://gocloudbackup.com/approve/email/' . $params['verification_code']));
+      
+      break;
+    
+    
+    
+    case 'new_review_admin_notify':
+      $message['subject'] = t('New review for "!provider" has been submitted', array('!provider' => $params['provider_name']));
+      $message['body'][] = t('Dear administrator!
+
+A new review for the provider "!provider" just has been submitted. Please approve or discard it at !pending_reviews.
+
+Please, don\'t forget to log in to access this page.
+
+Best wishes,
+GoCloudBackup team
+', array('!pending_reviews' => 'http://gocloudbackup.com/admin/content/approve-reviews', '!provider' => $params['provider_name']));
+      
+      break;
+    
+  }
+}  
+
+
+/**
+ * Simple theming of a Request for quote mail content.
+ */
+function theme_gcb_misc_requestQuote_mail($data) {
+ $out = 'Quote Request submission form:
+
+';
+ foreach ($data as $key => $value) {
+   if ($value) {
+    $out .= "$key = $value
+";
+   }
+ }
+ 
+ return $out;
+}
+
+
+/**
+ * Simple theming of the email with Captured but not submitted by a user data on a Request a quote page.
+ */
+function theme_gcb_misc_requestQuoteCaptured_mail($data) {
+ $out = 'Captured (and not submitted by a user) data from a Quote Request submission form:
+
+';
+ foreach ($data as $key => $value) {
+   if ($value) {
+    $out .= "$key = $value
+";
+   }
+ }
+ 
+ return $out;
+}
+
+
+/**
+* Implementation of hook_mail_alter().
+* Here we allow the site name to be used as the senders name for outgoing email.
+* see http://drupal.org/node/209672
+* 
+* No need for this hook if the smtp module is used.
+*/
+/*
+function gcb_misc_mail_alter(&$message){
+  $default_from = variable_get('site_mail', ini_get('sendmail_from'));
+  
+  if($message['from'] == $default_from){
+    $message['from'] = '"'. variable_get('site_name', 'gocloudbackup.com') .'" <'. $default_from .'>';
+    $message['headers']['From'] = $message['headers']['Sender'] = $message['headers']['Return-Path'] = $message['headers']['Errors-To'] = $message['headers']['Reply-To'] = $message['from'];
+  }
+}
+*/
+
+
+/**
+ * Helper function to send preset messages.
+ */
+function gcb_misc_sendMessage($tag, $data = NULL) {
+  switch ($tag) {
+    case 'new_review_admin_notify':
+      /*
+      $admins = gcb_misc_getAdmins();
+      foreach ($admins as $recipient) {
+        $params['recipient'] = $recipient;
+        drupal_mail('gcb_misc', 'new_review_admin_notify', $recipient->mail, user_preferred_language($recipient), $params);
+      }
+      */
+      global $language;
+      $params['provider_name'] = $data['provider_name'];
+      drupal_mail('gcb_misc', 'new_review_admin_notify', 'ry@gocloudbackup.com', $language->language, $params);
+      drupal_mail('gcb_misc', 'new_review_admin_notify', 'all4senses@gmail.com', $language->language, $params);
+      
+      
+      break;
+  
+
+      
+  case 'email_verification':
+      
+      global $language;
+      $params['verification_code'] = $data['verification_code'];
+      drupal_mail('gcb_misc', 'email_verification', $data['email'], $language, $params, 'gocloudbackup.com <contact@gocloudbackup.com>');
+      
+      break;
+  }
+}
+
+
+/**
+ * Get site's admins objects.
+ */
+function gcb_misc_getAdmins() {
+  $query = db_select('users', 'u')
+        ->fields('u');
+  $query->leftJoin('users_roles', 'ur', 'ur.uid = u.uid');
+  $query->leftJoin('role', 'r', 'r.rid = ur.rid');
+  $query->condition('r.name', 'administrator');
+  $admins = $query->execute()->fetchAllAssoc('uid');
+
+  return $admins;
+}
+
+
+/**
+ * Implements hook_form_alter().
+ *
+ * @param array &$form
+ *   Array with declared form.
+ *
+ * @param array &$form_state
+ *   Array with current form state.
+ *
+ * @param string $form_id
+ *   Form ID.
+ *
+ * @return void
+ *   Return nothing.
+ */
+function gcb_misc_form_alter(&$form, &$form_state, $form_id) {
+  
+  //dpm($form_id);dpm($form);
+  
+  // Unlink Ckeditor from the comment input form.
+  /*
+  if($form['#id'] == 'comment-form') {
+    $form['comment_body']['und'][0]['#type'] = 'textarea';
+  }
+  */
+  if (isset($form['#node']) && $form_id == $form['#node']->type .'_node_form') {
+    $form['body']['und']['0']['#format'] = "full_html";
+    //$form['field_custom_php_code']['und']['0']['#format'] = "php_code";
+  }
+}
+
+
+/**
+ * Returns tags list for a specific content type. 
+ * 
+ * Allows to use same tags for News, articles, etc.
+ */
+function gcb_misc_getTags($content_type, $base_url = NULL, $limit = NULL) {
+  $tags = NULL;
+  $voc = taxonomy_vocabulary_machine_name_load(TAGS);
+  
+  $types = array();
+
+  $query = db_select('taxonomy_term_data', 'td')
+        ->fields('td', array('name', 'tid', 'description'));
+  $query->leftJoin('taxonomy_index', 'ti', 'ti.tid = td.tid');
+  $query->leftJoin('node', 'n', 'n.nid = ti.nid');
+  $query->where('n.nid = ti.nid AND n.type = :type', array(':type' => $content_type))
+        ->addExpression('COUNT(n.nid)', 'count');
+  $query->groupBy('td.name');
+  if ($limit) {
+    $query->range(0, $limit);
+  }
+  $results = $query->execute();
+
+  // Necessary for pathauto_cleanstring().
+  module_load_include('inc', 'pathauto');
+  
+  foreach($results as $result) {
+    // Translate terms to the current language.
+    // $result->name = i18n_string_translate(array('taxonomy', 'term', $result->tid, 'name'), $result->name);
+    $base_url = trim($base_url, '/');
+    ////$result->link = array('link_title' => $result->name, 'href' => $base_url . '/tags/' . str_replace(array(' ', '.'), array('-', ''), drupal_strtolower($result->name)));
+    $result->link = array('link_title' => $result->name, 'href' => $base_url . '/tags/' . pathauto_cleanstring($result->name));
+    $tags[$result->tid] = $result;
+  }
+  return $tags;
+}
+
+
+/**
+ * Implements hook_theme().
+ */
+function gcb_misc_theme($existing, $type, $theme, $path) {
+  return array(
+    'gcb_misc_submenuSimple' => array(
+      'variables' => array('vars' => null),
+    ),
+    'gcb_misc_headerLinks' => array(
+      'variables' => array('vars' => null),
+    ),
+    // Fivestar REPLACING theme functions.
+    'gcb_misc_fivestar_static' => array(
+      'variables' => array('rating' => NULL, 'stars' => 5, 'tag' => 'vote', 'widget' => array('name' => 'default', 'css' => '')),
+    ),
+    // Compose a mail with a Request for a quote page/block.
+    'gcb_misc_requestQuote_mail' => array(
+      'variables' => array(),
+    ),
+    // Compose a mail with a Captured but not submitted by a user data from a Request for a quote page/block.
+    'gcb_misc_requestQuoteCaptured_mail' => array(
+      'variables' => array(),
+    ),
+    
+      
+    // Altered Tagadelic weighted tag cloud.
+    'gcb_misc_tagadelicWeighted_acceptPredefinedTermsPaths' => array(
+      'variables' => array('terms' => array())
+    ),
+
+  );
+}
+
+
+/**
+ * Theme function that renders the HTML for the tags.
+ *
+ * @ingroup themable
+ */
+function theme_gcb_misc_tagadelicWeighted_acceptPredefinedTermsPaths(array $vars) {
+  $terms = $vars['terms'];
+  $output = '';
+
+  foreach ($terms as $term) {
+    $output .= l($term->name, isset($term->link['href']) ? $term->link['href'] : 'taxonomy/term/' . $term->tid, array(
+      'attributes' => array(
+        'class' => array("tagadelic", "level" . $term->weight),
+        'rel' => 'tag',
+        'title'  => $term->description,
+        )
+      )
+    ) . " \n";
+  }
+  
+  
+  if(isset($vars['voc'])){
+    if (count($terms) >= variable_get('tagadelic_block_tags_' . $vars['voc']->vid, 12)) {
+      $output .= theme('more_link', array('title' => t('more tags'), 'url' => "tagadelic/chunk/{$vars['voc']->vid}"));
+    }
+  }
+
+  return $output;
+}
+  
+
+/**
+ * Simple theming of nested submenu.
+ */
+function theme_gcb_misc_headerLinks($vars) {
+  if(empty($vars['submenu']['below'])) {
+    return NULL;
+  }
+
+  $class = isset($vars['class']) ? $vars['class'] : 'header-links';
+  $delimiter = isset($vars['delimiter']) ? $vars['delimiter'] : '';
+  $out = '<ul class="' . $class . '">';
+  $count = 0;
+  foreach ($vars['submenu']['below'] as $submenu) {
+    if (isset($submenu['link']['hidden']) && $submenu['link']['hidden']) {
+      continue;
+    }
+    $out .= ($count ? $delimiter : '') . '<li>' . l(t($submenu['link']['link_title']), $submenu['link']['href'], array('attributes' => array('class' => array($submenu['link']['link_title']), 'title' => $submenu['link']['options']['attributes']['title'], 'target' => '_blank' ))) . '</li>';
+    $count++;
+  }
+  $out .= '</ul>';
+  return $out;
+}
+
+
+/**
+ * Simple theming of nested submenu.
+ */
+function theme_gcb_misc_submenuSimple($vars) {
+  if(empty($vars['submenu']['below'])) {
+    return NULL;
+  }
+  $level = isset($vars['level']) ? $vars['level'] : 0;
+  $class = isset($vars['class']) ? $vars['class'] : 'om-links';
+  $delimiter = isset($vars['delimiter']) ? $vars['delimiter'] : '';
+  $out = '<ul class="gcb ' . $class . ' lvl-' . $level . '">';
+  $count = 0;
+  foreach ($vars['submenu']['below'] as $submenu) {
+    if (is_object($submenu)) {
+      $submenu = (array) $submenu;
+    }
+    if (isset($submenu['link']['hidden']) && $submenu['link']['hidden']) {
+      continue;
+    }
+    $out .= ($count ? $delimiter : '') . '<li>';
+    if($level) {
+      for ($i = 0; $i < $level; $i++ ) {
+        $out .= '--';
+      }
+    }
+    $title = t($submenu['link']['link_title']);
+    if(isset($submenu['count']) && $submenu['count']) {
+      $title .= ' (' . $submenu['count'] . ')';
+    }
+    // If the field Description has '<nolink>' don't show link for this item
+    if(isset($submenu['link']['localized_options']['attributes']['title']) && strtolower($submenu['link']['localized_options']['attributes']['title']) == '<nolink>') {
+      $out .= $title;
+    }
+    else {
+      $out .= l($title, $submenu['link']['href']);
+    }
+    $out .= '</li>';
+    if (!empty($submenu['below'])) {
+      // Recursion call.
+      $out .= '<li>' . theme('gcb_misc_submenuSimple', array('submenu' => $submenu, 'level' => ($level + 1), 'class' => $class, 'delimiter' => $delimiter )) . '</li>';
+    }
+    $count++;
+  }
+  $out .= '</ul>';
+  return $out;
+}
+
+
+/**
+ * REPLACE FOR ORIGINAL fivestar module theming function. Just to use only its theming functionality.
+ * 
+ * Display a plain HTML view-only version of the widget with a specified rating.
+ *
+ * @param $rating
+ *   The desired rating to display out of 100 (i.e. 80 is 4 out of 5 stars).
+ * @param $stars
+ *   The total number of stars this rating is out of.
+ * @param $tag
+ *   Allows multiple ratings per node.
+ * @return
+ *   A themed HTML string representing the star widget.
+ */
+function theme_gcb_misc_fivestar_static($variables) {
+  $rating  = $variables['rating'];
+  $stars = $variables['stars'];
+  $tag = $variables['tag'];
+  $widget = $variables['widget'];
+
+  // a4s Intrusion!!!!
+  $path = drupal_get_path('module', 'gcb_misc') . '/css/fivestar';
+  drupal_add_css($path . '/css/fivestar.css');
+  // END of intrusion.
+  
+  if($widget['name'] != 'default') {
+    // a4s changes.
+    //drupal_add_css($widget['css']);
+    drupal_add_css($path . '/widgets/' . $widget['name'] . '/' . $widget['css']);
+  }
+  
+  $output = '<div class="fivestar fivestar-' . $widget['name'] . '">';
+  $output .= '<div class="fivestar-widget-static fivestar-widget-static-'. $tag .' fivestar-widget-static-'. $stars . ' clearfix">';
+  if (empty($stars)) {
+    $stars = 5;
+  }
+  $numeric_rating = $rating/(100/$stars);
+  for ($n=1; $n <= $stars; $n++) {
+    $star_value = ceil((100/$stars) * $n);
+    $prev_star_value = ceil((100/$stars) * ($n-1));
+    $zebra = ($n % 2 == 0) ? 'even' : 'odd';
+    $first = $n == 1 ? ' star-first' : '';
+    $last = $n == $stars ? ' star-last' : '';
+    $output .= '<div class="star star-'. $n .' star-'. $zebra . $first . $last .'">';
+    if ($rating < $star_value && $rating > $prev_star_value) {
+      $percent = (($rating - $prev_star_value) / ($star_value - $prev_star_value)) * 100;
+      $output .= '<span class="on" style="width: '. $percent .'%">';
+    }
+    elseif ($rating >= $star_value) {
+      $output .= '<span class="on">';
+    }
+    else {
+      $output .= '<span class="off">';
+    }
+    if ($n == 1)$output .= $numeric_rating;
+    $output .= '</span></div>';
+  }
+  $output .= '</div></div>';
+  return $output;
+}
+
+
+/**
+ * Returns all available providers aray with nid => title.
+ */
+function gcb_misc_getProviders(&$providers, $scope = 'all', $data = NULL) {
+  
+  if ($scope == 'all') {
+    $query = db_select('node', 'n');
+    //$query->join('field_data_field_p_types', 'pt', "pt.entity_id = n.nid"); 
+    $query->join('field_data_field_p_name', 'pn', "pn.entity_id = n.nid");
+    $query->fields('n', array('nid', 'title'))  
+          //->fields('pt', array('field_p_types_value'))
+          ->fields('pn', array('field_p_name_value')) 
+          ->condition('n.type', 'provider')
+          ->condition('n.status', 1); 
+    $result = $query->execute(); 
+
+    foreach($result as $provider) {
+      $providers[$provider->nid] = $provider->field_p_name_value;// . ' - ' . $provider->field_p_types_value; // = $provider->title;
+    }
+
+    // Sort providers alphabetically.
+    //SORT_NATURAL | SORT_FLAG_CASE   only for php from 5.4.0
+    //asort($providers); 
+    natcasesort($providers);
+  }
+  elseif ($scope == 'all_by_service_type') {
+    $query = db_select('node', 'n');
+    $query->join('field_data_field_p_types', 'pt', "pt.entity_id = n.nid"); 
+    $query->join('field_data_field_p_name', 'pn', "pn.entity_id = n.nid");
+    $query->fields('n', array('nid', 'title'))  
+          ->fields('pt', array('field_p_types_value'))
+          ->fields('pn', array('field_p_name_value')) 
+          ->condition('n.type', 'provider')
+          ->condition('pt.field_p_types_value', $data)
+          ->condition('n.status', 1); 
+    $result = $query->execute(); 
+
+    foreach($result as $provider) {
+      $providers[$provider->nid] = $provider->field_p_name_value;// . ' - ' . $provider->field_p_types_value; // = $provider->title;
+      //$p[$provider->nid] = $provider;
+    }
+    
+    // Sort providers alphabetically.
+    //SORT_NATURAL | SORT_FLAG_CASE   only for php from 5.4.0
+    //asort($providers); 
+    natcasesort($providers);
+  }
+  elseif ($scope == 'all_including_others_from_reviews') {
+    $query = db_select('field_data_field_r_provider_name', 'pn');
+    //$query->fields('n', array('nid', 'title'))
+    $query->fields('pn', array('field_r_provider_name_value'))
+          ->distinct(); 
+    $result = $query->execute(); 
+    foreach($result as $provider) {
+      $providers[$provider->field_r_provider_name_value] = $provider->field_r_provider_name_value; // = $provider->title;
+    }
+    // Sort providers alphabetically.
+    //SORT_NATURAL | SORT_FLAG_CASE   only for php from 5.4.0
+    //asort($providers); 
+    natcasesort($providers);
+  }
+
+}
+    
+
+/**
+ * Checks if the email is already taken by one of the site's registered user.
+ */
+function gcb_misc_emailIsRegistered($email) {
+  $data = db_select('users', 'u')
+          ->fields('u', array('uid'))
+          ->condition('mail', $email)
+          ->execute();
+  if ($email = $data->fetchField()) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+
+/**
+ * Check if a current user already submitted a review for a specific Provider and return it if it exists.
+ */
+function gcb_misc_userHasSubmittedReview($provider_nid, $user_uid, $user_email = NULL, $other_provider_title = NULL, $current_review_nid = NULL) {
+  
+  if (!$user_uid && !$user_email) {
+    // Not full source data...
+    // For uid = 0 should be set email also.
+    return FALSE;
+  }
+  
+  $data = db_select('node', 'n')
+        ->fields('n', array('nid', 'title'))
+        ->fields('na', array('field_r_notapproved_value'));
+  $data->leftJoin('field_data_field_ref_provider', 'rp', "rp.entity_id = n.nid");
+  $data->leftJoin('field_data_field_r_oprovider', 'op', "op.entity_id = n.nid");
+  $data->leftJoin('field_data_field_r_email', 'ue', "ue.entity_id = n.nid");
+  $data->leftJoin('field_data_field_r_notapproved', 'na', "na.entity_id = n.nid");
+  $data->condition('n.type', 'review')
+       //->condition('n.uid', $user_uid)
+       ;
+  
+  // For an anonymous user check email as well (we can find a user only that way in this case)
+  if ($user_email) {
+    // Let's check email instead if uid, as there could exist a review (from other user,  authorized or not) with a such email
+    $data->condition('ue.field_r_email_value', $user_email);
+  }
+  
+  // exclude a currently submitted review from the search.
+  if ($current_review_nid) {
+    $data->condition('n.nid', $current_review_nid, '!=');
+  }
+  
+  if ($provider_nid) {
+    $data->condition('rp.field_ref_provider_target_id', $provider_nid);
+  }
+  elseif ($other_provider_title) {
+    $data->condition('op.field_r_oprovider_value', $other_provider_title);
+  }
+  else {
+    // No provider id or title set.
+    return FALSE;
+  }
+  
+  $data = $data->execute()->fetchObject();
+  
+  if (empty($data)) {
+    return FALSE;
+  }
+  else {
+    return $data;
+  }
+}
+
+
+/**
+ * Implements hook_token_info().
+ */
+function gcb_misc_token_info() {
+  // Defines new token 'Provider name' in the node tokens group.
+  $info['tokens']['node']['provider-name-for-current-review'] = array(
+    'name' => t('Provider name for a current review'),
+    'description' => t('Name of the provider chosen from a select list or from a custom field if its provided...'),
+  );
+
+  return $info;
+}
+
+
+/**
+ * Implements hook_tokens().
+ * 
+ * Provides token for a current review's provider name. It set to selected from a list or from a manually filled field (if not selected from a list).
+ */
+function gcb_misc_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+  $sanitize = !empty($options['sanitize']);
+
+  // Add new token 'provider-name-for-current-review' to a 'node' tokens group.
+  if ($type == 'node' && !empty($data['node'])) {
+    $node = $data['node'];
+
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'provider-name-for-current-review':
+          if ($node->type == 'review') {
+            if (isset($node->field_ref_provider['und'][0]['target_id']) && $node->field_ref_provider['und'][0]['target_id']) {
+              
+//              $provider_title = db_select('node', 'n')
+//                ->fields('n', array('title'))
+//                ->condition('nid', $node->field_ref_provider['und'][0]['target_id'])
+//                ->execute()->fetchField();
+              
+              
+              $query = db_select('node', 'n');
+              $query->join('field_data_field_p_name', 'pn', "pn.entity_id = n.nid"); // inner_join file_usage table against file_managed
+              //$query->fields('n', array('nid', 'title'))  // specifying fields from file_usage table
+              $query->fields('pn', array('field_p_name_value')) // specifying fields from file_managed table
+                    ->condition('nid', $node->field_ref_provider['und'][0]['target_id']);
+              
+              $provider_title = $query->execute()->fetchField();
+              
+              
+              
+              
+              
+              $replacements[$original] = $provider_title;
+            }
+            else {
+              $replacements[$original] = check_plain($node->field_r_oprovider['und'][0]['value']);
+            }
+
+          }
+          
+          break;
+      }
+    }
+  }
+  
+  return $replacements;
+}
+
+
+/**
+ * Implements hook_TYPE_alter().
+ * 
+ * Provides custom tags for the Votes API via votingapi_metadata alter (defined in ).
+ */
+function gcb_misc_votingapi_metadata_alter(&$data) {
+  $data['tags'] += array(
+    'sound' => array(
+      'name' => t(SOUND),
+      'description' => t('Sound Quality Rating for a provider.'),
+    ),
+    'install' => array(
+      'name' => t(INSTALL),
+      'description' => t('Installation Process Rating for a provider.'),
+    ),
+    'service' => array(
+      'name' => t(CUSTOMER),
+      'description' => t('Value for Customer Service Rating for a provider.'),
+    ),
+    'rely' => array(
+      'name' => t(RELY),
+      'description' => t('Reliability Rating for a provider.'),
+    ),
+    'features' => array(
+      'name' => t(FEATURES),
+      'description' => t('Features Rating for a provider.'),
+    ),
+    'money' => array(
+      'name' => t(PRICE),
+      'description' => t('Value for Money Rating for a provider.'),
+    ),
+    'recommend' => array(
+      'name' => t(RECOMMEND),
+      'description' => t('Value for Would you recommend this CloudBackup provider. Yes or No.'),
+    ),
+    'overall' => array(
+      'name' => t(OVERALL),
+      'description' => t('Average overall value for all providers rates.'),
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function gcb_misc_views_pre_render(&$view) {
+  
+  //dpm($view->name); dpm($view->current_display);
+
+  // Add a prefaces for the some views pages.
+  $key = 'view-' . $view->name . '-' . $view->current_display;
+  $do_attach_preface = FALSE;
+  
+  switch($key) {
+    case 'view-providers-page_p_bu': 
+      // Business Providers listing page.
+    case 'view-providers-page_p_re': 
+      // Residential Providers listing page.
+    case 'view-reviews-page_all_reviews': 
+      // Residential Providers listing page.
+      
+    case 'view-blog-page': 
+    case 'view-blog-page_by_tag':
+      
+    case 'view-articles-page': 
+    case 'view-articles-page_by_tag':
+    
+    case 'view-news-page': 
+    case 'view-news-page_by_tag':
+      
+    case 'view-sitemap-page': 
+   
+    case 'view-taxonomy_term-page_by_tag':
+      
+      $do_attach_preface = TRUE;
+      break;
+    
+    
+    case 'view-reviews-block_all_reviews':
+      
+      $providers = array('' => t('- All Providers -'));
+      gcb_misc_getProviders($providers, 'all_including_others_from_reviews');
+
+      if (isset($_GET['provider']) && isset($providers[$_GET['provider']])) {
+        $provider_isset = TRUE;
+      }
+      else {
+        $provider_isset = FALSE;
+      }
+      $url = '';
+      foreach ($_GET as $key => $value) {
+        if ($key == 'q' || $key == 'provider') {
+          continue;
+        }
+        $url .= '&' . $key . '=' . urlencode($value);
+      }
+
+      $select_providers['all-reviews-select-providers'] = array(
+          '#type' => 'select',
+          '#title' => t('Choose a Provider'),
+          '#options' => $providers,
+          '#default_value' => $provider_isset ? $providers[$_GET['provider']] : $providers[''],
+          '#value' => $provider_isset ? $providers[$_GET['provider']] : $providers[''],
+          '#attributes' => array('id' => 'select_provider',  'onChange' => "top.location.href='http://gocloudbackup.com/" . $_GET['q'] . "?provider=' + encodeURIComponent(document.getElementById('select_provider').options[document.getElementById('select_provider').selectedIndex].value) + '$url'"),
+
+      ); 
+      
+      $view->attachment_before = render($select_providers);
+      
+      break;
+      
+      
+      
+    case 'view-reviews-block_all_reviews_bu':
+    case 'view-reviews-block_all_reviews_re':
+      
+      $providers = array('' => t('- All Providers -'));
+      $p_key = $key;
+      $r_p_types = array('view-reviews-block_all_reviews_bu' => array('business', 'Business'), 'view-reviews-block_all_reviews_re' => array('residential', 'Residential'));
+      gcb_misc_getProviders($providers, 'all_by_service_type', $r_p_types[$p_key][0]);
+
+      if (isset($_GET['provider']) && isset($providers[$_GET['provider']])) {
+        $provider_isset = TRUE;
+      }
+      else {
+        $provider_isset = FALSE;
+      }
+      $url = '';
+      foreach ($_GET as $key => $value) {
+        if ($key == 'q' || $key == 'provider') {
+          continue;
+        }
+        $url .= '&' . $key . '=' . urlencode($value);
+      }
+
+      $select_providers['all-reviews-select-providers'] = array(
+          '#type' => 'select',
+          '#title' => t('Choose a ' . $r_p_types[$p_key][1] .' Provider'),
+          '#options' => $providers,
+          '#default_value' => $provider_isset ? $providers[$_GET['provider']] : $providers[''],
+          '#value' => $provider_isset ? $providers[$_GET['provider']] : $providers[''],
+          '#attributes' => array('id' => 'select_provider',  'onChange' => "top.location.href='http://gocloudbackup.com/" . $_GET['q'] . "?provider=' + encodeURIComponent(document.getElementById('select_provider').options[document.getElementById('select_provider').selectedIndex].value) + '$url'"),
+
+      ); 
+      
+      $view->attachment_before = render($select_providers);
+      
+      break;
+      
+  }
+  
+  // Redefine the $key if on the specific content type.
+  if ($key == 'view-taxonomy_term-page_by_tag') {
+    $args = arg();
+    $term = taxonomy_term_load($args[2]);
+    switch ($term->vocabulary_machine_name) {
+      case 'news_tags':
+        $key = 'view-news-page_by_tag';
+        break;
+      case 'blog_tags':
+        $key = 'view-blog-page_by_tag';
+        break;
+      case 'articles_tags':
+        $key = 'view-articles-page_by_tag';
+        break;
+      default:
+        // Don't show, hide other vocabularies terms pages!!!
+        drupal_not_found();
+        exit;
+    }
+  }
+  
+  if ($do_attach_preface && $preface_node = gcb_misc_getPrefaceByKey($key)) {
+   
+    if ($view->current_display == 'page_by_tag') {
+      //$preface_node->title = $view->get_title();//$view->build_info['title'];
+      $preface_node->title .= ' "' . htmlspecialchars_decode($view->build_info['substitutions']['%1']) . '"';
+      $view->build_info['title'] = $preface_node->title;
+      
+    }
+    else {
+      // Change the title of the view (main page title actually)
+      if (isset($preface_node->metatags['title']['value'])) {
+        $view->build_info['title'] = $preface_node->metatags['title']['value'];
+      }
+      else{
+        $view->build_info['title'] = $preface_node->title;
+      }
+    }
+    
+    
+    // Show plain caption, not a link for a full node as a full node itself will be unpublished and unreachable.
+    $preface_node->title_no_link = TRUE;
+    // Hide the title of the preface.
+    // $preface_node->title = '';
+    // Works, but it's shown after exposed filters.
+    $view->attachment_before = render(node_view($preface_node, 'full'));
+    
+    // DOesn't work.
+    /*
+    $view->header = array(
+        '#type' => 'item',
+        '#markup' => '<div class="preface">' . render(node_view($preface_node)) . '</div>',
+    );
+    */
+
+    
+  }
+   
+} 
+
+
+/**
+ * Returns preface node by key.
+ */
+function gcb_misc_getPrefaceByKey($key) {
+    
+    $preface_node = NULL;
+    
+    $query = db_select('node', 'n');
+    $query->join('field_data_field_preface_key', 'pk', "pk.entity_id = n.nid"); 
+    $query->fields('n', array('nid'))  
+          //->fields('pn', array('field_preface_key_value')) 
+          ->condition('n.type', 'preface')
+          ->condition('pk.field_preface_key_value', $key); 
+    $preface_nid = $query->execute()->fetchField(); 
+    if ($preface_nid) {
+      $preface_node = node_load($preface_nid);
+    }
+    return $preface_node;
+}
+  
+  
+/**
+ * Returns all fees for available providers.
+ */
+function gcb_misc_getProvidersFees($scope = 'all') {
+  if ($scope == 'all') {
+    $data = db_select('field_revision_field_p_fees_save', 'f')
+          ->fields('f', array('entity_id', 'field_p_fees_save_value'))
+          ->execute();
+    foreach($data as $fee) {
+      $fees[$fee->entity_id] = unserialize($fee->field_p_fees_save_value);
+    }
+  }
+  return $fees;
+}
+
+
+/**
+ * Returns all quick data for available providers.
+ */
+function gcb_misc_getProvidersDataQuick($scope = 'all', $reset = FALSE, $clear_from_session = FALSE) {
+    
+  if ($clear_from_session && isset($_SESSION['p_all_data_quick'])) {
+    // Reset a helper session var with all quick data.
+    unset($_SESSION['p_all_data_quick']);
+  }
+    
+  $p_data_quick = NULL;
+  if ($scope == 'all') {
+    // If data is not in the Session or its age more than 5 hours, reset it.
+    
+    //$p_data_quick = @$_SESSION['p_all_data_quick'];
+    if(!$reset && isset($_SESSION['p_all_data_quick'])) {
+      $p_data_quick = $_SESSION['p_all_data_quick'];
+    }
+    else {
+      $p_data_quick = NULL;
+    }
+    
+    
+    if ($reset || !$p_data_quick || time() > ($p_data_quick['timestamp'] + 18000) ) {
+      $data = db_select('field_revision_field_p_data_quick', 'f')
+            ->fields('f', array('entity_id', 'field_p_data_quick_value'))
+            ->execute();
+      foreach($data as $value) {
+        $p_data_quick[$value->entity_id] = unserialize($value->field_p_data_quick_value);
+      }
+
+      $p_data_quick['timestamp'] = time();
+      $_SESSION['p_all_data_quick'] = $p_data_quick;
+    }
+  }
+  return $p_data_quick;  
+}
+    
+
+/**
+ * Return specific variable value from p_data_quick for a provider depending on the filter value (business OR residential, etc)
+ */
+function gcb_misc_getProviderQuickData($target, $data) {
+  
+  $out = '';
+  
+  switch($target) {
+    
+    
+    case 'logo_chart':
+    case 'logo_article':
+    
+      $all_data_quick = gcb_misc_getProvidersDataQuick();
+      $out = '';
+      
+      if (isset($all_data_quick[$data['data']->nid]['i_web']) && $all_data_quick[$data['data']->nid]['i_web']) {
+        $link = $all_data_quick[$data['data']->nid]['i_web'];
+      }
+      else {
+        $link = url('node/' . $data['data']->nid);
+      }
+      
+      if (isset($all_data_quick[$data['data']->nid]['i_logo_uri'])) {
+        if ($target == 'logo_chart') {
+          $image = theme('image_style', array( 'path' =>  $all_data_quick[$data['data']->nid]['i_logo_uri'], 'style_name' => 'logo_provider_chart_main', 'alt' =>  $all_data_quick[$data['data']->nid]['i_logo_alt'], 'title' =>  $all_data_quick[$data['data']->nid]['i_logo_title']));
+        } 
+        else {
+          $image = theme('image_style', array( 'path' =>  $all_data_quick[$data['data']->nid]['i_logo_uri'], 'style_name' => 'thumbnail', 'alt' =>  $all_data_quick[$data['data']->nid]['i_logo_alt'], 'title' =>  $all_data_quick[$data['data']->nid]['i_logo_title']));
+        }
+        $out = '<a href="' . $link . '" target="_blank">' . $image . '</a>';
+      }
+      else {
+        if (isset($all_data_quick[$data['data']->nid]['name'])) {
+          $out = '<a href="' . $link . '" target="_blank">' . $all_data_quick[$data['data']->nid]['name'] . '</a>';
+        }
+      }
+          
+      return $out;
+      
+      
+      
+    case 'features':
+      
+      $out = '';
+      $all_data_quick = gcb_misc_getProvidersDataQuick();
+      
+      $plan_title = isset($all_data_quick[$data['data']->nid][$data['service_type']]['plan']) ? $all_data_quick[$data['data']->nid][$data['service_type']]['plan'] : '';
+      $features = isset($all_data_quick[$data['data']->nid][$data['service_type']]['feat']) ?  $all_data_quick[$data['data']->nid][$data['service_type']]['feat'] : '';
+
+      if ($plan_title) {
+        $out .= '<div class="plan">' . $plan_title . '</div>';
+      }
+      if (!empty($features)) {
+        foreach($features as $tid => $term) {
+          $out .= '<div class="feature">' . t($term) . '</div>';
+        }
+      }
+      
+      return $out;
+      
+    
+    
+    
+    
+    case 'rating':
+    
+      $all_data_quick = gcb_misc_getProvidersDataQuick();
+      $out = '';
+      if (isset($data['data']->votingapi_cache_node_percent_overall_average_value) && $data['data']->votingapi_cache_node_percent_overall_average_value) {
+                
+        $out = theme('gcb_misc_fivestar_static', array('rating' => $data['data']->votingapi_cache_node_percent_overall_average_value, 'stars' => 5, 'tag' => 'overall', 'widget' => array('name' => 'stars', 'css' => 'stars.css')))
+              //. '<div class="rating">' . $data['data']->votingapi_cache_node_percent_overall_average_value . '%</div>'
+              //. '<div class="voters">' . $data['data']->votingapi_cache_node_percent_overall_count_value . ' ' . t('reviews') . '</div>'
+              ;
+        
+        //$out = '<div class="details"><a href="' . url('node/' . $data['data']->nid) . '">' . $data['data']->votingapi_cache_node_percent_overall_count_value . ' ' . $data['data']->node_title . '<br>' . t('Reviews') . '</a></div>' . $out . ' <div class="count">(' . number_format( (0.05 * $data['data']->votingapi_cache_node_percent_overall_average_value), 1 ) . ')</div>';
+        $out = '<div class="details"><a href="' . url('node/' . $data['data']->nid) . '"><div>' . $data['data']->votingapi_cache_node_percent_overall_count_value . ' ' . $all_data_quick[$data['data']->nid]['name'] . '</div><div>' . t('Reviews') . '</div></a></div>' . $out . ' <div class="count">(' . number_format( (0.05 * $data['data']->votingapi_cache_node_percent_overall_average_value), 1 ) . ')</div>';
+      }
+      
+      return $out;
+      
+      
+      
+      
+      
+    case 'plan':
+      
+      $all_data_quick = gcb_misc_getProvidersDataQuick();
+      
+      return isset($all_data_quick[$data['data']->nid][$data['service_type']]['plan']) ? $all_data_quick[$data['data']->nid][$data['service_type']]['plan'] : '';
+      
+      
+      
+    // Video Review from YouTube
+    case 'vr-y':
+      
+      $all_data_quick = gcb_misc_getProvidersDataQuick();
+      
+      return isset($all_data_quick[$data['data']->nid][$data['service_type']]['vr-y']) 
+                ? '<a class="yt-direct" href="http://www.youtube.com/embed/' . $all_data_quick[$data['data']->nid][$data['service_type']]['vr-y'] . '?rel=0&amp;wmode=transparent" title="' . $all_data_quick[$data['data']->nid]['name'] . ' Video Review">Watch</a>'
+                : '';
+      
+            
+      
+      
+    case 'monthly':
+    case 'back':
+    case 'setup':
+      
+      $all_data_quick = gcb_misc_getProvidersDataQuick();
+      $out = isset($all_data_quick[$data['data']->nid][$data['service_type']]['fees'][$target]) ? $all_data_quick[$data['data']->nid][$data['service_type']]['fees'][$target] : '';
+      
+      if ($target == 'monthly' && $out) {
+        $out = '$'. $out;
+      }
+      return $out;
+      
+    
+      
+    case 'i_web':
+      
+      $all_data_quick = gcb_misc_getProvidersDataQuick();
+      
+      return isset($all_data_quick[$data['data']->nid][$target]) ? $all_data_quick[$data['data']->nid][$target] : '';
+
+  }
+}
+
+
+/**
+ * Return specific variable value for a provider depending on the filter value (business OR residential, etc)
+ */
+function gcb_misc_getProviderData_fromView($target, $data) {
+  
+  $out = '';
+  
+  switch($target) {
+    
+    case 'service_types':
+      $service_types = unserialize(SERVICE_TYPES);
+      $p_service_types = $data['data']->_field_data['nid']['entity']->field_p_types['und'];
+      $types = '';
+      foreach ($p_service_types as $p_service_type) {
+        
+        $service_type_key = $p_service_type['value'];
+        
+        if ($p_service_type['value'] == $data['exposed_raw_input']['type']) {
+          $current_type = '<div class="type main">' . $service_types[$service_type_key] . '</div>';
+        }
+        else {
+          $types .= '<div class="type">' . $service_types[$service_type_key] . '</div>';
+        }
+      }
+      
+      if ($types) {
+        return $current_type . '<div class="descr">' . t('(currently exposed)') . '</div>' . $types;
+      }
+      else {
+        return $current_type;
+      }
+      
+      break; // End of case 'service_types':
+    
+      
+      
+    case 'user_rating':
+      $out = '';
+      if (isset($data['data']->votingapi_cache_node_percent_features_average_value) && $data['data']->votingapi_cache_node_percent_features_average_value) {
+                
+        $out = theme('gcb_misc_fivestar_static', array('rating' => $data['data']->votingapi_cache_node_percent_features_average_value, 'stars' => 5, 'tag' => 'features', 'widget' => array('name' => 'hearts', 'css' => 'hearts.css')))
+              //. '<div class="rating">' . $data['data']->votingapi_cache_node_percent_features_average_value . '%</div>'
+              . '<div class="voters">' . $data['data']->votingapi_cache_node_percent_features_count_value . ' ' . t('reviews') . '</div>'
+              ;
+      }
+      $out .= '<div class="details">' . l(t('Details'), 'node/' . $data['data']->nid) . '</div>';
+      break;
+    
+      
+      
+    case 'monthly_fees':
+    case 'longdistance_fees':
+    case 'setup_fees':
+      
+      if (!$all_fees = @$_SESSION['all_fees']) {
+        $all_fees = gcb_misc_getProvidersFees();
+        $_SESSION['all_fees'] = $all_fees;
+      }
+      
+      $p_fees = $all_fees[$data['data']->nid];
+      
+      $service_type_key = $data['exposed_raw_input']['type'];
+      
+      // Refine the fee key for the new provider structure.
+      if (isset($p_fees['bu']['mon'])) {
+        $old_fee_types = array('mon' => 'monthly_fees', 'set' => 'setup_fees', 'shp' => 'shipping_fees', 'can' => 'cancel_fees', 'lng' => 'longdistance_fees', 'oth' => 'other_fees' );
+        $target = array_shift(array_keys($old_fee_types, $target));
+      }
+      
+      if (isset($p_fees[$service_type_key][$target]) && $p_fees[$service_type_key][$target]) {
+        return '$' . $p_fees[$service_type_key][$target];
+      }
+      
+      break; // End of case 'monthly_fees':
+    
+      
+      
+      
+    case 'plan':
+      
+      if (!$p_data = unserialize($data['data']->field_field_p_data[0]['raw']['value'])) {
+        return NULL;
+      }
+      
+      $service_type_key = $data['exposed_raw_input']['type'];
+      
+      $service_types = unserialize(SERVICE_TYPES);
+      $service_descriptions = unserialize(SERVICE_DESCRIPTIONS);
+      //$fee_types = unserialize(FEE_TYPES);
+
+      $load_key = 's';
+      $p_services = $p_data['s'];
+
+      if (isset($p_services[$service_type_key]['pti'])) {
+        $out = '<div class="plan">' . $p_services[$service_type_key]['pti'] . '</div>';
+      }
+      if (isset($p_services[$service_type_key]['weights_' . $service_type_key . '_features'])) {
+        $features = $p_services[$service_type_key]['weights_' . $service_type_key . '_features'];
+      }
+
+      if (is_array($features)) {
+        $out .= '<div class="features">';
+        $count = 0;
+        foreach ($features as $feature) {
+          $out .= '<div class="feature">' . $feature['name'] . '</div>';
+          if ($count++ > 1) {
+            break;
+          }
+        }
+        $out .= '</div>';
+      }
+      break; // End of case 'features':
+  }
+  
+  return $out;
+}
+
+
+/**
+ * Forms API validation function for email.
+ */
+function gcb_misc_elementValidate_email($element, &$form_state) {
+  if (!valid_email_address($element['#value'])) {
+    form_error($element, t('Please enter a valid email address.'));
+  }
+//  if (empty($element['#value'])) {
+//    form_error($element, t('This field is required.'));
+//  }
+}  
+
+
+/**
+ * Forms API validation function for url.
+ */
+function gcb_misc_elementValidate_url($element, &$form_state) {
+  if (!valid_url($element['#value'])) {
+    form_error($element, t('Please enter a valid url address.'));
+  }
+//  if (empty($element['#value'])) {
+//    form_error($element, t('This field is required.'));
+//  }
+}
+
+
+/**
+ * Helper function for sorting by weight with uasort function.
+ * 
+ * Example of using:
+ * 
+ * uasort($array_with_elements_contained_key_weight, 'gcb_misc_sortArrayByWeight');
+ */
+function gcb_misc_sortArrayByWeight($a, $b) 
+{
+    if ($a['weight'] == $b['weight']) {
+        return 0;
+    }
+    return ($a['weight'] < $b['weight']) ? -1 : 1;
+}
+
+
+
+/**
+ * Socialite social buttons.
+ */
+function gcb_blocks_getSocialiteButtons($url = NULL, $title = NULL) {
+
+  if (!$url) {
+    $url = 'http://gocloudbackup.com' . ($_GET['q'] == 'home' ? '' : $_SERVER['REQUEST_URI']);
+  }
+  
+  drupal_add_js('sites/all/libraries/jquery.plugins/socialite/socialite.min.js');
+  //drupal_add_js('sites/all/libraries/jquery.plugins/socialite/socialite.js');
+  
+  $path_to_custom_js = drupal_get_path('module', 'gcb_misc') . '/js/';
+  drupal_add_js($path_to_custom_js . 'addSocialite.js');
+  
+  $out = '
+  <ul class="social-buttons cf">
+			<li><a href="http://twitter.com/share" class="socialite twitter-share" data-text="' . $title . '" data-url="' . $url . '" data-count="horizontal" rel="nofollow" target="_blank"><span class="vhidden">Share on Twitter</span></a></li>
+			<li><a href="https://plus.google.com/share?url=' . $url . '" class="socialite googleplus-one" data-size="medium" data-href="' . $url . '" rel="nofollow" target="_blank"><span class="vhidden">Share on Google+</span></a></li>
+			<li><a href="http://www.facebook.com/sharer.php?u=' . $url . '&amp;t=' . $title . '" class="socialite facebook-like" data-href="' . $url . '" data-send="false" data-layout="button_count" data-width="60" data-show-faces="false" rel="nofollow" target="_blank"><span class="vhidden">Share on Facebook</span></a></li>
+			<li><a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=' . $url . '&amp;title=' . $title . '" class="socialite linkedin-share" data-url="' . $url . '" data-counter="right" rel="nofollow" target="_blank"><span class="vhidden">Share on LinkedIn</span></a></li>
+		</ul>
+  ';
+  
+  return $out;
+}
+
+
+/**
+ * AddThis social Like buttons set.
+ */
+function gcb_blocks_getAddThisButtonsLike() {
+
+  $out = '
+    <!-- AddThis Button BEGIN -->
+  <div class="addthis_toolbox addthis_default_style ">
+  <a class="addthis_button_linkedin_counter"></a>
+  <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+  <a class="addthis_button_facebook_like" fb:like:layout="button_count" fb:like:locale="en_US"></a>
+  <a class="addthis_button_tweet"></a>
+  </div>
+  <script type="text/javascript">var addthis_config = {"data_track_addressbar":true, ui_language:"en", locale:"en_US"};</script>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-50253baf64925d35"></script>
+  <!-- AddThis Button END -->
+  ';
+  
+  return $out;
+}
