@@ -1,6 +1,6 @@
-name = GV Pages
-package = Get VOiP
+name = Gcb Pages
+package = GoCloudBackup
 description = "Various functions and forms for pages"
 core = 7.x
-tags[] = Get VOiP
-files[] = gv_pages.module
+tags[] = Gcb VOiP
+files[] = gcb_pages.module

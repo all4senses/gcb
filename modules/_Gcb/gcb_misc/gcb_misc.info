@@ -1,6 +1,6 @@
-name = GV Misc
-package = Get VOiP
+name = Gcb Misc
+package = GoCloudBackup
 description = "Miscelanious helper functions and hooks implementations"
 core = 7.x
-tags[] = Get VOiP
-files[] = gv_misc.module
+tags[] = GoCloudBackup
+files[] = gcb_misc.module
