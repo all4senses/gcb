@@ -31,7 +31,7 @@ function gcb_blocks_block_info() {
     
   
   $blocks['footer_menu'] = array(
-    'info' => t('Footer menu'),
+    'info' => t('Footer menu (gcb)'),
     'cache' => DRUPAL_CACHE_GLOBAL,
   );
   $blocks['header_links'] = array(
