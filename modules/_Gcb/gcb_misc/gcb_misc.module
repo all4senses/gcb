@@ -2201,7 +2201,7 @@ function gcb_misc_votingapi_metadata_alter(&$data) {
  */
 function gcb_misc_views_pre_render(&$view) {
   
-  //dpm($view->name); dpm($view->current_display);
+  dpm($view->name); dpm($view->current_display);
 
   // Add a prefaces for the some views pages.
   $key = 'view-' . $view->name . '-' . $view->current_display;
