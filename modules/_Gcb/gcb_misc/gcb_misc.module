@@ -2204,7 +2204,7 @@ function gcb_misc_views_pre_render(&$view) {
   dpm($view->name); dpm($view->current_display);
 
   // Add a prefaces for the some views pages.
-  $key = 'view-' . $view->name . '-' . $view->current_display;
+  $key = 'view-' . drupal_strtolower($view->name) . '-' . $view->current_display;
   $do_attach_preface = FALSE;
   
   switch($key) {
