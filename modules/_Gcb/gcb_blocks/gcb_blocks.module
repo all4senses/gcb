@@ -107,7 +107,7 @@ function gcb_blocks_block_view($delta = '') {
       break; 
     
     case 'request_quote_v1':
-      $block['subject'] = t('Request a quote block');
+      $block['subject'] = t('Request a quote block v1');
       $block['content'] = gcb_blocks_get_requestQuote_block_v1();
       break; 
      
