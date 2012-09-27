@@ -41,7 +41,7 @@ function gcb_blocks_block_info() {
   
     
   $blocks['request_quote_v1'] = array(
-    'info' => t('Request a quote block'),
+    'info' => t('Request a quote block v1'),
     'cache' => DRUPAL_CACHE_GLOBAL,
   );
   
