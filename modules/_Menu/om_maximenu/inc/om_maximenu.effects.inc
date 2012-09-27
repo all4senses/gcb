@@ -56,7 +56,7 @@ function om_maximenu_action($action = 'hover', $menu = '', $displace = 0, $style
       //$('#om-maximenu-" . $menu . " li.om-leaf').hover(omFadeIn,omFadeOut); //native jquery
       $('#om-maximenu-" . $menu . " li.om-leaf').hoverIntent({
         over: omFadeIn,
-        timeout: 1000,
+        timeout: 10,
         out: omFadeOut
       }); 
       function omFadeIn(){ $('.om-maximenu-content.closed', this).fadeIn();}
