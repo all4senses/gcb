@@ -24,7 +24,7 @@
         </div>
       </div>
       
-      <?php echo '<div id="block-gv-blocks-header-links"><div class="follow-us">Follow Us</div>', gcb_blocks_get_headerLinks(), '</div>', render($page['header']); ?>
+      <?php echo '<div id="block-gcb-blocks-header-links"><div class="follow-us">Follow Us</div>', gcb_blocks_get_headerLinks(), '</div>', render($page['header']); ?>
     </nav> <!-- /#navigation -->
 
     <?php ////if ($breadcrumb): print $breadcrumb; endif;?>
