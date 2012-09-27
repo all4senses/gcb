@@ -506,7 +506,7 @@ function gcb_pages_buildHome($name, $data) {
   $front_preface_node_view = node_view($front_preface_node, 'full');
 
   $out .= render($front_preface_node_view);
-  
+  /*
   // Get block for Top pick business providers.
   $block_data = array('module' => 'views', 'delta' => 'providers-block', 'shadow' => FALSE);
   $out .= gcb_blocks_getBlockThemed($block_data);
@@ -514,6 +514,9 @@ function gcb_pages_buildHome($name, $data) {
   // Get block for Top pick residential providers.
   $block_data = array('module' => 'views', 'delta' => 'providers-block_1', 'shadow' => FALSE); 
   $out .= gcb_blocks_getBlockThemed($block_data);
+  */
+  
+  $out .= 'xxxxxxxxxxxx';
   
   $out .= render($seo_welcome_node_view['field_preface_bottom']);
  
