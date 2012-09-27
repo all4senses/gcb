@@ -516,8 +516,6 @@ function gcb_pages_buildHome($name, $data) {
   $out .= gcb_blocks_getBlockThemed($block_data);
   */
   
-  $out .= 'xxxxxxxxxxxx';
-  
   $out .= render($front_preface_node_view['field_preface_bottom']);
  
   return $out;

@@ -1131,145 +1131,6 @@ font-size: 15px;
 
 
 
-/* Page Request a Quote V2*/
-
-body.node-type-quote.page-node-138,
-body.node-type-quote.page-node-139{background: none;}
-
-.node-type-quote.page-node-138 #all-content,
-.node-type-quote.page-node-139 #all-content{width: 1100px;}
-
-.node-type-quote #v2 #gcb-logo{margin-top: 0;  width: 700px;}
-.node-type-quote #v2 #gcb-logo .logo{background: url("images/getvoip-logo-main-blue.png") no-repeat scroll 0 0 transparent; float: left; height: 85px; margin: 0; padding: 0; width: 190px;}
-
-.node-type-quote #v2 #gcb-logo h3{font-size: 14px; font-style: italic; line-height: 18px; margin-top: 43px;}
-
-.node-type-quote #v2 .partners{margin-top: 9px;}
-
-
-.node-type-quote #v2 .field-name-field-q-image{position: absolute; top: 0; right: 0;}
-.node-type-quote #v2 .content{padding: 0; background: white; border: none; box-shadow: none;}
-
-.node-type-quote #v2 h1{background: none repeat scroll 0 0 transparent; float: left; font-size: 60px; margin: 0 0 10px;}
-.node-type-quote #v2 .sub_header1{ display: inline-block; font-size: 30px; margin: 15px 0 0 10px;}
-.node-type-quote #v2 .sub_header2{clear: both; font-size: 30px;}
-.node-type-quote #v2 h2{font-size: 20px; font-style: normal; font-weight: bold; margin: 10px 0 20px;}
-    
-
-.node-type-quote #v2 .heading{position: relative;}
-
-.node-type-quote #v2 .left{margin-right: 35px;}
-
-.node-type-quote #v2 .left.top{padding: 10px 0 20px 40px; background: none repeat scroll 0 0 #E3F1FE; border: 1px solid lightgray; border-radius: 30px 30px 30px 30px; box-shadow: 0 0 25px #DDDDDD, 0 0 7px #000000; height: 440px; position: relative; width: 475px; float: left; margin-bottom: 20px; margin-right: 25px;}
-
-.node-type-quote #v2 .right.top{float: left; height: auto; position: relative; width: auto;}
-.node-type-quote #v2 .right.top .caption{font-size: 25px; margin: 60px 0 20px; width: 300px;}
-
-.node-type-quote #v2 .right.top ul{margin: 0; padding: 0;}
-.node-type-quote #v2 .right.top li{background: url("images/arrow-circle-right-blue.png") no-repeat scroll 0 0 transparent; margin-bottom: 2px; text-indent: 30px;}
-
-.node-type-quote #v2 .bottom{color: white; margin: 15px 30px 20px 0; padding: 20px; float: left; background: none repeat scroll 0 0 #999999; border: 2px solid white; border-radius: 30px; box-shadow: 0 0 25px #DDDDDD, 0 0 10px #000000; height: 325px; position: relative; width: 500px; line-height: 20px;}
-.node-type-quote #v2 .bottom.right{margin-right: 0;}
-.node-type-quote #v2 .right.bottom h3{font-size: 16px; font-weight: bold; margin: 0;}
-.node-type-quote #v2 .right.bottom div{font-size: 15px; line-height: 18px; margin: 5px 0 26px 20px;}
-
-.node-type-quote #v2 #brands{box-shadow: none; margin-top: 0; padding: 0; background: none;}
-.node-type-quote #v2 #brands div{margin-right: 20px;}
-.node-type-quote #v2 #brands h2{font-size: 18px; margin: 130px 0 20px;}
-
-
-.node-type-quote #v2 .left.bottom{padding: 20px 0 20px 20px;}
-
-.node-type-quote #v2 .left .caption{display: inline-block; font-size: 28px;}
-.node-type-quote #v2 .left.top .caption{margin-bottom: 10px; border-bottom: 1px solid lightgray;}
-
-.node-type-quote #v2 .left.bottom .caption{font-size: 27px; margin: 20px 0 15px 10px;}
-
-.node-type-quote #v2 .left.bottom .options{margin: 0 0 30px 20px; float: left; width: 233px;}
-.node-type-quote #v2 .left.bottom .options.second{margin-left: 0;}
-
-.node-type-quote #v2 .left.bottom .option{background: url("images/galka-red.png") no-repeat scroll 0 0; margin-bottom: 8px;}
-      
-      
-.node-type-quote #v2 .question{clear: both;}
-
-.node-type-quote #v2 #requestQuoteFormWrapper{width: auto;}
-.node-type-quote #v2 #requestQuoteFormWrapper, .node-type-quote #v2 .multipartForm{height: 395px;}
-.node-type-quote #v2 #requestQuoteFormWrapper .step{height: auto; font-family: Georgia,"Bitstream Charter",serif;}
-
-.node-type-quote #v2 #requestQuoteFormWrapper .step#personal_info{height: 330px; width: 440px;}
-.node-type-quote #v2 .multipartForm .label_after{margin: 0 0 3px 25px;}
-
-/*.node-type-quote #v2 .ui-state-default, .node-type-quote #v2 .ui-widget-content .ui-state-default, .node-type-quote #v2  .ui-widget-header .ui-state-default{margin-bottom: 0;}*/
-.node-type-quote #v2 .multipartForm input[type="radio"]{clear: left;}
-
-.node-type-quote #v2 .multipartForm .label_after.last_radio{margin-bottom: 10px;}
-.node-type-quote #v2 .multipartForm .subset .label_after.last_radio{margin-bottom: 0;}
-
-.node-type-quote #v2 .subset.first{ float: left; margin-bottom: 5px; width: 235px;}
-.node-type-quote #v2 .subset.second{float: left; width: 200px;}
-
-.node-type-quote #v2 #on_error{clear: both; height: 18px;}
-.node-type-quote #v2 .multipartForm #questions_section label.error{bottom: 0; margin: 0;}
-
-.node-type-quote #v2 #requestQuoteFormWrapper #Navigation #next{cursor: pointer; box-shadow: 5px 5px 5px -5px gray; color: white; font-weight: bold; left: 8px; position: relative; margin: 0 0 3px 0; background: url("images/next-red.jpg") no-repeat scroll right 0 transparent; border-radius: 20px; height: 36px; width: auto; padding: 5px 40px 20px 20px; font-family: Verdana,Arial,sans-serif; font-size: 17px;}
-
-
-.node-type-quote #v2 #requestQuoteFormWrapper #personal_info .question{ color: lightgray; margin-bottom: 30px; margin-top: 15px;}
-.node-type-quote #v2 #requestQuoteFormWrapper #personal_info .wrapper{margin-bottom: 18px; width: 430px;}
-
-.node-type-quote #v2 #requestQuoteFormWrapper #personal_info #phone{margin-right: 147px;}
-.node-type-quote #v2 #requestQuoteFormWrapper #personal_info input{width: 285px;}
-.node-type-quote #v2 #requestQuoteFormWrapper #personal_info #phone input{width: 35px;}
-
-.node-type-quote #v2 .content .left .protected{bottom: 0; left: 0;}
-
-.node-type-quote #v2 #requestQuoteFormWrapper .subset-name{margin: 10px 0 10px 0;}
-.node-type-quote #v2 #requestQuoteFormWrapper .subset-name .wrapper{margin-bottom: 0;}
-.node-type-quote #v2 #requestQuoteFormWrapper .subset-name .wrapper.subset.first{width: 270px;}
-.node-type-quote #v2 #requestQuoteFormWrapper .subset-name .wrapper.subset.first input{width: 150px;}
-.node-type-quote #v2 #requestQuoteFormWrapper .subset-name .wrapper.subset.second{float: right; width: auto;}
-.node-type-quote #v2 #requestQuoteFormWrapper .subset-name .wrapper.subset.second input{width: 155px;}
-
-.node-type-quote #v2 #requestQuoteFormWrapper input{padding-bottom: 2px; padding-top: 3px;}
-    
-.node-type-quote #v2 #requestQuoteFormWrapper .label_before{margin-top: 3px; margin-left: 0; margin-bottom: 5px; font-weight: bold;}
-
-.node-type-quote #v2 #requestQuoteFormWrapper input#email,
-.node-type-quote #v2 #requestQuoteFormWrapper input#company{width: 315px;}
-
-.node-type-quote #v2 .content .left #phone{float: left;}
-.node-type-quote #v2 .multipartForm input.phone{width: 47px;}
-.node-type-quote #v2 .multipartForm input#phone_1{margin-left: 63px;}
-
-.node-type-quote #v2 .ui-state-default, 
-.node-type-quote #v2 .ui-widget-content .ui-state-default, 
-.node-type-quote #v2 .ui-widget-header .ui-state-default{ height: 15px; margin-bottom: 0; margin-top: 4px; text-align: left;}
-
-.node-type-quote #v2 #requestQuoteFormWrapper input.error{border: 1px dotted red;}
-
-
-
-
-.node-type-quote #v2 #requestQuoteFormWrapper .results.sending{margin-top: 225px; font-size: 16px; position: static;}
-.node-type-quote #v2 #requestQuoteFormWrapper .results.success{margin-top: 120px; font-size: 16px; position: static; width: 380px; padding-top: 45px;}
-
-.node-type-quote #v2 #requestQuoteFormWrapper .results .not-verified{position: absolute; top: 190px;}
-
-
-.node-type-quote #v2 .left.top.final{padding: 10px 3px 20px 15px; width: 503px;}
-
-.node-type-quote #v2 .left .quote-final{top: 20px; width: 450px;}
-.node-type-quote #v2 .left .quote-final p{font-size: 16px; line-height: 25px;}
-
-.node-type-quote #v2 .right-final{position: static;}
-.node-type-quote #v2 .right-final a.image{bottom: 0; position: absolute;}
-.node-type-quote #v2 .right-final .field-type-image{margin-bottom: 17px;}
-.node-type-quote #v2 .right-final h2{left: 40px; top: 185px;}
-.node-type-quote #v2 .right-final .link a{left: 30px; top: 285px;}
-
-
-
 /* Page Request a Quote V3*/
 
 .node-type-quote #v3{padding-top: 10px;}
@@ -1488,160 +1349,68 @@ body.sidebar-second.node-type-quote #main{margin: 0; padding: 0;}
 #highlighted #block-gcb-blocks-request-quote-v2 .shadow{background: none; height: 0; margin-bottom: 0;}
 
 
-/* Request a Quote block V2*/
-#block-gcb-blocks-request-quote-v2 .content{border-left: 1px dotted lightgray; padding: 0 5px;}
-#block-gcb-blocks-request-quote-v2 h3{font-style: normal; font-weight: bold; margin: 4px 0 3px; font-size: 16px;}
-#block-gcb-blocks-request-quote-v2 #up{float: left;}
-#block-gcb-blocks-request-quote-v2 #up .explain{float: left; font-size: 8px; width: 145px;}
-#block-gcb-blocks-request-quote-v2 #up .explain.p1{width: 115px;}
-#block-gcb-blocks-request-quote-v2 #up .number{background: url("images/qv3-circle-red-back.png") no-repeat scroll 0 0 transparent; color: white; float: left; font-size: 15px; height: 40px; padding: 3px 0 0 11px; width: 20px; font-family: serif;}
-#block-gcb-blocks-request-quote-v2 #up-image{background: url("images/path-finder.png") no-repeat scroll 0 0 transparent; float: right; height: 50px; margin: 20px 0 0; width: 50px;}
-
-#block-gcb-blocks-request-quote-v2 #requestQuoteFormWrapper{width: auto; height: 140px; border-top: 1px solid lightgray;}
-#block-gcb-blocks-request-quote-v2 #requestQuoteFormWrapper .step{height: 140px;}
-
-#block-gcb-blocks-request-quote-v2 .wrapper{float: left; margin-top: 0; width: 170px; font-size: 12px; margin-right: 5px;}
-
-#block-gcb-blocks-request-quote-v2 .wrapper.phone,
-#block-gcb-blocks-request-quote-v2 .wrapper.company,
-#block-gcb-blocks-request-quote-v2 .wrapper.website{margin-top: 0;}
-
-#block-gcb-blocks-request-quote-v2 .wrapper.phone input{margin: 0 5px 0 0; width: 42px;}
-#block-gcb-blocks-request-quote-v2 .wrapper.phone input#phone_3{margin-right: 0; width: 50px;}
-
-#block-gcb-blocks-request-quote-v2 .wrapper input{float: left; text-align: left; width: 98%; height: 12px;} 
-
-#block-gcb-blocks-request-quote-v2 .wrapper.first{width: 155px;}
-#block-gcb-blocks-request-quote-v2 .wrapper.last{width: 140px; margin-right: 0;}
-
-#block-gcb-blocks-request-quote-v2 .wrapper.top{margin-bottom: 5px;}
-#block-gcb-blocks-request-quote-v2 .wrapper.top.first select,
-#block-gcb-blocks-request-quote-v2 .wrapper.top.last select{text-align: center;}
-#block-gcb-blocks-request-quote-v2 .wrapper.top.last{margin-right: 0; text-align: center;}
-#block-gcb-blocks-request-quote-v2 .wrapper.top select{width: 100%;}
-
-#block-gcb-blocks-request-quote-v2 .label_before{float: none; margin-left: 0; margin-bottom: 0;}
-#block-gcb-blocks-request-quote-v2 .wrapper.phone .label_before{margin-bottom: 2px;}
-
-#block-gcb-blocks-request-quote-v2 .question{clear: left; float: left; font-weight: normal; margin: 0; padding-top: 5px;}
-/*#block-gcb-blocks-request-quote-v2 .ui-widget-content .ui-state-default{float: right; margin: 0 20px 10px 0; width: 230px; padding: 0 0 0 3px;}*/
-
-#block-gcb-blocks-request-quote-v2 #requestQuoteFormWrapper #Navigation{right: 13px; bottom: 4px;}
-
-#block-gcb-blocks-request-quote-v2 #requestQuoteFormWrapper #Navigation #next{background: url("images/sprite-quote-1.png") no-repeat scroll 205px -44px #D40000; border: none; border-radius: 7px 7px 7px 7px; color: white; cursor: pointer; font-family: Verdana,Arial,sans-serif; font-size: 16px; font-weight: bold; height: 21px; left: 8px; padding: 0 0 3px 10px; position: relative; text-align: left; width: 230px;}
-
-#block-gcb-blocks-request-quote-v2 #requestQuoteFormWrapper label.error{background: white;  border-left: 1px dotted lightgray; bottom: 1px; font-size: 10px; font-weight: normal; height: 17px; left: 241px; margin: 0; padding: 11px 0 1px 5px; width: 231px; z-index: 10;}
-
-#block-gcb-blocks-request-quote-v2 #requestQuoteFormWrapper .results{position: static; margin-top: 0; height: auto;}
-
-#block-gcb-blocks-request-quote-v2 .protected{background: url("images/protected.png") no-repeat scroll 0 0 white; bottom: 6px; height: 19px; left: 152px; position: absolute; width: 85px;}
 
 
+/* Request a Quote block V1 */
 
-/* Request a Quote block V3, v4 */
-
-
-#block-gcb-blocks-request-quote-v3,
-#block-gcb-blocks-request-quote-v4{margin-bottom: 0; padding-bottom: 3px; position: static;}
-#sidebar-second #block-gcb-blocks-request-quote-v3 .inside,
-#sidebar-second #block-gcb-blocks-request-quote-v4 .inside{background: transparent; border: medium none; padding-bottom: 0; padding-top: 0;}
-#sidebar-second #block-gcb-blocks-request-quote-v3 .shadow,
-#sidebar-second #block-gcb-blocks-request-quote-v4 .shadow{background: none; height: 0; margin-bottom: 0;}
+#block-gcb-blocks-request-quote-v1{margin-bottom: 0; padding-bottom: 3px; position: static;}
+#sidebar-second #block-gcb-blocks-request-quote-v1 .inside{background: transparent; border: medium none; padding-bottom: 0; padding-top: 0;}
+#sidebar-second #block-gcb-blocks-request-quote-v1 .shadow{background: none; height: 0; margin-bottom: 0;}
 
 
-#block-gcb-blocks-request-quote-v3 .content,
-#block-gcb-blocks-request-quote-v4 .content{padding: 0 5px;}
-#block-gcb-blocks-request-quote-v3 h3,
-#block-gcb-blocks-request-quote-v4 h3{border-bottom: 1px solid lightgray; font-size: 15px; font-weight: bold; margin: 4px 0 0; padding-bottom: 3px; text-align: center; color: #478AFD;}
-#block-gcb-blocks-request-quote-v3 h4,
-#block-gcb-blocks-request-quote-v4 h4{border: medium none; font-size: 14px; font-weight: normal; line-height: 15px; margin: 5px 0; text-align: center;}
-#block-gcb-blocks-request-quote-v3 .explain,
-#block-gcb-blocks-request-quote-v4 .explain{float: left; font-size: 10px; margin: 0 0 5px; width: auto;}
-#block-gcb-blocks-request-quote-v3 .explain.p1,
-#block-gcb-blocks-request-quote-v4 .explain.p1{margin: 0; width: 100%;}
-#block-gcb-blocks-request-quote-v3 .p1 .text,
-#block-gcb-blocks-request-quote-v4 .p1 .text{padding-top: 6px;}
-#block-gcb-blocks-request-quote-v3 .explain.p2,
-#block-gcb-blocks-request-quote-v4 .explain.p2{margin-top: 9px;}
-#block-gcb-blocks-request-quote-v3 .p2 .text,
-#block-gcb-blocks-request-quote-v4 .p2 .text{padding-top: 1px; line-height: 12px;}
-#block-gcb-blocks-request-quote-v3 .p3 .text,
-#block-gcb-blocks-request-quote-v4 .p3 .text{padding-top: 1px; line-height: 12px;}
-#block-gcb-blocks-request-quote-v3 .number,
-#block-gcb-blocks-request-quote-v4 .number{background: url("images/sprite-2.png") no-repeat scroll 0 -172px transparent; color: white; float: left; font-size: 15px; height: 25px; padding: 3px 0 0 8px; width: 20px; font-family: serif;}
+#block-gcb-blocks-request-quote-v1 .content{padding: 0 5px;}
+#block-gcb-blocks-request-quote-v1 h3{border-bottom: 1px solid lightgray; font-size: 15px; font-weight: bold; margin: 4px 0 0; padding-bottom: 3px; text-align: center; color: #478AFD;}
+#block-gcb-blocks-request-quote-v1 h4{border: medium none; font-size: 14px; font-weight: normal; line-height: 15px; margin: 5px 0; text-align: center;}
+#block-gcb-blocks-request-quote-v1 .explain{float: left; font-size: 10px; margin: 0 0 5px; width: auto;}
+#block-gcb-blocks-request-quote-v1 .explain.p1{margin: 0; width: 100%;}
+#block-gcb-blocks-request-quote-v1 .p1 .text{padding-top: 6px;}
+#block-gcb-blocks-request-quote-v1 .explain.p2{margin-top: 9px;}
+#block-gcb-blocks-request-quote-v1 .p2 .text{padding-top: 1px; line-height: 12px;}
+#block-gcb-blocks-request-quote-v1 .p3 .text{padding-top: 1px; line-height: 12px;}
+#block-gcb-blocks-request-quote-v1 .number{background: url("images/sprite-2.png") no-repeat scroll 0 -172px transparent; color: white; float: left; font-size: 15px; height: 25px; padding: 3px 0 0 8px; width: 20px; font-family: serif;}
 
 
-#block-gcb-blocks-request-quote-v3 #requestQuoteFormWrapper,
-#block-gcb-blocks-request-quote-v4 #requestQuoteFormWrapper{height: 282px; width: auto; z-index: 1;}
-#block-gcb-blocks-request-quote-v3 #requestQuoteFormWrapper .step,
-#block-gcb-blocks-request-quote-v4 #requestQuoteFormWrapper .step{height: 282px; color: gray; position: static;}
+#block-gcb-blocks-request-quote-v1 #requestQuoteFormWrapper{height: 282px; width: auto; z-index: 1;}
+#block-gcb-blocks-request-quote-v1 #requestQuoteFormWrapper .step{height: 282px; color: gray; position: static;}
 
-#block-gcb-blocks-request-quote-v4 .middle-wrapper{background: orange; margin: 20px 0 0 10px; padding: 5px 0 5px; width: 182px; border-radius: 5px;}
+#block-gcb-blocks-request-quote-v1 .middle-wrapper{background: orange; margin: 20px 0 0 10px; padding: 5px 0 5px; width: 182px; border-radius: 5px;}
 
-#block-gcb-blocks-request-quote-v3 .wrapper{float: left; font-size: 12px; margin-top: 3px; width: 192px;}
-#block-gcb-blocks-request-quote-v4 .wrapper{float: left; font-size: 12px; margin-top: 3px; width: 192px;}
+#block-gcb-blocks-request-quote-v1 .wrapper{float: left; font-size: 12px; margin-top: 3px; width: 192px;}
 
-#block-gcb-blocks-request-quote-v4 .middle-wrapper .wrapper{float: none; width: 182px; margin-top: 0;}
+#block-gcb-blocks-request-quote-v1 .middle-wrapper .wrapper{float: none; width: 182px; margin-top: 0;}
 
-#block-gcb-blocks-request-quote-v3 .wrapper.middle{height: 16px;}
-#block-gcb-blocks-request-quote-v4 .wrapper.middle{height: 32px;}
+#block-gcb-blocks-request-quote-v1 .wrapper.middle{height: 32px;}
 
-#block-gcb-blocks-request-quote-v3 .wrapper.phone{margin-top: 3px;}
+#block-gcb-blocks-request-quote-v1 .wrapper.phone #phone{margin-top: 2px;}
 
-#block-gcb-blocks-request-quote-v3 .wrapper.phone #phone{float: right; margin-top: 2px;}
-#block-gcb-blocks-request-quote-v4 .wrapper.phone #phone{margin-top: 2px;}
+#block-gcb-blocks-request-quote-v1 .wrapper input{border: 1px solid gray; border-radius: 6px; box-shadow: inset 0 3px 3px lightgray; float: none; font-size: 14px; height: 27px; margin: 2px 0 0 7px; padding-left: 7px; text-align: left; width: 160px; background: white;}
+#block-gcb-blocks-request-quote-v1 .wrapper input:focus{box-shadow: 0 3px 10px lightgray inset;}
 
-#block-gcb-blocks-request-quote-v3 .wrapper.phone input{float: left; margin: 0 2px 0 0; width: 24px;}
-/*#block-gcb-blocks-request-quote-v4 .wrapper.phone input{float: left; margin: 0 2px 0 0;}*/
+#block-gcb-blocks-request-quote-v1 .wrapper.last{margin-right: 0;}
 
-#block-gcb-blocks-request-quote-v3 .wrapper.phone input#phone_3{margin-right: 0; width: 35px;}
+#block-gcb-blocks-request-quote-v1 .wrapper.top.first{margin-top: 0; }
+#block-gcb-blocks-request-quote-v1 .wrapper.top.first select,
+#block-gcb-blocks-request-quote-v1 .wrapper.top.last select{text-align: center;}
+#block-gcb-blocks-request-quote-v1 .wrapper.top.last{margin-right: 0; text-align: center;}
+#block-gcb-blocks-request-quote-v1 .wrapper.top select{float: right; width: 80px; margin-top: 4px;}
 
-#block-gcb-blocks-request-quote-v3 .wrapper input{float: right; height: 12px; text-align: left; width: 90px; margin-right: 0; margin-top: 2px; border: 1px solid lightgray;}
+#block-gcb-blocks-request-quote-v1 .label_before{float: left; margin-bottom: 0; margin-left: 10px;}
+#block-gcb-blocks-request-quote-v1 .wrapper.phone .label_before{margin-bottom: 2px;}
 
-#block-gcb-blocks-request-quote-v4 .wrapper input{border: 1px solid gray; border-radius: 6px; box-shadow: inset 0 3px 3px lightgray; float: none; font-size: 14px; height: 27px; margin: 2px 0 0 7px; padding-left: 7px; text-align: left; width: 160px; background: white;}
-#block-gcb-blocks-request-quote-v4 .wrapper input:focus{box-shadow: 0 3px 10px lightgray inset;}
+#block-gcb-blocks-request-quote-v1 .question{clear: left; float: left; font-weight: normal; margin: 0 0 0 10px; padding-top: 5px;}
 
-#block-gcb-blocks-request-quote-v3 .wrapper.last,
-#block-gcb-blocks-request-quote-v4 .wrapper.last{margin-right: 0;}
+#block-gcb-blocks-request-quote-v1 #requestQuoteFormWrapper #Navigation{right: 16px; bottom: 4px;}
 
-#block-gcb-blocks-request-quote-v3 .wrapper.top.first,
-#block-gcb-blocks-request-quote-v4 .wrapper.top.first{margin-top: 0; }
-#block-gcb-blocks-request-quote-v3 .wrapper.top.first select,
-#block-gcb-blocks-request-quote-v3 .wrapper.top.last select,
-#block-gcb-blocks-request-quote-v4 .wrapper.top.first select,
-#block-gcb-blocks-request-quote-v4 .wrapper.top.last select{text-align: center;}
-#block-gcb-blocks-request-quote-v3 .wrapper.top.last,
-#block-gcb-blocks-request-quote-v4 .wrapper.top.last{margin-right: 0; text-align: center;}
-#block-gcb-blocks-request-quote-v3 .wrapper.top select,
-#block-gcb-blocks-request-quote-v4 .wrapper.top select{float: right; width: 80px; margin-top: 4px;}
+#block-gcb-blocks-request-quote-v1 #requestQuoteFormWrapper #Navigation #next{background: url("images/sprite-2.png") no-repeat scroll 60px -412px #478AFD; border: medium none; border-radius: 3px 3px 3px 3px; color: white; cursor: pointer; font-family: Verdana,Arial,sans-serif; font-size: 13px; font-weight: bold; height: 21px; left: 8px; padding: 1px 0 2px 3px; position: relative; text-align: left; width: 80px;}
 
-#block-gcb-blocks-request-quote-v3 .label_before,
-#block-gcb-blocks-request-quote-v4 .label_before{float: left; margin-bottom: 0; margin-left: 10px;}
-#block-gcb-blocks-request-quote-v3 .wrapper.phone .label_before,
-#block-gcb-blocks-request-quote-v4 .wrapper.phone .label_before{margin-bottom: 2px;}
+#block-gcb-blocks-request-quote-v1 #requestQuoteFormWrapper label.error{background: none repeat scroll 0 0 white; bottom: 0; font-size: 9px; font-weight: normal; height: 17px; left: 3px; margin: 0; padding: 11px 0 1px 7px; width: 187px; z-index: 10;}
 
-#block-gcb-blocks-request-quote-v3 .question,
-#block-gcb-blocks-request-quote-v4 .question{clear: left; float: left; font-weight: normal; margin: 0 0 0 10px; padding-top: 5px;}
+#block-gcb-blocks-request-quote-v1 #requestQuoteFormWrapper .results{position: static; margin-top: 7px; height: auto;}
 
-#block-gcb-blocks-request-quote-v3 #requestQuoteFormWrapper #Navigation,
-#block-gcb-blocks-request-quote-v4 #requestQuoteFormWrapper #Navigation{right: 16px; bottom: 4px;}
+#block-gcb-blocks-request-quote-v1 .protected{background: url("images/sprite-0.png") no-repeat scroll 0 -17px white; bottom: 3px; height: 20px; left: 10px; position: absolute; width: 85px;}
 
-#block-gcb-blocks-request-quote-v3 #requestQuoteFormWrapper #Navigation #next,
-#block-gcb-blocks-request-quote-v4 #requestQuoteFormWrapper #Navigation #next{background: url("images/sprite-2.png") no-repeat scroll 60px -412px #478AFD; border: medium none; border-radius: 3px 3px 3px 3px; color: white; cursor: pointer; font-family: Verdana,Arial,sans-serif; font-size: 13px; font-weight: bold; height: 21px; left: 8px; padding: 1px 0 2px 3px; position: relative; text-align: left; width: 80px;}
-
-#block-gcb-blocks-request-quote-v3 #requestQuoteFormWrapper label.error,
-#block-gcb-blocks-request-quote-v4 #requestQuoteFormWrapper label.error{background: none repeat scroll 0 0 white; bottom: 0; font-size: 9px; font-weight: normal; height: 17px; left: 3px; margin: 0; padding: 11px 0 1px 7px; width: 187px; z-index: 10;}
-
-#block-gcb-blocks-request-quote-v3 #requestQuoteFormWrapper .results,
-#block-gcb-blocks-request-quote-v4 #requestQuoteFormWrapper .results{position: static; margin-top: 7px; height: auto;}
-
-#block-gcb-blocks-request-quote-v3 .protected{background: url("images/sprite-0.png") no-repeat scroll 0 -17px white; bottom: 3px; height: 20px; left: 3px; position: absolute; width: 85px;}
-#block-gcb-blocks-request-quote-v4 .protected{background: url("images/sprite-0.png") no-repeat scroll 0 -17px white; bottom: 3px; height: 20px; left: 10px; position: absolute; width: 85px;}
-
-#block-gcb-blocks-request-quote-v3 .ui-state-default, #block-gcb-blocks-request-quote-v3 .ui-widget-content .ui-state-default, #block-gcb-blocks-request-quote-v3 .ui-widget-header .ui-state-default,
-#block-gcb-blocks-request-quote-v4 .ui-state-default, #block-gcb-blocks-request-quote-v4 .ui-widget-content .ui-state-default, #block-gcb-blocks-request-quote-v4 .ui-widget-header .ui-state-default{background-image: none;}
-#block-gcb-blocks-request-quote-v3 select.ui-state-default,
-#block-gcb-blocks-request-quote-v4 select.ui-state-default{background: #f4f4f4;}
+#block-gcb-blocks-request-quote-v1 .ui-state-default, #block-gcb-blocks-request-quote-v1 .ui-widget-content .ui-state-default, #block-gcb-blocks-request-quote-v1 .ui-widget-header .ui-state-default{background-image: none;}
+#block-gcb-blocks-request-quote-v1 select.ui-state-default{background: #f4f4f4;}
 
 
 

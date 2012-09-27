@@ -40,7 +40,7 @@ function gcb_blocks_block_info() {
   );
   
     
-  $blocks['request_quote'] = array(
+  $blocks['request_quote_v1'] = array(
     'info' => t('Request a quote block'),
     'cache' => DRUPAL_CACHE_GLOBAL,
   );
@@ -106,9 +106,9 @@ function gcb_blocks_block_view($delta = '') {
       $block['content'] = gcb_blocks_get_headerLinks();
       break; 
     
-    case 'request_quote':
+    case 'request_quote_v1':
       $block['subject'] = t('Request a quote block');
-      $block['content'] = gcb_blocks_get_requestQuote_block();
+      $block['content'] = gcb_blocks_get_requestQuote_block_v1();
       break; 
      
 //    case 'b_provider_p_bottom':
@@ -361,7 +361,7 @@ function gcb_blocks_getBlockThemed($block_data)
 /**
  * Block Request a quote with a multistep form.
  */
-function gcb_blocks_get_requestQuote_block() {
+function gcb_blocks_get_requestQuote_block_v1() {
   
   drupal_add_library('system', 'ui.core');
   drupal_add_library('system', 'ui.widget');
@@ -383,7 +383,7 @@ function gcb_blocks_get_requestQuote_block() {
   $_SESSION['requestQuoteToken'] = $token;
 
   $out = '
-  <h3>No-Risk Free GoCloudBackup Quote</h3>
+  <h3>No-Risk Free Backup Quote</h3>
   <h4>Don\'t trust your phone system with just anyone!</h4>
   <div id="requestQuoteFormWrapper">
         <div class="sending results" style="display: none;"></div>
