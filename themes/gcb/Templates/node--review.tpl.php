@@ -17,7 +17,7 @@
                   <h1 property="dc:title v:summary" 
                 <?php else: ?>
                     <?php 
-                    $full_title_urls = array('/providers/reviews', '/business-voip-reviews', '/residential-voip-reviews');
+                    $full_title_urls = array('/providers/reviews', '/business-cloudbackup-reviews', '/residential-cloudbackup-reviews');
                     if (in_array(@$_SERVER['REDIRECT_URL'], $full_title_urls)) {
                       $full_title = TRUE;
                     }

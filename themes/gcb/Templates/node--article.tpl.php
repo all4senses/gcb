@@ -15,12 +15,13 @@
       <?php endif; ?>
 
           <?php if ($page): ?>
-          <h1 <?php print ' ' . /*$title_attributes*/ /*preg_replace('/datatype=".*"/', '', $title_attributes);*/ preg_replace('/datatype=""/', '', $title_attributes); ?>>
+          <h1 
           <?php else: ?>
-          <h2 <?php print ' ' . /*$title_attributes*/ /*preg_replace('/datatype=".*"/', '', $title_attributes);*/ preg_replace('/datatype=""/', '', $title_attributes); ?>>
+          <h2 
           <?php endif; ?>
-
-            
+              
+            <?php print ' ' . /*$title_attributes*/ /*preg_replace('/datatype=".*"/', '', $title_attributes);*/ preg_replace('/datatype=""/', '', $title_attributes); if (!$node->status) {echo ' class="not-published"';} ?>>
+              
             <?php if (!isset($node->title_no_link) && !$page): ?>
               <a href="<?php print $node_url; ?>">
                 <?php print $title; ?>
@@ -131,17 +132,25 @@
               echo $node->field_a_teaser['und'][0]['value'];
             }
             else {
-              $teaser_data = gv_misc_getArticleTeaserData('all', $content['body'][0]['#markup'], $node->nid);
+              $teaser_data = gcb_misc_getArticleTeaserData('all', $content['body'][0]['#markup'], $node->nid);
               echo $teaser_data['teaser'];
             }
             
             hide($content['body']);
           }
           
-          if (isset($content['field_topics']) && (!isset($content['metatags']['keywords']['#attached']['drupal_add_html_head'][0][0]['#value']) || !$content['metatags']['keywords']['#attached']['drupal_add_html_head'][0][0]['#value']) ) {
+          $keyword_metatag_name = ($node->type == 'news_post') ? 'news_keywords' : 'keywords';
+          
+          if (isset($content['metatags']['keywords'])) {
             hide($content['metatags']['keywords']);
-            gv_misc_pushTagsToMetatags('keywords', $content['field_topics']);
           }
+          if (isset($content['metatags']['keywords']['#attached']['drupal_add_html_head'][0][0]['#value']) && $content['metatags']['keywords']['#attached']['drupal_add_html_head'][0][0]['#value']) {
+            gcb_misc_addMetatag($keyword_metatag_name, $content['metatags']['keywords']['#attached']['drupal_add_html_head'][0][0]['#value']);
+          }
+          elseif (@$content['field_topics']) {
+            gcb_misc_pushTagsToMetatags($keyword_metatag_name, $content['field_topics']);
+          }
+          
           print render($content);
         ?>
       </div>
@@ -193,7 +202,7 @@
                             <?php if(1): ?>
 
                               <?php 
-                                echo gv_blocks_getSocialiteButtons($url, $title); 
+                                echo gcb_blocks_getSocialiteButtons($url, $title); 
                               ?> 
 
                             <?php else: ?> 
@@ -274,9 +283,9 @@
       <div class="providers">
         <?php 
           $block_data = array('module' => 'views', 'delta' => 'providers-block_pick_bu', 'shadow' => TRUE);
-          echo gv_blocks_getBlockThemed($block_data);
+          echo gcb_blocks_getBlockThemed($block_data);
           $block_data = array('module' => 'views', 'delta' => 'providers-block_pick_re', 'shadow' => TRUE);
-          echo gv_blocks_getBlockThemed($block_data);
+          echo gcb_blocks_getBlockThemed($block_data);
           echo '<div class="bottom-clear"></div>';
         ?>
       </div>

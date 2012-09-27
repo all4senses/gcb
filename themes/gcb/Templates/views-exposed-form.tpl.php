@@ -51,12 +51,12 @@
       <div class="views-exposed-widget views-widget-sort-by">
         <?php 
           // a4s changes 
-          $gv_sort_by = NULL;
+          $gcb_sort_by = NULL;
           if(strpos($sort_by, 'selected="selected">Post date')) {
-            $gv_sort_by = 'Post date';
+            $gcb_sort_by = 'Post date';
           }
           elseif(strpos($sort_by, 'selected="selected">Rating')) {
-            $gv_sort_by = 'Rating';
+            $gcb_sort_by = 'Rating';
           }
           print $sort_by; 
         
@@ -65,7 +65,7 @@
       <div class="views-exposed-widget views-widget-sort-order">
         <?php 
           // a4s changes 
-          switch ($gv_sort_by) {
+          switch ($gcb_sort_by) {
             case 'Post date':
               $sort_order = str_replace('>Asc<', '>Oldest<', $sort_order);
               $sort_order = str_replace('>Desc<', '>Newest<', $sort_order);

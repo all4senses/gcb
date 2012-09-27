@@ -179,19 +179,6 @@ function gcb_misc_getInitialQuotePageNode($finalQuotePage_title) {
 
 
 /**
- * Renders metatags array with a new order of tags: description, keywords, the rest...
- *
- */
-function gcb_misc_renderMetatags_newOrder(&$metatags) {
-  
-  echo render($metatags['description']);
-  echo render($metatags['keywords']);
-  // The rest...
-  echo render($metatags);
-}
-
-
-/**
  * Process variables for search-result.tpl.php.
  *
  * The $variables array contains the following arguments:

@@ -54,7 +54,7 @@
                 $share_title = NULL;
                 
                 if ($is_front) {
-                  $share_title = gv_misc_metatag_getFrontTitle();
+                  $share_title = gcb_misc_metatag_getFrontTitle();
                 }
                 
                 if (!$share_title) {
@@ -65,7 +65,7 @@
                     $share_title = $title;
                   }
                 }
-                echo gv_blocks_getSocialiteButtons($url, $share_title); 
+                echo gcb_blocks_getSocialiteButtons($url, $share_title); 
               
               ?> 
 

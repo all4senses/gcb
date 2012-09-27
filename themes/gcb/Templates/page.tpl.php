@@ -16,11 +16,11 @@
       
       <div id="logo-block">
         <a href="<?php print $front_page; ?>" title="<?php print t('GoCloudBackup Home'); ?>" id="logo">
-          <img src="<?php print 'http://getvoip.com/sites/all/themes/gv_orange/css/images/getvoip-logo.png'; ?>" alt="<?php print t('GoCloudBackup logo'); ?>" title="<?php print t('GoCloudBackup Home'); ?>" />
+          <img src="<?php print 'http://gocloudbackup.com/sites/all/themes/gcb/css/images/gocloudbackup-logo.png'; ?>" alt="<?php print t('GoCloudBackup logo'); ?>" title="<?php print t('GoCloudBackup Home'); ?>" />
         </a>
         <div class="descr">
           <div class="title">2012 GoCloudBAckup GUIDE</div>
-          <div class="subtitle">SERVICE PROVIDER REVIEWS</div><div class="stars"><img src="http://getvoip.com/sites/all/themes/gv_orange/css/images/sprite-0.png" alt="GoCloudBAckup Reviews" title="GoCloudBAckup Reviews"/></div>
+          <div class="subtitle">SERVICE PROVIDER REVIEWS</div><div class="stars"><img src="http://gocloudbackup.com/sites/all/themes/gcb/css/images/sprite-0.png" alt="GoCloudBAckup Reviews" title="GoCloudBAckup Reviews"/></div>
         </div>
       </div>
       
@@ -98,6 +98,6 @@
     <?php echo render($page['footer']); ?>
     <div class="c">© 2012 GoCloudBackup.com | All Rights Reserved</div>
     <div id="sitelock"><a id="sitelock" href="#" onclick="window.open('https://www.sitelock.com/verify.php?site=getvoip.com','SiteLock','width=600,height=600,left=160,top=170');" ><img alt="website security" title="SiteLock"  src="//shield.sitelock.com/shield/getvoip.com"/></a></div>
-    <a id="valid-rss" href="http://appc.w3.org/check.cgi?url=http%3A//getvoip.com/rss.xml"><img src="http://getvoip.com/sites/all/themes/gv_orange/css/images/valid-rss-rogers.png" alt="[Valid RSS]" title="Validate my RSS feed" /></a>
+    <a id="valid-rss" href="http://appc.w3.org/check.cgi?url=http%3A//gocloudbackup.com/rss.xml"><img src="http://gocloudbackup.com/sites/all/themes/gcb/css/images/valid-rss-rogers.png" alt="[Valid RSS]" title="Validate my RSS feed" /></a>
   </footer> <!-- /#footer -->
 
