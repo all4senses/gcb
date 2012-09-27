@@ -19,7 +19,7 @@
           <img src="<?php print 'http://gocloudbackup.com/sites/all/themes/gcb/css/images/gocloudbackup-logo.png'; ?>" alt="<?php print t('GoCloudBackup logo'); ?>" title="<?php print t('GoCloudBackup Home'); ?>" />
         </a>
         <div class="descr">
-          <div class="title">2012 GoCloudBAckup GUIDE</div>
+          <div class="title">2012 Backup GUIDE</div>
           <div class="subtitle">SERVICE PROVIDER REVIEWS</div><div class="stars"><img src="http://gocloudbackup.com/sites/all/themes/gcb/css/images/sprite-0.png" alt="GoCloudBAckup Reviews" title="GoCloudBAckup Reviews"/></div>
         </div>
       </div>
