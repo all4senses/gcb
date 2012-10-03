@@ -87,7 +87,7 @@ input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-s
 /*.region-sidebar-second #block-search-form .form-actions{position: absolute; right: 4px; top: 2px; height: 20px;}*/
 .region-sidebar-second #block-search-form .form-actions{display: block; height: 20px; float: left;}
 /*.region-sidebar-second #block-search-form input.form-submit{background: url("images/search.png") no-repeat scroll 0 0 transparent; text-indent: -9999px; width: 20px; height: 16px; border: none;}*/
-.region-sidebar-second #block-search-form input.form-submit{background: url("/sites/all/themes/gcb_orange/css/images/sprite-2.png") no-repeat scroll 0 -150px white; color: white; border: none; font-size: 0px; text-indent: -90px; height: 21px; display: block; margin: 6px 0 0 6px; width: 18px; cursor: pointer;}
+.region-sidebar-second #block-search-form input.form-submit{background: url("/sites/all/themes/gcb/css/images/sprite-2.png") no-repeat scroll 0 -150px white; color: white; border: none; font-size: 0px; text-indent: -90px; height: 21px; display: block; margin: 6px 0 0 6px; width: 18px; cursor: pointer;}
 
 
 
@@ -1460,7 +1460,7 @@ body.sidebar-second.node-type-quote #main{margin: 0; padding: 0;}
 .social-buttons div.linkedin-share{width: 125px; padding-right: 0;}
 .social-buttons a.linkedin-share{width: 95px; background-position: -294px 30px; padding-right: 10px;}
 
-a.yt-direct{background: url("/sites/all/themes/gcb_orange/css/images/video-link.jpg") no-repeat 31px 0; display: block; margin-top: 10px; padding-top: 35px; font-size: 12px; outline: none;}
+a.yt-direct{background: url("/sites/all/themes/gcb/css/images/video-link.jpg") no-repeat 31px 0; display: block; margin-top: 10px; padding-top: 35px; font-size: 12px; outline: none;}
 a.yt-direct:hover{background: url('images/video-link.jpg') no-repeat 31px 4px; outline: none;}
 a.yt-direct:active{outline: none;}
 
