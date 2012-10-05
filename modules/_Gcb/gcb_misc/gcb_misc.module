@@ -2160,8 +2160,8 @@ function gcb_misc_tokens($type, $tokens, array $data = array(), array $options =
  */
 function gcb_misc_votingapi_metadata_alter(&$data) {
   
-  $rating_options = $rating_options_with_overall_const;
-  $rating_options_descr = $rating_options_descriptions_const;
+  $rating_options = unserialize(RATING_OPTIONS_WITH_OVERALL);
+  $rating_options_descr = unserialize(RATING_OPTIONS_DESCRIPTIONS);
   
   foreach ($rating_options as $tag_name => $tag_title) {
     $new_tags[$tag_name] = array(
@@ -2597,7 +2597,7 @@ function gcb_misc_getProviderData_fromView($target, $data) {
   switch($target) {
     
     case 'service_types':
-      $service_types = $service_types_const;
+      $service_types = unserialize(SERVICE_TYPES);
       $p_service_types = $data['data']->_field_data['nid']['entity']->field_p_types['und'];
       $types = '';
       foreach ($p_service_types as $p_service_type) {
@@ -2673,9 +2673,9 @@ function gcb_misc_getProviderData_fromView($target, $data) {
       
       $service_type_key = $data['exposed_raw_input']['type'];
       
-      $service_types = $service_types_const;
-      $service_descriptions = $service_descriptions_const;
-      //$fee_types = $fee_types_const;
+      $service_types = unserialize(SERVICE_TYPES);
+      $service_descriptions = unserialize(SERVICE_DESCRIPTIONS);
+      //$fee_types = unserialize(FEE_TYPES);
 
       $load_key = 's';
       $p_services = $p_data['s'];
