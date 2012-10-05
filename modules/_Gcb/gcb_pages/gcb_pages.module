@@ -907,9 +907,10 @@ function gcb_pages_form_alter(&$form, &$form_state, $form_id) {
       
             
             
-      $service_types = unserialize(SERVICE_TYPES);
-      $service_descriptions = unserialize(SERVICE_DESCRIPTIONS);
-      $fee_types = unserialize(FEE_TYPES);
+      $service_types = $service_types_const;
+      $service_descriptions = $service_descriptions_const;
+      $fee_types = $fee_types_const;
+      
       $load_key = 's';
       
       $form['s'] = array(
@@ -1225,8 +1226,11 @@ function gcb_pages_form_alter(&$form, &$form_state, $form_id) {
       $rating_options = array('' => FALSE, '20' => 'Horrible', '40' => 'Bad', '60' => 'OK', '80' => 'Good', '100' => 'Excellent');
       $weight = 8;
      
-      $vote_keys = array('sound' => SOUND, 'install' => INSTALL, 'service' => CUSTOMER, 'rely' => RELY, 'features' => FEATURES, 'money' => PRICE, );
+      //$vote_keys = array('sound' => SOUND, 'install' => INSTALL, 'service' => CUSTOMER, 'rely' => RELY, 'features' => FEATURES, 'money' => PRICE, );
+      $vote_keys = $rating_options_const;
+      
       $votes = array();
+      
       $form['ureview'] = array(
         '#type' => 'fieldset',
         '#title' => t('Step 3: Rate and Review Your CloudBackup Provider'),
@@ -1238,6 +1242,10 @@ function gcb_pages_form_alter(&$form, &$form_state, $form_id) {
               '#prefix' => '<div class="rate-caption"><div class="col-2">' . t('Click Stars To Start Reviewing') . '</div><div class="col-3">' . t('Rate it') . '</div></div>',
           );
           foreach ($vote_keys as $vote_key => $vote_title) {
+            // Don't process a Recommend option here.
+            if ($vote_key == 'recommend') {
+              continue;
+            }
             $form['ureview']['votes']['rating_' . $vote_key] = array(
               '#type' => 'select',
               '#options' => $rating_options,
@@ -1933,7 +1941,8 @@ function gcb_pages_validateForm_review(&$form, &$form_state) {
     }
   }
   
-  $rating_options = array('sound' => SOUND, 'install' => INSTALL, 'service' => CUSTOMER, 'rely' => RELY, 'features' => FEATURES, 'money' => PRICE, 'recommend' => RECOMMEND);
+  //$rating_options = array('sound' => SOUND, 'install' => INSTALL, 'service' => CUSTOMER, 'rely' => RELY, 'features' => FEATURES, 'money' => PRICE, 'recommend' => RECOMMEND);
+  $rating_options = $rating_options_const;
   
   foreach ($rating_options as $rating_option => $rating_option_title) {
     if ($form_state['values']['rating_' . $rating_option] === FALSE) {
@@ -2060,7 +2069,9 @@ function gcb_pages_submitForm_review(&$form, &$form_state) {
       if ($provider_nid && $provider_nid != 7) {
         $saved_ratings = unserialize($form_state['values']['field_ratings_oprovider']['und'][0]['value']);
         
-        $vote_keys = array('sound' => SOUND, 'install' => INSTALL, 'service' => CUSTOMER, 'rely' => RELY, 'features' => FEATURES, 'money' => PRICE, 'recommend' => RECOMMEND);
+        //$vote_keys = array('sound' => SOUND, 'install' => INSTALL, 'service' => CUSTOMER, 'rely' => RELY, 'features' => FEATURES, 'money' => PRICE, 'recommend' => RECOMMEND);
+        $vote_keys = $rating_options_const;
+        
         $votes = array();
         
         foreach ($vote_keys as $vote_key => $vote_title) {
@@ -2159,7 +2170,9 @@ function gcb_pages_node_presave($node) {
     
     // Create a votes array
     
-    $vote_keys = array('sound' => SOUND, 'install' => INSTALL, 'service' => CUSTOMER, 'rely' => RELY, 'features' => FEATURES, 'money' => PRICE, 'recommend' => RECOMMEND);
+    //$vote_keys = array('sound' => SOUND, 'install' => INSTALL, 'service' => CUSTOMER, 'rely' => RELY, 'features' => FEATURES, 'money' => PRICE, 'recommend' => RECOMMEND);
+    $vote_keys = $rating_options_const;
+    
     $votes = array();
 
     $overall_count = 0;
@@ -2485,7 +2498,10 @@ function gcb_pages_node_delete($node) {
 function gcb_pages_addRatingsToNodeThemed($node, $votes, $counts = NULL, $semicolon = '') {
   $overall_vote = NULL;
   if ($votes) {
-    $rating_titles = array('sound' => SOUND, 'install' => INSTALL, 'service' => CUSTOMER, 'rely' => RELY, 'features' => FEATURES, 'money' => PRICE, 'overall' => OVERALL, 'recommend' => RECOMMEND);
+    
+    //$rating_titles = array('sound' => SOUND, 'install' => INSTALL, 'service' => CUSTOMER, 'rely' => RELY, 'features' => FEATURES, 'money' => PRICE, 'overall' => OVERALL, 'recommend' => RECOMMEND);
+    $rating_titles = $rating_options_with_overall_const;
+    
     $node->content['gcb_ratings'] = array(
         '#markup' => '',
         //'#prefix' => '<div class="gcb_votes">',

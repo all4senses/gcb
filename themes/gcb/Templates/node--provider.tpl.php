@@ -147,8 +147,8 @@
                     
                       
                         
-                          $service_types = unserialize(SERVICE_TYPES);
-                          $fee_types = unserialize(FEE_TYPES);
+                          $service_types = $service_types_const;
+                          $fee_types = $fee_types_const;
 
                           $load_key = 's';
                           $p_services = $node->p_data['s'];

@@ -2159,6 +2159,20 @@ function gcb_misc_tokens($type, $tokens, array $data = array(), array $options =
  * Provides custom tags for the Votes API via votingapi_metadata alter (defined in ).
  */
 function gcb_misc_votingapi_metadata_alter(&$data) {
+  
+  $rating_options = $rating_options_with_overall_const;
+  $rating_options_descr = $rating_options_descriptions_const;
+  
+  foreach ($rating_options as $tag_name => $tag_title) {
+    $new_tags[$tag_name] = array(
+      'name' => $tag_title,
+      'description' => $rating_options_descr[$tag_name],
+    );
+  }
+  
+  $data['tags'] += $new_tags;
+  
+  /*
   $data['tags'] += array(
     'sound' => array(
       'name' => t(SOUND),
@@ -2193,6 +2207,7 @@ function gcb_misc_votingapi_metadata_alter(&$data) {
       'description' => t('Average overall value for all providers rates.'),
     ),
   );
+  */
 }
 
 
@@ -2582,7 +2597,7 @@ function gcb_misc_getProviderData_fromView($target, $data) {
   switch($target) {
     
     case 'service_types':
-      $service_types = unserialize(SERVICE_TYPES);
+      $service_types = $service_types_const;
       $p_service_types = $data['data']->_field_data['nid']['entity']->field_p_types['und'];
       $types = '';
       foreach ($p_service_types as $p_service_type) {
@@ -2658,9 +2673,9 @@ function gcb_misc_getProviderData_fromView($target, $data) {
       
       $service_type_key = $data['exposed_raw_input']['type'];
       
-      $service_types = unserialize(SERVICE_TYPES);
-      $service_descriptions = unserialize(SERVICE_DESCRIPTIONS);
-      //$fee_types = unserialize(FEE_TYPES);
+      $service_types = $service_types_const;
+      $service_descriptions = $service_descriptions_const;
+      //$fee_types = $fee_types_const;
 
       $load_key = 's';
       $p_services = $p_data['s'];
