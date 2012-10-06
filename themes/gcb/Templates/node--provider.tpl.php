@@ -154,7 +154,7 @@
                           $p_services = $node->p_data['s'];
 
                           foreach ($node->field_p_types['und'] as $type) {
-                            $service_type_key = gcb_misc_refineServiceTypeKey($type['value']);
+                            $service_type_key = $type['value']; //gcb_misc_refineServiceTypeKey($type['value']);
                             echo '<li><a href="#tabs-' . $count++ . '">' . t('!type', array('!type' => $service_types[$service_type_key])) . '</a></li>';
                           }
                     
