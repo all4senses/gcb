@@ -2561,7 +2561,14 @@ function gcb_misc_getProviderQuickData($target, $data) {
                 : '';
       
             
+    case 'storage_space':
       
+      $all_data_quick = gcb_misc_getProvidersDataQuick();
+      
+      return isset($all_data_quick[$data['data']->nid][$data['service_type']]['ss']) 
+                ? $all_data_quick[$data['data']->nid][$data['service_type']]['ss']
+                : '';
+        
       
     case 'monthly':
     case 'back':
