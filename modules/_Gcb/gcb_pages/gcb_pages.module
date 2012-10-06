@@ -506,15 +506,15 @@ function gcb_pages_buildHome($name, $data) {
   $front_preface_node_view = node_view($front_preface_node, 'full');
 
   $out .= render($front_preface_node_view);
-  /*
+  
   // Get block for Top pick business providers.
-  $block_data = array('module' => 'views', 'delta' => 'providers-block', 'shadow' => FALSE);
+  $block_data = array('module' => 'views', 'delta' => 'providers-block_top_business', 'shadow' => FALSE);
   $out .= gcb_blocks_getBlockThemed($block_data);
  
-  // Get block for Top pick residential providers.
-  $block_data = array('module' => 'views', 'delta' => 'providers-block_1', 'shadow' => FALSE); 
+  // Get block for Top pick personal providers.
+  $block_data = array('module' => 'views', 'delta' => 'providers-block_top_personal', 'shadow' => FALSE); 
   $out .= gcb_blocks_getBlockThemed($block_data);
-  */
+
   
   $out .= render($front_preface_node_view['field_preface_bottom']);
  
