@@ -2564,7 +2564,6 @@ function gcb_misc_getProviderQuickData($target, $data) {
     case 'ss':
       
       $all_data_quick = gcb_misc_getProvidersDataQuick();
-      //dpm($all_data_quick);
       return $all_data_quick[$data['data']->nid][$data['service_type']]['ss'];
         
       
