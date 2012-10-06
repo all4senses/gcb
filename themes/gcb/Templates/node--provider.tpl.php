@@ -170,7 +170,7 @@
                     foreach ($node->field_p_types['und'] as $type) {
               
                       
-                                      $service_type_key = gcb_misc_refineServiceTypeKey($type['value']);
+                                      $service_type_key = $type['value']; //gcb_misc_refineServiceTypeKey($type['value']);
 
                                       $basicinfo_title = $p_services[$service_type_key]['pti'];
                                       $basicinfo_text = $p_services[$service_type_key]['pte'];
