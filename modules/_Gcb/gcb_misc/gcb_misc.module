@@ -2561,7 +2561,7 @@ function gcb_misc_getProviderQuickData($target, $data) {
                 : '';
       
             
-    case 'storage_space':
+    case 'ss':
       
       $all_data_quick = gcb_misc_getProvidersDataQuick();
       
