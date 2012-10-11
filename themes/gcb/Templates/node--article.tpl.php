@@ -242,7 +242,6 @@
 
                     <?php 
                       $tags = NULL;
-                      dpm($node);
                       switch ($node->type) {
                         case 'news_post':
                           $target = 'news';
@@ -255,14 +254,13 @@
                         case 'article':
                           $target = 'articles';
                           $target_tags = @$field_tags_articles['und'];
-                          dpm($field_tags_articles);
                           break;
                       }
                       if (!$target_tags) {
                         $target_tags = array();
                       }
                       foreach ($target_tags as $key => $value) {
-                        $tags .= ($tags ? '<div class="delim">|</div>' : '') . l(t($content['field_topics'][$key]['#title']), 'taxonomy/term/' . $value['tid']);
+                        $tags .= ($tags ? '<div class="delim">|</div>' : '') . l(t($content['field_tags'][$key]['#title']), 'taxonomy/term/' . $value['tid']);
                       }
                       if ($tags) {
                         echo '<div class="topics"><div class="title">' . t('TAGS:') . '</div>' . $tags . '<div class="bottom-clear"></div></div>';
