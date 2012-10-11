@@ -150,7 +150,7 @@
           elseif (@$content['field_topics']) {
             gcb_misc_pushTagsToMetatags($keyword_metatag_name, $content['field_topics']);
           }
-          
+           
           print render($content);
         ?>
       </div>
