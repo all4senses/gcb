@@ -122,7 +122,7 @@
           // Hide comments, tags, and links now so that we can render them later.
           hide($content['comments']);
           hide($content['links']);
-          hide($content['field_topics']);
+          hide($content['field_tags']);
           
           
           if (!$page) {
@@ -242,6 +242,7 @@
 
                     <?php 
                       $tags = NULL;
+                      dpm($node);
                       switch ($node->type) {
                         case 'news_post':
                           $target = 'news';
@@ -254,6 +255,7 @@
                         case 'article':
                           $target = 'articles';
                           $target_tags = @$field_tags_articles['und'];
+                          dpm($field_tags_articles);
                           break;
                       }
                       if (!$target_tags) {
