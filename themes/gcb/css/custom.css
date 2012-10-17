@@ -4,7 +4,7 @@
 
 
 /* General structue */
-body{background: url("images/header-back.png") repeat-x right top #e7e7e7;}
+body{background: url("images/body-top-back.jpg") repeat-x right top #F2F2F1;}
 
 /* Three columns layout */
 body.two-sidebars #sidebar-first {float: left; margin: 0 0 0 -857px; padding: 0; width: 180px;}
@@ -66,7 +66,7 @@ input.blur,
 
 #header, #navigation, #all-content, #footer-inside{width: 1100px; margin: auto;}
 
-#header{padding-top: 85px; z-index: 4;}
+#header{padding: 85px 0 0 0; z-index: 4;}
 
 
 /* Header */
