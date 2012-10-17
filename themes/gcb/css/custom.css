@@ -92,7 +92,7 @@ input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-s
 
 
 #header #logo-block{color: white; font-family: arial; left: 0; position: absolute; top: 0; width: 500px;}
-#header #logo{float: left; margin: 20px 20px 0 0;}
+#header #logo{float: left; margin: 20px 30px 0 0;}
 #header #logo-block .descr{float: left;}
 #header #logo-block .title{font-size: 26px; font-weight: bold; margin-top: 10px;}
 #header #logo-block .stars{float: left; height: 20px; margin: 2px 0 0 7px; overflow: hidden; width: 80px; position: relative;}
@@ -611,7 +611,7 @@ form .counter.exceeded{color: red;}
 
 /*.page-node #main*/ .share{font-size: 16px; border-top: 1px solid lightgray; margin-top: 20px; padding: 10px 0 30px 0;}
 
-.front .share, .preface .share{border: none; margin-top: -15px; /*padding: 0 0 40px 0;*/ padding: 3px 0 3px 10px; position: absolute; top: 20px; right: 210px; height: 20px; z-index: 100;}
+.front .share, .preface .share{border: none; margin-top: -15px; /*padding: 0 0 40px 0;*/ padding: 3px 0 3px 10px; position: absolute; top: 30px; right: 210px; height: 20px; z-index: 100;}
 
 /*.front .share{padding: 0 0 30px 0;}*/
 
