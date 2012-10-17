@@ -1,18 +1,5 @@
-<div id="bshadow">
-    
-    
-  <div id="skip-link">
-    <a href="#main-content" class="element-invisible element-focusable"><?php print t('Skip to main content'); ?></a>
-    <?php if ($main_menu): ?>
-      <a href="#navigation" class="element-invisible element-focusable"><?php print t('Skip to navigation'); ?></a>
-    <?php endif; ?>
-  </div>
-
-  
-  <header id="header" role="banner" class="clearfix">
-
-    <nav id="navigation" role="navigation" class="clearfix">
-      <div id="header-menu-back"></div>
+<header id="header" role="banner" class="clearfix">
+  <nav id="navigation-upper" role="navigation" class="clearfix">
       
       <div id="logo-block">
         <a href="<?php print $front_page; ?>" title="<?php print t('GoCloudBackup Home'); ?>" id="logo">
@@ -24,11 +11,33 @@
         </div>
       </div>
       
-      <?php echo '<div id="block-gcb-blocks-header-links"><div class="follow-us">Follow Us</div>', gcb_blocks_get_headerLinks(), '</div>', render($page['header']); ?>
-    </nav> <!-- /#navigation -->
+      <?php echo '<div id="block-gcb-blocks-header-links"><div class="follow-us">Follow Us</div>', gcb_blocks_get_headerLinks(), '</div>'; ?>
+    </nav> <!-- /#navigation1 1 -->
+  
+</header> <!-- /#header -->
+
+<div id="bshadow">
+    
+    
+  <div id="skip-link">
+    <a href="#main-content" class="element-invisible element-focusable"><?php print t('Skip to main content'); ?></a>
+    <?php if ($main_menu): ?>
+      <a href="#navigation" class="element-invisible element-focusable"><?php print t('Skip to navigation'); ?></a>
+    <?php endif; ?>
+  </div>
+
+  
+  
+
+    <nav id="navigation" role="navigation" class="clearfix">
+      <div id="header-menu-back"></div>
+      
+      
+      <?php echo render($page['header']); ?>
+    </nav> <!-- /#navigation 2 -->
 
     <?php ////if ($breadcrumb): print $breadcrumb; endif;?>
-  </header> <!-- /#header -->
+  
 
   
   <?php if ($page['highlighted']): ?>
