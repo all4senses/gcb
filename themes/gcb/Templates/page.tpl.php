@@ -14,15 +14,15 @@
     <nav id="navigation" role="navigation" class="clearfix">
       <div id="header-menu-back"></div>
       
-      <a href="<?php print $front_page; ?>" title="<?php print t('GoCloudBackup Home'); ?>" id="logo">
-        <img src="<?php print 'http://gocloudbackup.com/sites/all/themes/gcb/css/images/gocloudbackup-logo.png'; ?>" alt="<?php print t('GoCloudBackup logo'); ?>" title="<?php print t('GoCloudBackup Home'); ?>" />
-      </a>
-      
-      <div id="header-descr">
-        <div class="title">2012 Backup GUIDE</div>
-        <div class="subtitle">SERVICE PROVIDER REVIEWS</div><div class="stars"><img src="http://gocloudbackup.com/sites/all/themes/gcb/css/images/sprite-0.png" alt="GoCloudBAckup Reviews" title="GoCloudBAckup Reviews"/></div>
+      <div id="logo-block">
+        <a href="<?php print $front_page; ?>" title="<?php print t('GoCloudBackup Home'); ?>" id="logo">
+          <img src="<?php print 'http://gocloudbackup.com/sites/all/themes/gcb/css/images/gocloudbackup-logo.png'; ?>" alt="<?php print t('GoCloudBackup logo'); ?>" title="<?php print t('GoCloudBackup Home'); ?>" />
+        </a>
+        <div class="descr">
+          <div class="title">2012 Backup GUIDE</div>
+          <div class="subtitle">SERVICE PROVIDER REVIEWS</div><div class="stars"><img src="http://gocloudbackup.com/sites/all/themes/gcb/css/images/sprite-0.png" alt="GoCloudBAckup Reviews" title="GoCloudBAckup Reviews"/></div>
+        </div>
       </div>
-      
       
       <?php echo '<div id="block-gcb-blocks-header-links"><div class="follow-us">Follow Us</div>', gcb_blocks_get_headerLinks(), '</div>', render($page['header']); ?>
     </nav> <!-- /#navigation -->
