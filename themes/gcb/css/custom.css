@@ -33,8 +33,8 @@ em, p em{font-style: italic;}
 
 h2, .h2 {line-height: 25px;}
 
-a{color: #478AFD;}
-a:visited{color: #478AFD;}
+a{color: #01B7F4;}
+a:visited{color: #01B7F4;}
 
 
 ul{list-style: none;}
@@ -44,9 +44,9 @@ ul{list-style: none;}
 
 
 /* Login/register page */
-.toboggan-unified #login-links a{background-color: #478AFD; border: medium none; border-radius: 3px 3px 3px 3px; color: white; font-size: 20px; padding: 5px;}
-.toboggan-unified #login-links a.lt-active, .toboggan-unified #login-links a.lt-active:hover{background-color: #478AFD; border: medium none; color: white; font-size: 20px; padding: 5px;}
-.toboggan-unified #login-message{color: #478AFD;}
+.toboggan-unified #login-links a{background-color: #01B7F4; border: medium none; border-radius: 3px 3px 3px 3px; color: white; font-size: 20px; padding: 5px;}
+.toboggan-unified #login-links a.lt-active, .toboggan-unified #login-links a.lt-active:hover{background-color: #01B7F4; border: medium none; color: white; font-size: 20px; padding: 5px;}
+.toboggan-unified #login-message{color: #01B7F4;}
 .toboggan-unified{padding: 20px; text-align: center; width: 810px;}
 .toboggan-unified input{text-align: center;}
 
@@ -214,8 +214,8 @@ body.not-admin #om-menu-main-om-menu li.om-leaf.leaf-write-review{background: no
 
 #requestQuoteFormWrapper #Navigation{bottom: 10px; position: absolute; right: 10px;}
 
-#block-gcb-blocks-request-quote #Navigation input{background: url("images/sprite-2.png") no-repeat scroll right -905px #478AFD; border: medium none; border-radius: 3px 3px 3px 3px; color: white; cursor: pointer; display: inline-block; font-size: 15px; padding: 3px 12px 3px 5px;}
-#block-gcb-blocks-request-quote #Navigation input#back{background: url("images/sprite-2.png") no-repeat scroll 3px -927px #478AFD; padding: 3px 5px 3px 12px;}
+#block-gcb-blocks-request-quote #Navigation input{background: url("images/sprite-2.png") no-repeat scroll right -905px #01B7F4; border: medium none; border-radius: 3px 3px 3px 3px; color: white; cursor: pointer; display: inline-block; font-size: 15px; padding: 3px 12px 3px 5px;}
+#block-gcb-blocks-request-quote #Navigation input#back{background: url("images/sprite-2.png") no-repeat scroll 3px -927px #01B7F4; padding: 3px 5px 3px 12px;}
 
     
 
@@ -236,7 +236,7 @@ body.not-admin #om-menu-main-om-menu li.om-leaf.leaf-write-review{background: no
 .multipartForm label.error{bottom: 48px; color: gray; display: block; font-size: 12px; left: 10px; line-height: 13px; position: absolute;}
 .multipartForm .step-notice{bottom: 8px; font-size: 12px; left: 5px; line-height: 15px; position: absolute; text-align: right; width: 40px;}
 .multipartForm .step-notice span{font-weight: bold;}
-.multipartForm .step-notice span.f{margin-right: 2px; color: #478AFD;}
+.multipartForm .step-notice span.f{margin-right: 2px; color: #01B7F4;}
 .multipartForm .step-notice span.s{margin-left: 2px;}
 
 
@@ -249,7 +249,7 @@ body.not-admin #om-menu-main-om-menu li.om-leaf.leaf-write-review{background: no
 #requestQuoteFormWrapper .form-required{font-size: 10px; margin-left: 2px;}
 #requestQuoteFormWrapper .results{padding: 0 10px 0 5px; text-align: center; font-size: 14px; height: 272px; overflow: hidden; border-radius: 0;}
 #requestQuoteFormWrapper .results p{margin: 10px 0 0; line-height: 21px;}
-#requestQuoteFormWrapper .results a{display: inline-block; font-size: 16px; padding: 3px 0 0; color: #478AFD;}
+#requestQuoteFormWrapper .results a{display: inline-block; font-size: 16px; padding: 3px 0 0; color: #01B7F4;}
 #requestQuoteFormWrapper .results.sending p{margin: 90px 0 0 0;}
 
 #requestQuoteFormWrapper .results p.error{color: #CC302A; margin-top: 80px;}
@@ -281,14 +281,14 @@ body.not-admin #om-menu-main-om-menu li.om-leaf.leaf-write-review{background: no
 /*
 .front #main .block{position: relative; margin-bottom: 15px;}
 .front #main .block .more-link{position: absolute; right: 0; top: 14px;}
-.front #main .block .more-link a{color: #478AFD; font-size: 12px; font-weight: bold;}
+.front #main .block .more-link a{color: #01B7F4; font-size: 12px; font-weight: bold;}
 */
 
 .front #main .block,
 #block-views-providers-block, #block-views-providers-block-1, #block-views-providers-block_1{position: relative; margin-bottom: 15px;}
 
 .block-views .view-id-providers .more-link{position: absolute; right: 0; top: 14px;}
-.block-views .view-id-providers .more-link a{color: #478AFD; font-size: 12px; font-weight: bold; font-family: "Georgia", "Bitstream Charter", serif;}
+.block-views .view-id-providers .more-link a{color: #01B7F4; font-size: 12px; font-weight: bold; font-family: "Georgia", "Bitstream Charter", serif;}
 
 .front #main .block-views h2,
 #block-views-providers-block h3, #block-views-providers-block-1 h3,
@@ -393,7 +393,7 @@ th.views-field-php-4{width: 130px;}
 /* Correct a bit layout for separate admin pages with providers as blocks */
 .node-type-admin-page th.views-field-php-4{width: 140px;}
 
-td.views-field-php-4 a{font-weight: bold; font-size: 13px; color: #478AFD;}
+td.views-field-php-4 a{font-weight: bold; font-size: 13px; color: #01B7F4;}
 td.views-field-php-4 a:hover{text-decoration: underline;}
 
 th.views-field-php-5{border: none; width: 95px;}
@@ -465,7 +465,7 @@ body.sidebar-second #sidebar-second{float: right; margin-right: 18px; padding: 1
 .sidebar .block .content ul{list-style: none; padding: 0; margin: 0;}
 .sidebar .block .content a{color: #777777; font-family: sans-serif; font-size: 12px; padding: 4px 10px; display: block;}
 .sidebar .block .content .view-id-reviews .views-row a{background: url("images/sprite-2.png") no-repeat scroll 5px -796px transparent; padding: 7px 10px 10px 34px;}
-.sidebar .block .content a:hover{color: #478AFD; text-decoration: underline;}
+.sidebar .block .content a:hover{color: #01B7F4; text-decoration: underline;}
 
 
 
@@ -508,8 +508,8 @@ form .counter.exceeded{color: red;}
 #review-node-form fieldset, #outer-box{padding-top: 0; padding-bottom: 10px; margin-top: 0; margin-bottom: 10px;}
 
 #review-node-form, #outer-box{font-family: Georgia,"Bitstream Charter",serif;}
-#outer-box legend{font-size: 25px; padding: 0 7px 0 7px; color: #478AFD;}
-#review-node-form legend{font-size: 22px; padding: 0 7px 0 7px; color: #478AFD;}
+#outer-box legend{font-size: 25px; padding: 0 7px 0 7px; color: #01B7F4;}
+#review-node-form legend{font-size: 22px; padding: 0 7px 0 7px; color: #01B7F4;}
 
 
 #edit-about-you input{width: 100%;}
@@ -590,7 +590,7 @@ form .counter.exceeded{color: red;}
 .page-node #main .main-content .content h2{color: #275FA6; border: none; font-size: 35px; padding: 0; width: 200px; min-height: 80px;}
 .page-node #main .main-content .content h2.not-published{color: red;}
 
-.page-node #main .main-content h1{color: #478AFD; font-family: Georgia,"Bitstream Charter",serif; font-size: 28px;}
+.page-node #main .main-content h1{color: #01B7F4; font-family: Georgia,"Bitstream Charter",serif; font-size: 28px;}
 .page-node #main .main-content h1.not-published{color: red;}
 
 .node-type-admin-page h1{margin-top: 13px;}
@@ -634,11 +634,11 @@ form .counter.exceeded{color: red;}
 .page-node #main .topics{border-top: 1px solid lightgray; font-family: Georgia,"Bitstream Charter",serif; font-size: 13px; font-weight: bold; padding-top: 10px; /*padding-bottom: 20px;*/}
 .page-node #main .topics .title{margin-right: 10px; float: left;}
 .page-node #main .topics a{float: left;}
-.page-node #main .topics .delim{margin: 0 5px 0 5px; float: left; color: #478AFD;}
+.page-node #main .topics .delim{margin: 0 5px 0 5px; float: left; color: #01B7F4;}
 
  
 /*.page-node #main #providers-bottom,*/
-/*.page-node*/ #main .providers{/*border-top: 5px solid #478AFD; border-bottom: 5px solid #478AFD;*/ margin: 0 20px; padding: 20px 0 0;}
+/*.page-node*/ #main .providers{/*border-top: 5px solid #01B7F4; border-bottom: 5px solid #01B7F4;*/ margin: 0 20px; padding: 20px 0 0;}
 
 /*.page-node*/ #main .providers.dir{padding: 10px 0 0;}
 
@@ -648,7 +648,7 @@ form .counter.exceeded{color: red;}
 /*.page-node*/ #main .providers #block-views-providers-block_pick_bu{float: left;}
 /*.page-node*/ #main .providers #block-views-providers-block_pick_re{float: right;}
 /*.page-node*/ #main .providers .content{border: 1px solid lightgray; padding: 0; margin-top: 5px;}
-/*.page-node*/ #main .providers h2{margin-top: 0; color: #478AFD; font-size: 22px;}
+/*.page-node*/ #main .providers h2{margin-top: 0; color: #01B7F4; font-size: 22px;}
 /*.page-node*/ #main .providers table{margin-bottom: 0;}
 /*.page-node*/ #main .providers thead{display: none;}
 /*.page-node*/ #main .providers .views-row-last{border-bottom: none;}
@@ -678,7 +678,7 @@ form .counter.exceeded{color: red;}
 /*.node-type-provider #main h1{border: 1px solid lightgray; border-bottom: none; color: #275FA6; font-family: Georgia,"Bitstream Charter",serif; font-size: 18px; line-height: 25px; font-weight: bold; margin: 0; padding: 5px 0 5px 20px; width: 833px;}*/
 /*.node-type-provider #main .main-content h1{border: 1px solid lightgray; border-bottom: none; color: #275FA6; font-family: Georgia,"Bitstream Charter",serif; font-size: 18px; line-height: 25px; font-weight: bold; margin: 0; padding: 5px 0 5px 20px; width: 833px;}*/
 
-.node-type-provider #main .main-content h1{border-bottom: 1px solid lightgray; color: #478AFD; font-family: Georgia,"Bitstream Charter",serif; font-size: 18px; font-weight: bold; line-height: 25px; margin: 0 0 20px; padding: 5px 5px 5px 10px; width: 803px;}
+.node-type-provider #main .main-content h1{border-bottom: 1px solid lightgray; color: #01B7F4; font-family: Georgia,"Bitstream Charter",serif; font-size: 18px; font-weight: bold; line-height: 25px; margin: 0 0 20px; padding: 5px 5px 5px 10px; width: 803px;}
 
 
 .node-type-provider #main .main-content{padding: 0;}
@@ -711,7 +711,7 @@ form .counter.exceeded{color: red;}
 
 
 .gcb_votes{float: left; width: 280px; margin: 0 30px 0 30px;}
-.gcb_votes .caption{background: none repeat scroll 0 0 #478AFD; color: white; font-weight: bold; padding: 7px 0 6px 10px;}
+.gcb_votes .caption{background: none repeat scroll 0 0 #01B7F4; color: white; font-weight: bold; padding: 7px 0 6px 10px;}
 .gcb_votes .caption span{float: left; margin-right: 10px;}
 .gcb_votes .data{padding: 0 0 0px 0; border: 1px solid gray; border-top: none;}
 .gcb_vote{clear: both; height: 30px;}
@@ -732,7 +732,7 @@ form .counter.exceeded{color: red;}
 .node-type-provider .shadow{height: 45px;}
 
 .node-type-provider .reviews .header{border-bottom: 1px solid lightgray; height: 38px; margin-bottom: 10px; width: 100%;}
-.node-type-provider .reviews .header .button{margin-top: 0; font-size: 16px; line-height: auto; cursor: default; background: none repeat scroll 0 0 #478AFD; color: white; float: left; font-weight: bold; margin-right: 10px; padding: 7px 10px 7px 10px; font-family: sans-serif;}
+.node-type-provider .reviews .header .button{margin-top: 0; font-size: 16px; line-height: auto; cursor: default; background: none repeat scroll 0 0 #01B7F4; color: white; float: left; font-weight: bold; margin-right: 10px; padding: 7px 10px 7px 10px; font-family: sans-serif;}
 .node-type-provider .reviews .header .button a, .node-type-provider .reviews .header .button a:hover{color: white; display: block;}
 
 
@@ -860,13 +860,13 @@ form .counter.exceeded{color: red;}
 
 
 /*
-.page-node #main .providers, .page-node #main #providers-bottom{border-top: 5px solid #478AFD; margin: 30px 20px 30px 20px; padding: 30px 0;}
+.page-node #main .providers, .page-node #main #providers-bottom{border-top: 5px solid #01B7F4; margin: 30px 20px 30px 20px; padding: 30px 0;}
 .page-node #main #providers-bottom{width: 800px; padding-bottom: 0; clear: both;}
 .page-node #main .providers .block{width: 385px; margin-bottom: 30px;}
 .page-node #main .providers .block .inside{border: none;}
 
 .page-node #main .providers .content{border: 1px solid lightgray; padding: 0; margin-top: 12px;}
-.page-node #main .providers h2{margin-top: 0; color: #478AFD; font-size: 22px;}
+.page-node #main .providers h2{margin-top: 0; color: #01B7F4; font-size: 22px;}
 .page-node #main .providers table{margin-bottom: 0;}
 .page-node #main .providers thead{display: none;}
 .page-node #main .providers .views-row-last{border-bottom: none;}
@@ -945,7 +945,7 @@ h2.preface{border: none; color: black; font-family: Georgia,"Bitstream Charter",
 /* Articles teasers */
 .node-teaser{font-family: Georgia,"Bitstream Charter",serif; margin-bottom: 0;}
 .node-teaser h2{display: block; max-height: 50px; overflow: hidden;}
-.node-teaser h2 a{font-family: Georgia,"Bitstream Charter",serif; color: #478AFD; font-size: 18px; line-height: 20px; font-weight: bold; margin: 0; border: medium none; padding: 0 10px 0 0;}    
+.node-teaser h2 a{font-family: Georgia,"Bitstream Charter",serif; color: #01B7F4; font-size: 18px; line-height: 20px; font-weight: bold; margin: 0; border: medium none; padding: 0 10px 0 0;}    
 
 .node-teaser .submitted{border-bottom: 1px dotted lightgray; display: block; font-size: 12px; margin: 7px 0; padding-bottom: 5px;}
 
@@ -953,7 +953,7 @@ h2.preface{border: none; color: black; font-family: Georgia,"Bitstream Charter",
 
 .content.teaser .thumb{width: 150px; height: 98px; float: left; margin: 5px 10px 5px 0; text-align: center;}
 
-.content.teaser .more{float: right; color: #478AFD;}
+.content.teaser .more{float: right; color: #01B7F4;}
 
 
 
@@ -1205,7 +1205,7 @@ font-size: 15px;
 
 
 .node-type-quote #v3 .ps{clear: both; color: gray; font-family: arial; font-size: 10px;}
-.node-type-quote #v3 .ps span{color: #478AFD;}
+.node-type-quote #v3 .ps span{color: #01B7F4;}
 
 /*.node-type-quote #v3 #requestQuoteFormWrapper select{margin: 0 20px 10px 0; width: 230px;}*/
 
@@ -1260,7 +1260,7 @@ font-size: 15px;
 
 .node-type-quote #v3 footer{background: white; margin: 0; clear: both; height: 55px; padding-top: 10px;}
 
-.node-type-quote #v3 .guide{background: url("images/guide-cover.jpg") no-repeat scroll 9px 0 transparent; color: #478AFD; font-size: 10px; padding: 80px 0 0; position: absolute; right: 7px; text-align: center; top: 0; width: 90px; line-height: 13px;}
+.node-type-quote #v3 .guide{background: url("images/guide-cover.jpg") no-repeat scroll 9px 0 transparent; color: #01B7F4; font-size: 10px; padding: 80px 0 0; position: absolute; right: 7px; text-align: center; top: 0; width: 90px; line-height: 13px;}
 .node-type-quote #v3 .left .guide{background: url("images/click-here-button.png") no-repeat scroll 41px 20px transparent; color: black; font-size: 14px; left: 45px; padding: 0 0 100px; top: 45px; width: 300px;}
 
 /* Bodies on node pages */
@@ -1330,7 +1330,7 @@ body.sidebar-second.node-type-quote #main{margin: 0; padding: 0;}
 */
 
 .profile{margin-top: 5px; font-family: Georgia,"Bitstream Charter",serif;}
-.profile #user-caption{border-bottom: 1.5px dotted lightgray; color: #478AFD; font-size: 25px; font-style: italic; margin-bottom: 20px; text-align: center;}
+.profile #user-caption{border-bottom: 1.5px dotted lightgray; color: #01B7F4; font-size: 25px; font-style: italic; margin-bottom: 20px; text-align: center;}
 .profile .field-name-field-u-bio,
 .profile .field-name-field-u-bio p{text-align: left;}
 
@@ -1365,7 +1365,7 @@ body.sidebar-second.node-type-quote #main{margin: 0; padding: 0;}
 
 
 #block-gcb-blocks-request-quote-v1 .content{padding: 0 5px;}
-#block-gcb-blocks-request-quote-v1 h3{border-bottom: 1px solid lightgray; font-size: 15px; font-weight: bold; margin: 4px 0 0; padding-bottom: 3px; text-align: center; color: #478AFD;}
+#block-gcb-blocks-request-quote-v1 h3{border-bottom: 1px solid lightgray; font-size: 15px; font-weight: bold; margin: 4px 0 0; padding-bottom: 3px; text-align: center; color: #01B7F4;}
 #block-gcb-blocks-request-quote-v1 h4{border: medium none; font-size: 14px; font-weight: normal; line-height: 15px; margin: 5px 0; text-align: center;}
 #block-gcb-blocks-request-quote-v1 .explain{float: left; font-size: 10px; margin: 0 0 5px; width: auto;}
 #block-gcb-blocks-request-quote-v1 .explain.p1{margin: 0; width: 100%;}
@@ -1407,7 +1407,7 @@ body.sidebar-second.node-type-quote #main{margin: 0; padding: 0;}
 
 #block-gcb-blocks-request-quote-v1 #requestQuoteFormWrapper #Navigation{right: 16px; bottom: 4px;}
 
-#block-gcb-blocks-request-quote-v1 #requestQuoteFormWrapper #Navigation #next{background: url("images/sprite-2.png") no-repeat scroll 60px -412px #478AFD; border: medium none; border-radius: 3px 3px 3px 3px; color: white; cursor: pointer; font-family: Verdana,Arial,sans-serif; font-size: 13px; font-weight: bold; height: 21px; left: 8px; padding: 1px 0 2px 3px; position: relative; text-align: left; width: 80px;}
+#block-gcb-blocks-request-quote-v1 #requestQuoteFormWrapper #Navigation #next{background: url("images/sprite-2.png") no-repeat scroll 60px -412px #01B7F4; border: medium none; border-radius: 3px 3px 3px 3px; color: white; cursor: pointer; font-family: Verdana,Arial,sans-serif; font-size: 13px; font-weight: bold; height: 21px; left: 8px; padding: 1px 0 2px 3px; position: relative; text-align: left; width: 80px;}
 
 #block-gcb-blocks-request-quote-v1 #requestQuoteFormWrapper label.error{background: none repeat scroll 0 0 white; bottom: 0; font-size: 9px; font-weight: normal; height: 17px; left: 3px; margin: 0; padding: 11px 0 1px 7px; width: 187px; z-index: 10;}
 
