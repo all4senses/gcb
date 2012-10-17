@@ -92,7 +92,7 @@ input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-s
 
 
 #header #logo-block{color: white; font-family: arial; left: 0; position: absolute; top: 0; width: 500px;}
-#header #logo{float: left; margin: 20px 30px 0 0;}
+#header #logo{float: left; margin: 30px 20px 0 0;}
 #header #logo-block .descr{float: left;}
 #header #logo-block .title{font-size: 26px; font-weight: bold; margin-top: 10px;}
 #header #logo-block .stars{float: left; height: 20px; margin: 2px 0 0 7px; overflow: hidden; width: 80px; position: relative;}
