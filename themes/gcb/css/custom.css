@@ -157,6 +157,7 @@ ul.gcb{margin-left: 0px; padding-left: 10px;}
 /*#om-menu-main-om-menu li.om-leaf{background: url("images/menu-main-delim.png") no-repeat right top transparent; height: 40px;}*/
 /*#om-menu-main-om-menu li.om-leaf{position: relative; background: url("images/menu-main-delim.png") no-repeat right top transparent; height: 40px;}*/
 #om-menu-main-om-menu li.om-leaf{position: relative; background: url("images/sprite-2.png") no-repeat scroll right -107px transparent; height: 40px; z-index: 400;}
+#om-menu-main-om-menu li.om-leaf:hover{background: none; position: relative; left: -2px;}
 
 #om-menu-main-om-menu li.om-leaf.leaf-about-us .om-maximenu-middle{width: 120px;}
   
@@ -165,9 +166,9 @@ body.not-admin #om-menu-main-om-menu li.om-leaf.leaf-write-review{background: no
 
 
 /*.om-maximenu ul.om-menu li.om-leaf .om-link{line-height: 30px; color: white; font-weight: bold; padding: 5px 20px 15px 20px;}*/
-.om-maximenu ul.om-menu li.om-leaf .om-link{line-height: 36px; color: #868686; font-weight: bold; padding: 4px 14px 8px 14px;}
+.om-maximenu ul.om-menu li.om-leaf .om-link{line-height: 36px; color: #868686; font-weight: bold; padding: 4px 14px 8px 10px;}
 .om-maximenu ul.om-menu li.om-leaf .om-link.link-e{padding: 4px 0 8px 8px;}
-.om-maximenu ul.om-menu li.om-leaf:hover om-link, .om-maximenu ul.om-menu li.om-leaf:hover a.om-link{background: #478afd; color: white;  /*border-radius: 10px 10px 0 0;*/}
+.om-maximenu ul.om-menu li.om-leaf:hover om-link, .om-maximenu ul.om-menu li.om-leaf:hover a.om-link{background: url("images/main-menu-hover.png") no-repeat right 8px; color: white;  /*border-radius: 10px 10px 0 0;*/}
 
 /*Make screen wide width for om submenu block */
 /*.om-maximenu .om-maximenu-content{left: 0px; top: 56px; width: 455px;}*/
