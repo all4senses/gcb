@@ -64,14 +64,16 @@ input.blur,
 
 
 
-#header, #navigation, #all-content, #footer-inside{width: 1100px; margin: auto;}
+/*#header, */#navigation, #all-content, #footer-inside{width: 1100px; margin: auto;}
 
-#header{padding-top: 85px; z-index: 4;}
+/*#header{padding-top: 85px; z-index: 4;}*/
+
+#header{background: white; margin: 0 0 100px 0; padding: 0;}
 
 
 /* Header */
 /*#header #header-menu-back{background: url("images/menu-main-back.png") repeat-x scroll 0 0 transparent; border-radius: 6px 6px 0 0; min-height: 45px;}*/
-#header #header-menu-back{background: url("images/sprite-2.png") repeat-x scroll 0 -58px #F3F3F3; border-radius: 6px 6px 0 0; min-height: 45px;}
+#header-menu-back{background: url("images/sprite-2.png") repeat-x scroll 0 -58px #F3F3F3; border-radius: 6px 6px 0 0; min-height: 45px;}
 
 /* Search block */
 /*#header*/ .region-sidebar-second #block-search-form{position: static; color: lightgray; padding-bottom: 0;/*position: absolute; right: 10px; top: 95px;*/}
