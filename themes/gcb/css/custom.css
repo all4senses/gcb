@@ -4,7 +4,7 @@
 
 
 /* General structue */
-body{background: url("images/header-back.png") repeat-x right top #e7e7e7;}
+body{background: url("images/body-top-back.jpg") repeat-x right top #E7E7E7;}
 
 /* Three columns layout */
 body.two-sidebars #sidebar-first {float: left; margin: 0 0 0 -857px; padding: 0; width: 180px;}
@@ -66,7 +66,7 @@ input.blur,
 
 #header, #navigation, #all-content, #footer-inside{width: 1100px; margin: auto;}
 
-#header{padding-top: 85px; z-index: 4;}
+#header{padding: 85px 0 0 0; z-index: 4;}
 
 
 /* Header */
@@ -91,7 +91,7 @@ input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-s
 
 
 
-#header #logo-block{color: #C5C5C5; font-family: arial; left: 0; position: absolute; top: 0; width: 500px;}
+#header #logo-block{color: white; font-family: arial; left: 0; position: absolute; top: 0; width: 500px;}
 #header #logo{float: left; margin-right: 20px;}
 #header #logo-block .descr{float: left;}
 #header #logo-block .title{font-size: 26px; font-weight: bold; margin-top: 10px;}
@@ -106,9 +106,9 @@ ul.header-links{margin: 5px 0 0; padding: 0;}
 ul.header-links li{float: left;}
 ul.header-links a{display: block; text-indent: -9999px; width: 35px; height: 42px; margin-right: 7px;}
 ul.header-links a.Twitter{background: url("images/sprite-2.png") no-repeat scroll 0 -199px transparent;}
-ul.header-links a.Facebook{background: url("images/sprite-2.png") no-repeat scroll 0 -239px transparent;}
-ul.header-links a.GooglePlus{background: url("images/sprite-2.png") no-repeat scroll 0 -322px transparent;}
-ul.header-links a.LinkedIn{background: url("images/sprite-2.png") no-repeat scroll 0 -282px transparent;}
+ul.header-links a.Facebook{background: url("images/sprite-2.png") no-repeat scroll 0 -238px transparent;}
+ul.header-links a.GooglePlus{background: url("images/sprite-2.png") no-repeat scroll 0 -319px transparent;}
+ul.header-links a.LinkedIn{background: url("images/sprite-2.png") no-repeat scroll 0 -278px transparent;}
 
 ul.header-links a.Submit.Reviews{background: url("images/block-head-red.png") repeat-x scroll 0 0 red; border: 1px solid red; border-radius: 3px 3px 3px 3px; color: white; padding: 0 2px 0 3px; margin: 0; position: absolute; right: 0; text-indent: 0; top: 52px; width: 145px; height: 25px; font-weight: bold;  text-align: center;}
 
@@ -116,10 +116,10 @@ ul.header-links a.Submit.Reviews{background: url("images/block-head-red.png") re
 
 
 /* Footer */
-#footer {background: black; color: white; height: 210px; padding: 5px 0; text-align: center;}
+#footer {background: #E0E0E0; color: white; height: 210px; padding: 5px 0; text-align: center;}
 #footer .region-footer{width: 1000px; margin: auto; font-family: Georgia,"Bitstream Charter",serif;}
-#footer .block{margin-bottom: 0;}
-#footer .menu a{color: white; font-size: 14px;}
+#footer .block{margin-bottom: 0; color: gray;}
+#footer .menu a{color: gray; font-size: 14px;}
 #footer .menu li{margin: 2px 2px 0 2px;}
 #footer .c{clear: both; margin: auto; color: gray; font-size: 12px; width: 290px; padding: 10px 0 20px;}
 #footer #sitelock img{margin-right: 5px; width: 82px;}
@@ -445,7 +445,7 @@ td.views-field-php-5 a{background: #478AFD; border-radius: 3px; color: white; fo
 
 body.sidebar-second #sidebar-second{float: right; margin-right: 18px; padding: 18px 0 0; width: 220px;}
 .sidebar .top-line{background: url("images/sprite-0.png") no-repeat scroll 0 -2px transparent; height: 5px; margin: 12px 0 10px; width: 100%;}
-.sidebar .block{overflow: hidden; background: white; border-radius: 5px; margin-bottom: 12px; position: relative; padding-bottom: 10px; z-index: 5;}
+.sidebar .block{overflow: hidden; background: white; border-radius: 5px; margin-bottom: 12px; position: relative; padding-bottom: 10px; z-index: 1;}
 .sidebar .block-title{margin: 0; padding: 15px 7px 15px 10px; font-size: 16px; font-weight: bold; text-transform: capitalize; line-height: 18px;}
 
 
