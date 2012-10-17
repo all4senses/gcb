@@ -64,18 +64,14 @@ input.blur,
 
 
 
-/*#header, */#navigation, #all-content, #footer-inside{width: 1100px; margin: auto;}
+#header, #navigation, #all-content, #footer-inside{width: 1100px; margin: auto;}
 
-/*#header{padding-top: 85px; z-index: 4;}*/
-
-#header{background: white; margin: 0 0 100px 0; padding: 0;}
-
-#navigation-upper{width: 1100px; margin: 0 auto 0 auto; height: 100px; position: relative; top: 0;}
+#header{padding-top: 85px; z-index: 4;}
 
 
 /* Header */
 /*#header #header-menu-back{background: url("images/menu-main-back.png") repeat-x scroll 0 0 transparent; border-radius: 6px 6px 0 0; min-height: 45px;}*/
-#header-menu-back{background: url("images/sprite-2.png") repeat-x scroll 0 -58px #F3F3F3; border-radius: 6px 6px 0 0; min-height: 45px;}
+#header #header-menu-back{background: url("images/sprite-2.png") repeat-x scroll 0 -58px #F3F3F3; border-radius: 6px 6px 0 0; min-height: 45px;}
 
 /* Search block */
 /*#header*/ .region-sidebar-second #block-search-form{position: static; color: lightgray; padding-bottom: 0;/*position: absolute; right: 10px; top: 95px;*/}
@@ -141,7 +137,7 @@ div.error{border: none;}
 ul.gcb{margin-left: 0px; padding-left: 10px;}
 /*.om-maximenu-simple .om-maximenu-middle-right {background-color: lightgray;}*/
 /*.block.block-om-maximenu{left: 10px; position: absolute; top: 122px; font-family: Georgia,"Bitstream Charter",serif;}*/
-.region-header .block.block-om-maximenu{width: 1090px; top: 2px; left: 11px; position: absolute; /*top: 87px;*/ font-family: Georgia,"Bitstream Charter",serif; z-index: 10; /*height: 42px; overflow: hidden;*/}
+.block.block-om-maximenu{width: 1090px; left: 11px; position: absolute; top: 87px; font-family: Georgia,"Bitstream Charter",serif; z-index: 10; /*height: 42px; overflow: hidden;*/}
 
 
 .om-btitle {float: left; position: absolute; left: -180px;}
