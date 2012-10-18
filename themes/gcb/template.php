@@ -142,6 +142,13 @@ function gcb_preprocess_block(&$variables, $hook) {
   }
 
   $variables['title_attributes_array']['class'][] = 'block-title';
+  
+  
+  $variables['classes_array'][] = $variables['block_zebra'];
+  if ($variables['block_id'] == 1) {
+    $variables['classes_array'][] = 'first';
+  }
+  
 }
 
 
