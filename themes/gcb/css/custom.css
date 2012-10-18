@@ -355,7 +355,7 @@ div.fivestar-widget-static .star span.on{background: url("images/sprite-2.png") 
 
 
 .view-providers tr{background: transparent;}
-.view-providers tr.even{background: #f9f9f9;}
+.view-providers tr.even{background: #EDFBFF;}
 .view-providers tr.odd{border: none; background: transparent;}
 .view-providers tr.odd.views-row-last,
 .view-providers tr.even{border-top: 1px solid #f4f4f4; border-bottom: 1px solid #f4f4f4;}
