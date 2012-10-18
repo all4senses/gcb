@@ -157,7 +157,7 @@ ul.gcb{margin-left: 0px; padding-left: 10px;}
 /*#om-menu-main-om-menu li.om-leaf{background: url("images/menu-main-delim.png") no-repeat right top transparent; height: 40px;}*/
 /*#om-menu-main-om-menu li.om-leaf{position: relative; background: url("images/menu-main-delim.png") no-repeat right top transparent; height: 40px;}*/
 #om-menu-main-om-menu li.om-leaf{position: relative; background: url("images/sprite-2.png") no-repeat scroll right -109px transparent; height: 40px; z-index: 400; padding: 0 10px;}
-#om-menu-main-om-menu li.om-leaf:hover{/*background: none;*/ position: relative; left: -2px;}
+#om-menu-main-om-menu li.om-leaf:hover{/*background: none; position: relative; left: -2px;*/}
 
 #om-menu-main-om-menu li.om-leaf.leaf-about-us .om-maximenu-middle{width: 120px;}
   
