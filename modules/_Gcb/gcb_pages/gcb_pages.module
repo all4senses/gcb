@@ -1423,7 +1423,7 @@ function gcb_pages_form_alter(&$form, &$form_state, $form_id) {
         
         
         
-        // Show saved it a hidden field other data
+        // Show saved in a hidden field other data
         if (isset($form['field_r_data']['und'][0]['value']['#default_value'])) {
           $other_data = unserialize($form['field_r_data']['und'][0]['value']['#default_value']);
           $form['provider']['lines']['#default_value'] = $other_data['lines'];
@@ -1577,13 +1577,13 @@ function gcb_pages_form_alter(&$form, &$form_state, $form_id) {
 
         // Add stars widgets to a Rating block
         $module_path . '/js/gcb_review_stars.js',
-        'sites/all/libraries/jquery.ui.stars/jquery.ui.stars.min.js',
+        'sites/all/libraries/jquery.plugins/jquery.ui.stars/jquery.ui.stars.min.js',
       );
 
       $form['#attached']['library'][] = array('system', 'ui.widget');
 
       $form['#attached']['css'] = array(
-        'sites/all/libraries/jquery.ui.stars/css/jquery.ui.stars.css',
+        'sites/all/libraries/jquery.plugins/jquery.ui.stars/css/jquery.ui.stars.css',
       );
   
   
