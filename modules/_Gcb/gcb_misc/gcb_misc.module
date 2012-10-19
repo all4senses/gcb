@@ -945,7 +945,7 @@ function gcb_misc_url_inbound_alter(&$path, $original_path, $path_language) {
 //  $path = 'contact';
 //}
 //else
-  if ($path == 'cloudbackup-provider-submit-user-review') {
+  if ($path == 'backup-provider-submit-user-review') {
     $path = 'node/add/review';
   }
 //  elseif (preg_match('|^pdfs\/(.*)|', $path, $matches)) {
@@ -968,7 +968,7 @@ function gcb_misc_url_outbound_alter(&$path, &$options, $original_path) {
 //  }
 //  else
   if ($path == 'node/add/review') {
-    $path = 'cloudbackup-provider-submit-user-review';
+    $path = 'backup-provider-submit-user-review';
   }
   //elseif (preg_match('|^sites\/default\/files\/pdfs\/(.*)|', $path, $matches)) {
   elseif (preg_match('|^' . addslashes(gcb_misc_file_public_path()) . '\/pdfs\/(.*)|', $path, $matches)) {
