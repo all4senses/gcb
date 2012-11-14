@@ -39,7 +39,14 @@
   
   <?php 
  
-    $user_name = $user_profile['field_u_fname'][0]['#markup'] . ' ' . $user_profile['field_u_lname'][0]['#markup'];
+    if (isset($user_profile['field_u_fname'][0]['#markup']) || isset($user_profile['field_u_lname'][0]['#markup'])) {
+      $user_name = trim($user_profile['field_u_fname'][0]['#markup'] . ' ' . $user_profile['field_u_lname'][0]['#markup']);
+    }
+    else {
+      $user_name = '';
+    }
+    
+    dpm($user_profile);
     
     echo '<div id="user-caption">Meet: ' , $user_name, '</div>', render($user_profile['user_picture']), render($user_profile['field_u_bio']),  '<div class="bottom-clear"></div>';
     

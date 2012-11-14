@@ -169,8 +169,12 @@ body.not-admin #om-menu-main-om-menu li.om-leaf.leaf-write-review{background: no
 .om-maximenu ul.om-menu li.om-leaf .om-link{line-height: 36px; color: #868686; font-weight: bold; padding: 4px 14px 8px 10px;}
 .om-maximenu ul.om-menu li.om-leaf .om-link.link-e{padding: 4px 0 8px 8px;}
 .om-maximenu ul.om-menu li.om-leaf:hover om-link, .om-maximenu ul.om-menu li.om-leaf:hover a.om-link{background: url("images/main-menu-hover.png") no-repeat right 8px; color: white;  /*border-radius: 10px 10px 0 0;*/}
+
 /* "e":hover */
-.om-maximenu ul.om-menu li.om-leaf.leaf-e:hover a.om-link{padding-right: 15px;}
+.om-maximenu ul.om-menu li.om-leaf.leaf-e:hover a.om-link{padding-right: 11px; background: url("images/main-menu-hover.png") no-repeat -205px 8px;}
+.om-maximenu ul.om-menu li.om-leaf.leaf-e:hover{padding-left: 8px;}
+
+
 
 /*Make screen wide width for om submenu block */
 /*.om-maximenu .om-maximenu-content{left: 0px; top: 56px; width: 455px;}*/
