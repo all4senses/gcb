@@ -953,6 +953,13 @@ h2.preface{border: none; color: black;  font-size: 18px; font-weight: bold; line
 */
 
 
+.page-node-24 h1.preface, .page-node-25 h1.preface, .page-node-26 h1.preface {text-align: center; color: gray;}
+
+
+
+
+
+
 /* Articles teasers */
 .node-teaser{ margin-bottom: 0;}
 .node-teaser h2{display: block; max-height: 50px; overflow: hidden;}
