@@ -8,29 +8,29 @@
           captionEl: $('#edit-rating-features-choice'),
           cancelShow: false
         });
-        $('.form-item-rating-install').stars({
+        $('.form-item-rating-upload').stars({
           inputType: "select",
-          captionEl: $('#edit-rating-install-choice'),
+          captionEl: $('#edit-rating-upload_speed-choice'),
           cancelShow: false
         });
-        $('.form-item-rating-sound').stars({
+        $('.form-item-rating-storage-space').stars({
           inputType: "select",
-          captionEl: $('#edit-rating-sound-choice'),
+          captionEl: $('#edit-rating-storage_space-choice'),
           cancelShow: false
         });
-        $('.form-item-rating-rely').stars({
+        $('.form-item-rating-customer').stars({
           inputType: "select",
-          captionEl: $('#edit-rating-rely-choice'),
+          captionEl: $('#edit-rating-customer-choice'),
           cancelShow: false
         });
-        $('.form-item-rating-money').stars({
+        $('.form-item-rating-ease-of-use').stars({
           inputType: "select",
-          captionEl: $('#edit-rating-money-choice'),
+          captionEl: $('#edit-rating-ease_of_use-choice'),
           cancelShow: false
         });
-        $('.form-item-rating-service').stars({
+        $('.form-item-rating-price').stars({
           inputType: "select",
-          captionEl: $('#edit-rating-service-choice'),
+          captionEl: $('#edit-rating-price-choice'),
           cancelShow: false
         });
     

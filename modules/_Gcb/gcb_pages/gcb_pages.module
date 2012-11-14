@@ -1237,7 +1237,7 @@ function gcb_pages_form_alter(&$form, &$form_state, $form_id) {
       
           $form['field_r_data']['#access'] = FALSE;
           
-          
+          /*
           $lines_options = array(1 => '1 - 5', 2 => '6 - 10', 3 => '11+');
           $form['provider']['lines'] = array(
             '#type' => 'radios',
@@ -1247,7 +1247,7 @@ function gcb_pages_form_alter(&$form, &$form_state, $form_id) {
             '#weight' => 10,
             '#prefix' => '<div class="label left">' . t('How many lines do you have:') . '</div>',
           );
-          
+          */
           
       
           
