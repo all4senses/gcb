@@ -189,6 +189,14 @@ body.not-admin .om-maximenu/*#om-menu-main-om-menu*/ li.om-leaf.leaf-write-revie
 .om-maximenu ul.om-menu li.om-leaf.leaf-e:hover a.om-link{padding-right: 11px; background: url("images/main-menu-hover.png") no-repeat -205px 8px;}
 .om-maximenu ul.om-menu li.om-leaf.leaf-e:hover{padding-left: 8px;}
 
+/* OM menu Edit link */
+.block-om-maximenu div.contextual-links-wrapper,
+.om-maximenu .om-maximenu-edit a{display: none !important;}
+
+
+
+
+
 /* Menu*/
 .menu-preface{float: left; margin-right: 20px;}
 /* Footer and header menu */ 
