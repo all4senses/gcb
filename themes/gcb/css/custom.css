@@ -156,12 +156,12 @@ ul.gcb{margin-left: 0px; padding-left: 10px;}
 
 /*#om-menu-main-om-menu li.om-leaf{background: url("images/menu-main-delim.png") no-repeat right top transparent; height: 40px;}*/
 /*#om-menu-main-om-menu li.om-leaf{position: relative; background: url("images/menu-main-delim.png") no-repeat right top transparent; height: 40px;}*/
-#om-menu-main-om-menu li.om-leaf{position: relative; background: url("images/sprite-2.png") no-repeat scroll right -109px transparent; height: 40px; z-index: 400; padding: 0 10px;}
-#om-menu-main-om-menu li.om-leaf:hover{/*background: none; position: relative; left: -2px;*/}
+.om-maximenu/*#om-menu-main-om-menu*/ li.om-leaf{position: relative; background: url("images/sprite-2.png") no-repeat scroll right -109px transparent; height: 40px; z-index: 400; padding: 0 10px;}
+.om-maximenu/*#om-menu-main-om-menu*/ li.om-leaf:hover{/*background: none; position: relative; left: -2px;*/}
 
-#om-menu-main-om-menu li.om-leaf.leaf-about-us .om-maximenu-middle{width: 120px;}
+.om-maximenu/*#om-menu-main-om-menu*/ li.om-leaf.leaf-about-us .om-maximenu-middle{width: 120px;}
   
-#om-menu-main-om-menu li.om-leaf.last,
+.om-maximenu/*#om-menu-main-om-menu*/ li.om-leaf.last,
 body.not-admin #om-menu-main-om-menu li.om-leaf.leaf-write-review{background: none;}
 
 
@@ -169,11 +169,6 @@ body.not-admin #om-menu-main-om-menu li.om-leaf.leaf-write-review{background: no
 .om-maximenu ul.om-menu li.om-leaf .om-link{line-height: 36px; color: #868686; font-weight: bold; padding: 4px 14px 8px 10px;}
 .om-maximenu ul.om-menu li.om-leaf .om-link.link-e{padding: 4px 0 8px 8px;}
 .om-maximenu ul.om-menu li.om-leaf:hover om-link, .om-maximenu ul.om-menu li.om-leaf:hover a.om-link{background: url("images/main-menu-hover.png") no-repeat right 8px; color: white;  /*border-radius: 10px 10px 0 0;*/}
-
-/* "e":hover */
-.om-maximenu ul.om-menu li.om-leaf.leaf-e:hover a.om-link{padding-right: 11px; background: url("images/main-menu-hover.png") no-repeat -205px 8px;}
-.om-maximenu ul.om-menu li.om-leaf.leaf-e:hover{padding-left: 8px;}
-
 
 
 /*Make screen wide width for om submenu block */
@@ -190,6 +185,9 @@ body.not-admin #om-menu-main-om-menu li.om-leaf.leaf-write-review{background: no
 /* Submenu items - smaller */
 .om-leaf .content a{font-size: 13px;}
 
+/* "e":hover */
+.om-maximenu ul.om-menu li.om-leaf.leaf-e:hover a.om-link{padding-right: 11px; background: url("images/main-menu-hover.png") no-repeat -205px 8px;}
+.om-maximenu ul.om-menu li.om-leaf.leaf-e:hover{padding-left: 8px;}
 
 /* Menu*/
 .menu-preface{float: left; margin-right: 20px;}
