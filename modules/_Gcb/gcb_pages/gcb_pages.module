@@ -699,6 +699,36 @@ function gcb_pages_form_alter(&$form, &$form_state, $form_id) {
   // dpm($form_id);  dpm($form);
   // $conf['locale_custom_strings_en']['old string'] = 'new string'
   
+  
+  // Add a Save Draft button.
+  switch ($form_id) {
+    
+    case 'news_post_node_form':
+    case 'blog_post_node_form':
+    case 'article_node_form':
+    case 'provider_node_form':
+    //case 'phone_node_form':
+      
+        // Restore aliased pdfs links, from /pdfs/ to <public files dir>/pdfs/
+        $form['body'] = gcb_misc_rewriteLinks('pdfs', $form, 'back');
+      
+        // Set the Save Draft button.
+        $form['actions']['save_draft'] = array(
+          '#type' => 'submit',
+          '#value' => 'Save Draft',
+          '#submit' => array('node_form_submit'),
+          '#weight' => 6,
+        );
+        
+        // Complete Save Draft and rewrite links (like 'pdfs')
+        $form['#submit'][] = 'gcb_pages_submitForm_saveDraftAndRewriteLinks';
+        
+        break;
+      
+  } // End of switch ($form_id) { // Save Draft button
+  
+  
+  
   switch ($form_id) {
     
     case 'news_post_node_form':
@@ -708,7 +738,7 @@ function gcb_pages_form_alter(&$form, &$form_state, $form_id) {
         //dpm($form);
         
         // Restore aliased pdfs links, from /pdfs/ to <public files dir>/pdfs/
-        $form['body'] = gcb_misc_rewriteLinks('pdfs', $form, 'back');
+        //$form['body'] = gcb_misc_rewriteLinks('pdfs', $form, 'back');
         
         // Hide second specific Tags field for news/blog/articles for a corresponding content type.
         global $user;
@@ -730,15 +760,15 @@ function gcb_pages_form_alter(&$form, &$form_state, $form_id) {
         $form['field_a_teaser']['#access'] = FALSE;
         $form['field_main_image']['#access'] = FALSE;
       
-        $form['actions']['save_draft'] = array(
-          '#type' => 'submit',
-          '#value' => 'Save Draft',
-          '#submit' => array('node_form_submit'),
-          '#weight' => 6,
-        );
+//        $form['actions']['save_draft'] = array(
+//          '#type' => 'submit',
+//          '#value' => 'Save Draft',
+//          '#submit' => array('node_form_submit'),
+//          '#weight' => 6,
+//        );
       
         $form['#submit'][] = 'gcb_pages_submitForm_article';
-        $form['#validate'][] = 'gcb_pages_validateForm_article';
+        //$form['#validate'][] = 'gcb_pages_validateForm_article';
                 
       break;
     
@@ -1653,10 +1683,10 @@ function gcb_pages_validateForm_article(&$form, &$form_state) {
   form_set_value($form[$target_field], $tags, $form_state);
   
   // Replace real links <public files dir>/pdfs/ with /pdfs/
-  global $user;
-  if ($user->uid == 1 && $new_body = gcb_misc_rewriteLinks('pdfs', $form_state)) {
-    form_set_value($form['body'], $new_body, $form_state);
-  }
+//  global $user;
+//  if ($user->uid == 1 && $new_body = gcb_misc_rewriteLinks('pdfs', $form_state)) {
+//    form_set_value($form['body'], $new_body, $form_state);
+//  }
   
   // Define a main image and build a custom teaser.
   $data = gcb_misc_getArticleTeaserData('all', $form_state['values']['body']['und'][0]['value'], $form_state['values']['nid']);
@@ -1679,7 +1709,34 @@ function gcb_pages_validateForm_article(&$form, &$form_state) {
  * @return void
  *   Return nothing.
  */
-function gcb_pages_submitForm_article(&$form, &$form_state) {
+//function gcb_pages_submitForm_article(&$form, &$form_state) {
+//
+//  if ($form_state['values']['op'] == 'Save Draft') {
+//    $form_state['values']['status'] = 0;
+//    drupal_set_message(t('Attention! This article is saved as draft and is not published now!'), 'warning');
+//      // Doesn't work
+//      //form_set_value($form['options'], array('status' => array('#default_value' => 0)), $form_state);
+//      //form_set_value($form['options']['status'], array('#default_value' => 0), $form_state);
+//  }
+//  else {
+//    $form_state['values']['status'] = 1;
+//  }
+//}
+
+
+/**
+ * Custom submit of article type form.
+ *
+ * @param array &$form
+ *   Array with declared form.
+ *
+ * @param array &$form_state
+ *   Array with current form state.
+
+ * @return void
+ *   Return nothing.
+ */
+function gcb_pages_submitForm_saveDraftAndRewriteLinks(&$form, &$form_state) {
 
   if ($form_state['values']['op'] == 'Save Draft') {
     $form_state['values']['status'] = 0;
@@ -1690,6 +1747,11 @@ function gcb_pages_submitForm_article(&$form, &$form_state) {
   }
   else {
     $form_state['values']['status'] = 1;
+  }
+  
+  // Replace real links <public files dir>/pdfs/ with /pdfs/
+  if ($new_body = gcb_misc_rewriteLinks('pdfs', $form_state)) {
+    form_set_value($form['body'], $new_body, $form_state);
   }
 }
 
