@@ -152,7 +152,7 @@ ul.gcb{margin-left: 0px; padding-left: 10px;}
 /* set constant position for om submenu block*/
 .om-maximenu.om-maximenu-block ul.om-menu {width: 1089px;}
 
-.om-maximenu ul.om-menu li.om-leaf{top: -2px;}
+.om-maximenu ul.om-menu li.om-leaf{top: -2px; padding: 0 10px;}
 
 /*#om-menu-main-om-menu li.om-leaf{background: url("images/menu-main-delim.png") no-repeat right top transparent; height: 40px;}*/
 /*#om-menu-main-om-menu li.om-leaf{position: relative; background: url("images/menu-main-delim.png") no-repeat right top transparent; height: 40px;}*/
@@ -162,7 +162,7 @@ ul.gcb{margin-left: 0px; padding-left: 10px;}
 .om-maximenu/*#om-menu-main-om-menu*/ li.om-leaf.leaf-about-us .om-maximenu-middle{width: 120px;}
   
 .om-maximenu/*#om-menu-main-om-menu*/ li.om-leaf.last,
-body.not-admin #om-menu-main-om-menu li.om-leaf.leaf-write-review{background: none;}
+body.not-admin .om-maximenu/*#om-menu-main-om-menu*/ li.om-leaf.leaf-write-review{background: none;}
 
 
 /*.om-maximenu ul.om-menu li.om-leaf .om-link{line-height: 30px; color: white; font-weight: bold; padding: 5px 20px 15px 20px;}*/
