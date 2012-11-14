@@ -8,7 +8,7 @@
           captionEl: $('#edit-rating-features-choice'),
           cancelShow: false
         });
-        $('.form-item-rating-upload').stars({
+        $('.form-item-rating-upload-speed').stars({
           inputType: "select",
           captionEl: $('#edit-rating-upload_speed-choice'),
           cancelShow: false
