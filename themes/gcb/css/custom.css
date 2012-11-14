@@ -42,6 +42,7 @@ ul{list-style: none;}
 
 .delim{margin: 0 5px 0 5px; /*color: #275FA6;*/}
 
+.field-name-field-tags div {display: inline-block;}
 
 /* Login/register page */
 .toboggan-unified #login-links a{background-color: #01B7F4; border: medium none; border-radius: 3px 3px 3px 3px; color: white; font-size: 20px; padding: 5px;}
