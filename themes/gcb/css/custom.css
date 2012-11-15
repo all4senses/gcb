@@ -758,7 +758,7 @@ form .counter.exceeded{color: red;}
 .node-type-provider .reviews .view-filters label,
 .view-display-id-block_all_reviews .view-filters label,
 .view-display-id-block_all_reviews_bu*/ .view-filters label{float: left; margin-right: 5px; font-weight: normal; font-size: 15px;  padding-top: 2px;}
-
+.view-filters select{float: left;}
 
 
 /* Provider edit page */
