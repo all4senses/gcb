@@ -58,9 +58,9 @@
   <?php if ($articles || $blog_posts || $news_posts): ?>
   
     <?php // Add tabs js.
-      $module_path = drupal_get_path('module', 'gv_pages');
+      $module_path = drupal_get_path('module', 'gcb_pages');
       drupal_add_library('system', 'ui.tabs');
-      drupal_add_js( $module_path . '/js/gv_provider_tabs.js'); 
+      drupal_add_js( $module_path . '/js/gcb_provider_tabs.js'); 
     ?>
     <div class="data tabs">
 

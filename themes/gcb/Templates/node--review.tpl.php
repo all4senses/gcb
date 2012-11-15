@@ -14,7 +14,7 @@
                 <?php $full_title = FALSE; ?>
                 
                 <?php if ($page): /* <span class="pname" property="v:itemreviewed"><?php echo $node->field_r_provider_name['und'][0]['safe_value'] ?></span><span class="pname delim">:</span><h1 property="v:summary" */?>
-                  <h1 property="dc:title v:summary" 
+                  <h1 property="dc:title v:summary" <?php if (!$node->status) {echo ' class="not-published"';}?> 
                 <?php else: ?>
                     <?php 
                     $full_title_urls = array('/providers/reviews', '/business-cloudbackup-reviews', '/residential-cloudbackup-reviews');
@@ -27,6 +27,7 @@
                     <?php else: ?>
                       <h3 class="rcaption" property="dc:title v:summary"
                     <?php endif; ?>
+                     <?php if (!$node->status) {echo ' class="not-published"';}?> 
                 <?php endif; ?>
                   
                 <?php /*print $title_attributes;*/ ?>>
