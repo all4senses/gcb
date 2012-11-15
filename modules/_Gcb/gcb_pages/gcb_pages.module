@@ -767,8 +767,8 @@ function gcb_pages_form_alter(&$form, &$form_state, $form_id) {
 //          '#weight' => 6,
 //        );
       
-        $form['#submit'][] = 'gcb_pages_submitForm_article';
-        //$form['#validate'][] = 'gcb_pages_validateForm_article';
+        //$form['#submit'][] = 'gcb_pages_submitForm_article';
+        $form['#validate'][] = 'gcb_pages_validateForm_article';
                 
       break;
     
