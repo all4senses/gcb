@@ -626,8 +626,8 @@ function gcb_misc_addSocialShareData_toPage($node) {
     case 'provider':
       
       $p_data = unserialize($node->field_p_data['und'][0]['value']);
-      if (isset($p_data['logo_share_src_themed']) && $p_data['logo_share_src_themed']) {
-        $image = $p_data['logo_share_src_themed'];
+      if (isset($p_data['share_src_themed']) && $p_data['share_src_themed']) {
+        $image = $p_data['share_src_themed'];
       }
       elseif(isset($node->field_p_logo['und'][0]['uri']) && $node->field_p_logo['und'][0]['uri']) {
         $image = gcb_misc_getPathFromStreamUri($node->field_p_logo['und'][0]['uri']);
@@ -640,9 +640,9 @@ function gcb_misc_addSocialShareData_toPage($node) {
       
       
     case 'review':
-      global $review_provider_logo_path;
-      if ($review_provider_logo_path) {
-        $image = $review_provider_logo_path;
+      global $review_share_src_themed;
+      if ($review_share_src_themed) {
+        $image = $review_share_src_themed;
       }
       $og_type = 'company';
       $gplus_type = 'Review';
@@ -2786,6 +2786,31 @@ function gcb_blocks_getAddThisButtonsLike() {
   <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-50253baf64925d35"></script>
   <!-- AddThis Button END -->
   ';
+  
+  return $out;
+}
+
+
+/**
+ * Get img src for Share from Uri.
+ */
+function gcb_misc_getShareSrcThemed_fromUri($uri) {
+  
+  // Define share pic.
+  $image_size = getimagesize(ltrim(gv_misc_getPathFromStreamUri($uri), '/'));
+  // Image for sharing.
+  if ($image_size[0] / $image_size[1] > 1) {
+    // Too wide. will not be cutted.
+    $out = image_style_url('share_wide', $uri);
+  }
+  elseif ($image_size[1] / $image_size[0] < 1) {
+    // Too tall. will not be cutted.
+    $out = image_style_url('share_tall', $uri);
+  }
+  else {
+    //Normal image, will not be cutted.
+    $out = image_style_url('share', $uri);
+  }
   
   return $out;
 }
