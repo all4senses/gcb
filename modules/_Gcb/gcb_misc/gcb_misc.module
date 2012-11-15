@@ -2273,7 +2273,7 @@ function gcb_misc_views_pre_render(&$view) {
           '#options' => $providers,
           '#default_value' => $provider_isset ? $providers[$_GET['provider']] : $providers[''],
           '#value' => $provider_isset ? $providers[$_GET['provider']] : $providers[''],
-          '#attributes' => array('id' => 'select_provider',  'onChange' => "top.location.href='http://gocloudbackup.com/" . url($_GET['q']) . "?provider=' + encodeURIComponent(document.getElementById('select_provider').options[document.getElementById('select_provider').selectedIndex].value) + '$url'"),
+          '#attributes' => array('id' => 'select_provider',  'onChange' => "top.location.href='http://gocloudbackup.com" . url($_GET['q']) . "?provider=' + encodeURIComponent(document.getElementById('select_provider').options[document.getElementById('select_provider').selectedIndex].value) + '$url'"),
 
       ); 
       
