@@ -582,7 +582,7 @@ function gcb_misc_metatag_getFrontTitle() {
  */
 function gcb_misc_addSocialShareData_toPage($node) {
   
-  global $gplus_type;
+  global $schema_org_type;
   $image = NULL;
   $og_type = NULL;
   $title = NULL;
@@ -618,7 +618,7 @@ function gcb_misc_addSocialShareData_toPage($node) {
       }
       
       $og_type = 'article';
-      $gplus_type = 'Article';
+      $schema_org_type = 'Article';
       break;
     
       
@@ -634,7 +634,7 @@ function gcb_misc_addSocialShareData_toPage($node) {
       }
       
       $og_type = 'company';
-      $gplus_type = 'LocalBusiness';
+      $schema_org_type = 'LocalBusiness';
       break;
       
       
@@ -645,7 +645,7 @@ function gcb_misc_addSocialShareData_toPage($node) {
         $image = $review_share_src_themed;
       }
       $og_type = 'company';
-      $gplus_type = 'Review';
+      $schema_org_type = 'Review';
       // Refresh a title a bit.
       $title = $node->field_r_provider_name['und'][0]['value'] . ' Review - ' . $node->title;
       break;
