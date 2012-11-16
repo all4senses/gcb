@@ -635,6 +635,7 @@ function gcb_misc_addSocialShareData_toPage($node) {
       
       $og_type = 'company';
       $schema_org_type = 'LocalBusiness';
+      dpm($schema_org_type);
       break;
       
       
