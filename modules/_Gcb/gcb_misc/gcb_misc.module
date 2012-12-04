@@ -2798,7 +2798,7 @@ function gcb_blocks_getAddThisButtonsLike() {
 function gcb_misc_getShareSrcThemed_fromUri($uri) {
   
   // Define share pic.
-  $image_size = getimagesize(ltrim(gv_misc_getPathFromStreamUri($uri), '/'));
+  $image_size = getimagesize(ltrim(gcb_misc_getPathFromStreamUri($uri), '/'));
   // Image for sharing.
   if ($image_size[0] / $image_size[1] > 1) {
     // Too wide. will not be cutted.
