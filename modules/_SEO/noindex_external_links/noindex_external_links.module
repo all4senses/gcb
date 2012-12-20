@@ -7,7 +7,7 @@
 /**
  * Builds the form.
  */
-function noindex_external_links_settings_form($form, &$form_state, $filter, $format, $defaults, $filters) {
+function noindex_external_links_settings_form($form_, &$form_state, $filter, $format, $defaults, $filters) {
   
   dpm($defaults);
   
