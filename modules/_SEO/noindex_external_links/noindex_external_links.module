@@ -10,7 +10,8 @@
 function noindex_external_links_settings_form($form, &$form_state, $filter, $format, $defaults, $filters) {
   
   dpm($defaults);
-  return;
+  
+  dpm($filter);
   
   $filter->settings += $defaults;
   $form['noindex_external_links_method'] = array(
