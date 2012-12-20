@@ -9,17 +9,20 @@
  */
 function noindex_external_links_settings_form($form, &$form_state, $filter, $format, $defaults, $filters) {
   
-//  $filter->settings += $defaults;
-//  $form['noindex_external_links_method'] = array(
-//    '#type' => 'checkboxes',
-//    '#title' => t('Indexing control method'),
-//    '#description' => t('You can use any combination of this methods.'),
-//    '#default_value' => isset($filter->settings['noindex_external_links_method']) ? $filter->settings['noindex_external_links_method'] : array('nofollow'),
-//    '#options' => array(
-//      'noindex' => '<strong>'. t('Wrap links with tag') .' '. htmlentities('<NOINDEX>') .' </strong>. <br />'. t('NOINDEX tag is used to deny indexing part of page. Only Yandex and Rambler considers this tag but Google and others doesn\'t. There is also an attribute NOINDEX in meta-tag Robots.'),
-//      'nofollow' => t('<strong>Add attribute rel="nofollow" to links</strong>. <br />This link\'s attribute has no effect on indexing. Only Google really do not follow this links but others do. Attribute is used to say to search engine that links no longer constitute a "vote" in the PageRank system.'),
-//    ),
-//  );
+  dpm($defaults);
+  return;
+  
+  $filter->settings += $defaults;
+  $form['noindex_external_links_method'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Indexing control method'),
+    '#description' => t('You can use any combination of this methods.'),
+    '#default_value' => isset($filter->settings['noindex_external_links_method']) ? $filter->settings['noindex_external_links_method'] : array('nofollow'),
+    '#options' => array(
+      'noindex' => '<strong>'. t('Wrap links with tag') .' '. htmlentities('<NOINDEX>') .' </strong>. <br />'. t('NOINDEX tag is used to deny indexing part of page. Only Yandex and Rambler considers this tag but Google and others doesn\'t. There is also an attribute NOINDEX in meta-tag Robots.'),
+      'nofollow' => t('<strong>Add attribute rel="nofollow" to links</strong>. <br />This link\'s attribute has no effect on indexing. Only Google really do not follow this links but others do. Attribute is used to say to search engine that links no longer constitute a "vote" in the PageRank system.'),
+    ),
+  );
 
   $html_validation_link = array('!link' => l(t('HTML-validation'), 'http://validator.w3.org/'));
 
@@ -62,17 +65,18 @@ function noindex_external_links_settings_form($form, &$form_state, $filter, $for
   );
 
 
-  $form['thanks'] = array(
-    '#type' => 'item',
-    '#title' => '',
-    '#markup' => '
-	    <ul>
-        <li><a title="Рецепты создания сайтов на Drupal" href="http://drupalcookbook.ru/">Рецепты создания сайтов на Drupal</a></li>
-        <li><a title="Крупнейшее русскоязычное сообщество Drupal" href="http://drupal.ru/">Русскоязычное Drupal-сообщество</a></li>
-        <li><a title="Поиск по русским сайтам о Drupal" href="http://drupalpoisk.ru/">Поиск по русским сайтам про Drupal</a></li>
-        </ul>',
-  );
+//  $form['thanks'] = array(
+//    '#type' => 'item',
+//    '#title' => '',
+//    '#markup' => '
+//	    <ul>
+//        <li><a title="Рецепты создания сайтов на Drupal" href="http://drupalcookbook.ru/">Рецепты создания сайтов на Drupal</a></li>
+//        <li><a title="Крупнейшее русскоязычное сообщество Drupal" href="http://drupal.ru/">Русскоязычное Drupal-сообщество</a></li>
+//        <li><a title="Поиск по русским сайтам о Drupal" href="http://drupalpoisk.ru/">Поиск по русским сайтам про Drupal</a></li>
+//        </ul>',
+//  );
 
+  
   return $form;
 }
 
