@@ -197,7 +197,7 @@ function noindex_external_links_replace($match) {
   $link = $match[0];
 
   //ToDo: Можно принудительно удалять noindex,nofollow...
-  if (!empty($url['host']) && in_array($url['host'], $_noindex_external_links_allowed_domains))  return $link;
+  if (in_array($url['host'], $_noindex_external_links_allowed_domains))  return $link;
   elseif (count($_noindex_external_links_method)<1 && !in_array($url['host'], $_noindex_external_links_denied_domains))  return $link;
   else {
     //Combine all attributes:
